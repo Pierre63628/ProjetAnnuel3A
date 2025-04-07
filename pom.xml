@@ -7,6 +7,7 @@
   <name>Archetype - Scrapper</name>
   <url>http://maven.apache.org</url>
 
+
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
@@ -172,7 +173,7 @@
               <executable>jpackage</executable>
               <arguments>
                 <argument>--type</argument>
-                <argument>exe</argument>
+                <argument>dmg</argument>
                 <argument>--name</argument>
                 <argument>Scrapper</argument>
                 <argument>--input</argument>

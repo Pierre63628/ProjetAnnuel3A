@@ -33,8 +33,9 @@ public class EventViewController implements Initializable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Event> events = mapper.readValue(
-                new File("/Users/pes/PA 3eme Année/ProjetAnnuel3A/WebScrapperEventPA/events_storage/eventbrite_events_20250401_020822.json"),
-                new TypeReference<List<Event>>() {}
+                new File("src/main/resources/events_storage/eventbrite_events.json"),
+                    new TypeReference<>() {
+                    }
             );
             eventListView.getItems().addAll(events);
         } catch (IOException e) {

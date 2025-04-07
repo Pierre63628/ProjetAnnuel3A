@@ -1,0 +1,127 @@
+[ {
+  "date" : "2025-04-12T20:00:00",
+  "detailed_date" : "sam. 12 avr. 2025 20:00 - dim. 13 avr. 2025 00:30 CEST",
+  "detailed_address" : "Nantes\nNantes 44000 Nantes\nAfficher la carte",
+  "event_id" : "1046369187407",
+  "name" : "Soirée Disney Channel & 2000's NANTES",
+  "location" : "Saturday at 8:00 PM",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2000s-nantes-1046369187407?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-20T22:00:00",
+  "detailed_date" : "dim. 20 avr. 2025 22:00 - lun. 21 avr. 2025 04:00 CEST",
+  "detailed_address" : "Salle Glodie Evenements\n2 Rue des Mazières 91170 Viry-Châtillon\nAfficher la carte",
+  "event_id" : "1266950676579",
+  "name" : "Worship Room V",
+  "location" : "dim. 20 avr., 22:00",
+  "category" : "spirituality",
+  "url" : "https://www.eventbrite.fr/e/billets-worship-room-v-1266950676579?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-04T16:00:00",
+  "detailed_date" : "2025-05-04T16:00:00Z",
+  "detailed_address" : "Cabaret Sauvage\n59 Boulevard Macdonald 75019 Paris\nShow map",
+  "event_id" : "1244101975499",
+  "name" : "ANDIA & THE URS | PARIS (Cabaret Sauvage) | 04.05.2025",
+  "location" : "Cabaret Sauvage",
+  "category" : "music",
+  "url" : "https://www.eventbrite.co.uk/e/andia-the-urs-paris-cabaret-sauvage-04052025-tickets-1244101975499?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-10T13:30:00",
+  "detailed_date" : "jeu. 10 avr. 2025 13:30 - 19:00 CEST",
+  "detailed_address" : "Le Wagon\n16 Villa Gaudelet 75011 Paris\nAfficher la carte",
+  "event_id" : "1230431266039",
+  "name" : "CMO Day 2025",
+  "location" : "jeudi prochain à 13:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cmo-day-2025-1230431266039?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-11T14:00:00",
+  "detailed_date" : "ven. 11 avr. 2025 14:00 - 19:30 CEST",
+  "detailed_address" : "Ministère de l'Économie et des Finances\n139 Rue de Bercy 75012 Paris\nAfficher la carte",
+  "event_id" : "1273697937819",
+  "name" : "Tour de France de l'entrepreneuriat des femmes - Etape Paris !",
+  "location" : "vendredi prochain à 14:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-tour-de-france-de-lentrepreneuriat-des-femmes-etape-paris-1273697937819?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-03T20:00:00",
+  "detailed_date" : "sam. 3 mai 2025 20:00 - dim. 4 mai 2025 01:00 CEST",
+  "detailed_address" : "Paris\nParis 75 Paris\nAfficher la carte",
+  "event_id" : "1216686304489",
+  "name" : "Soirée Disney Channel & 2010's PARIS 2ème date",
+  "location" : "sam. 3 mai, 20:00",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-paris-2eme-date-1216686304489?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-10T09:00:00",
+  "detailed_date" : "jeu. 10 avr. 2025 09:00 - 13:00 CEST",
+  "detailed_address" : "Le Wagon\n16 Villa Gaudelet 75011 Paris\nAfficher la carte",
+  "event_id" : "1230277445959",
+  "name" : "Sales Day 2025",
+  "location" : "jeudi prochain à 09:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-sales-day-2025-1230277445959?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-12T19:00:00",
+  "detailed_date" : "sam. 12 avr. 2025 19:00 - dim. 13 avr. 2025 02:00 CEST",
+  "detailed_address" : "La Colombe\n8 Place Oscar Niemeyer 76600 Le Havre\nAfficher la carte",
+  "event_id" : "1221252993579",
+  "name" : "LH PERK COMEDY",
+  "location" : "samedi prochain à 19:00",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-lh-perk-comedy-1221252993579?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-14T10:00:00",
+  "detailed_date" : "lun. 14 avr. 2025 10:00 - 18:30 CEST",
+  "detailed_address" : "Château de Candie\n533 Rue du Bois de Candie 73000 Chambéry\nAfficher la carte",
+  "event_id" : "935576894677",
+  "name" : "Le Salon Gourmand",
+  "location" : "Château de Candie",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.fr/e/inscription-le-salon-gourmand-935576894677?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-11T20:00:00",
+  "detailed_date" : "ven. 11 avr. 2025 20:00 - sam. 12 avr. 2025 00:00 CEST",
+  "detailed_address" : "Caen centre: adresse écrite sur le billet\nCaen 14000 Caen\nAfficher la carte",
+  "event_id" : "1238157585669",
+  "name" : "Soirée Disney Channel & 2010s (Caen) - 2e édition",
+  "location" : "vendredi prochain à 20:00",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-caen-2e-edition-1238157585669?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-08T19:00:00",
+  "detailed_date" : "mar. 8 avr. 2025 19:00 - 22:00 CEST",
+  "detailed_address" : "Restaurant Dos Almas\n35 Rue Jean Goujon 75008 Paris\nAfficher la carte",
+  "event_id" : "1253086398149",
+  "name" : "CLUB MASTERING CHANGE : Conversation with Laurence Barrett",
+  "location" : "demain à 19:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-club-mastering-change-conversation-with-laurence-barrett-1253086398149?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-20T09:45:00",
+  "detailed_date" : "dim. 20 avr. 2025 09:45 - 12:00 CEST",
+  "detailed_address" : "13 Rue Jean Mermoz\n13 Rue Jean Mermoz 74940 Annecy\nAfficher la carte",
+  "event_id" : "1290062945999",
+  "name" : "La Chasse aux oeufs du Clos des Sens, dimanche 20 avril 2025",
+  "location" : "13 Rue Jean Mermoz",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-la-chasse-aux-oeufs-du-clos-des-sens-dimanche-20-avril-2025-1290062945999?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-16T10:00:00",
+  "detailed_date" : "mer. 16 avr. 2025 10:00 - 21:00 CEST",
+  "detailed_address" : "Val d'Isére Snow Park\nVal d'Isère Snow Park At the Park hut 73150 Val-d'Isère\nAfficher la carte",
+  "event_id" : "1248442096919",
+  "name" : "World Monoski Championship 2025",
+  "location" : "Val d'Isére Snow Park",
+  "category" : "sports-and-fitness",
+  "url" : "https://www.eventbrite.co.uk/e/billets-world-monoski-championship-2025-1248442096919?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-26T20:30:00",
+  "detailed_date" : "sam. 26 avr. 2025 20:30 - dim. 27 avr. 2025 01:30 CEST",
+  "detailed_address" : "montpellier\nmontpellier 34000 Montpellier\nAfficher la carte",
+  "event_id" : "1088831015879",
+  "name" : "Soirée Disney Channel & 2010's MONTPELLIER 2",
+  "location" : "sam. 26 avr., 20:30",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-montpellier-2-1088831015879?aff=ebdssbdestsearch"
+} ]

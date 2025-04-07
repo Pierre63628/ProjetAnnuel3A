@@ -46,16 +46,14 @@ public class EventStorageService {
 
     private void createStorageDirectory() {
         try {
-            Files.createDirectories(Paths.get(STORAGE_DIR));
+            Files.createDirectories(Path.of("src/main/resources/" + STORAGE_DIR));
         } catch (IOException e) {
             System.err.println("Error creating storage directory: " + e.getMessage());
         }
     }
 
     public void saveEventsToJson(String source) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        String fileName = String.format("%s/%s_events_%s.json", STORAGE_DIR, source, timestamp);
-
+        String fileName = String.format("src/main/resources/%s/%s_events.json", STORAGE_DIR, source);
         try {
             objectMapper.writeValue(new File(fileName), validEvents);
             System.out.println("Events saved to file: " + fileName);
@@ -63,7 +61,6 @@ public class EventStorageService {
             System.err.println("Error saving events to file: " + e.getMessage());
         }
     }
-
 
     public void saveEventsToDB(String source) {
         String sql = """
