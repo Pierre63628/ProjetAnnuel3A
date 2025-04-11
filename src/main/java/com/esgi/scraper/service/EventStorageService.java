@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class EventStorageService {
     private static final String STORAGE_DIR = "events_storage";
-    static List<Map<String, String>> validEvents = new ArrayList<>();
-    static List<Map<String, String>> invalidEvents = new ArrayList<>();
+    public List<Map<String, String>> validEvents = new ArrayList<>();
+    public List<Map<String, String>> invalidEvents = new ArrayList<>();
     private final ObjectMapper objectMapper;
 
     public EventStorageService() {
@@ -32,7 +32,15 @@ public class EventStorageService {
         createStorageDirectory();
     }
 
-    public static void cleanEvents(List<Map<String, String>> events) {
+    /**
+     * Nettoie et valide les événements scrapés
+     * @param events Liste des événements à nettoyer
+     */
+    public void cleanEvents(List<Map<String, String>> events) {
+        // Réinitialiser les listes
+        validEvents.clear();
+        invalidEvents.clear();
+
         for (Map<String, String> event : events) {
             String dateStr = event.get("detailed_date");
             if (DateValidator.isValidEventDate(dateStr)) {
@@ -66,7 +74,12 @@ public class EventStorageService {
         String sql = """
         INSERT INTO events (name, url, image_url, date, source)
         VALUES (?, ?, ?, ?, ?)
-        ON CONFLICT (url) DO NOTHING
+        ON CONFLICT (url) DO UPDATE SET
+            name = EXCLUDED.name,
+            image_url = EXCLUDED.image_url,
+            date = EXCLUDED.date,
+            source = EXCLUDED.source,
+            created_at = CURRENT_TIMESTAMP
     """;
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -80,7 +93,19 @@ public class EventStorageService {
                 pstmt.addBatch();
             }
 
-            pstmt.executeBatch();
+            int[] results = pstmt.executeBatch();
+            int insertedCount = 0;
+            int updatedCount = 0;
+
+            for (int result : results) {
+                if (result > 0) {
+                    insertedCount++;
+                } else if (result == 0) {
+                    updatedCount++;
+                }
+            }
+
+            System.out.println("Events saved to database: " + insertedCount + " inserted, " + updatedCount + " updated.");
         } catch (SQLException e) {
             System.err.println("Error saving events: " + e.getMessage());
         }

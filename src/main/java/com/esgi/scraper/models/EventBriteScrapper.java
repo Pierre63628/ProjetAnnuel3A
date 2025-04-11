@@ -20,7 +20,7 @@ public class EventBriteScrapper {
     public List<Map<String, String>> scrape(String baseUrl, WebDriver driver, WebDriverWait wait) {
         List<Map<String, String>> allEvents = new ArrayList<>();
 
-        for (int page = 1; page <= 1; page++) {
+        for (int page = 1; page <= 10; page++) {
             String url = baseUrl + "?page=" + page;
             driver.get(url);
             System.out.println("Scraping page: " + page);

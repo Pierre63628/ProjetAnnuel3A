@@ -33,7 +33,12 @@ public class ScraperService {
         this.eventRepository.createTableIfNotExists();
     }
 
-    public void runScraping(String url) {
+    /**
+     * Exécute le scraping des événements depuis une URL donnée
+     * @param url L'URL du site à scraper
+     * @return Le nombre d'événements scrapés
+     */
+    public int runScraping(String url) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
@@ -41,39 +46,53 @@ public class ScraperService {
         WebDriver driver = new ChromeDriver(options);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
+        try {
+            List<Map<String, String>> events = null;
+            String source = null;
 
-        List<Map<String, String>> events = null;
-        String source = null;
+            // Déterminer la source en fonction de l'URL
+            if (url.contains("eventbrite")) {
+                events = eventBriteScrapper.scrape(url, driver, wait);
+                source = "eventbrite";
+            } else if (url.contains("allevent")) {
+                events = allEventScraper.scrape(url, driver, wait);
+                source = "allevent";
+            } else if (url.contains("meetup")) {
+                events = meetupEventScraper.scrape(url, driver, wait);
+                source = "meetup";
+            }
 
-        if (url.contains("eventbrite")) {
-            events = eventBriteScrapper.scrape(url, driver, wait);
-            source = "eventbrite";
-        } else if (url.contains("allevent")) {
-            events = allEventScraper.scrape(url, driver, wait);
-            source = "allevent";
-        } else if (url.contains("meetup")) {
-            events = meetupEventScraper.scrape(url, driver, wait);
-            source = "meetup";
-        }
+            eventRepository.cleanupOldEvents(30);
 
-        if (events != null && !events.isEmpty()) {
-            System.out.println("Scraped events: " + toJson(events));
+            if (events != null && !events.isEmpty()) {
+                System.out.println("Scraped " + events.size() + " events.");
 
-            eventStorageService.cleanEvents(events);
+                eventStorageService.cleanEvents(events);
+                int validCount = eventStorageService.validEvents.size();
+                int invalidCount = eventStorageService.invalidEvents.size();
+                System.out.println("Valid events: " + validCount + ", Invalid events: " + invalidCount);
 
-            // Save to database
-            eventStorageService.saveEventsToDB(source);
-            System.out.println("Events saved to database.");
+                eventStorageService.saveEventsToDB(source);
+                eventStorageService.saveEventsToJson(source);
 
-            // Save to JSON file
-            eventStorageService.saveEventsToJson(source);
-        } else {
-            // If no events were scraped or there's no internet, try to load from file
-            List<Map<String, String>> cachedEvents = eventStorageService.loadLatestEvents(source);
-            if (!cachedEvents.isEmpty()) {
-                System.out.println("Loaded cached events from file: " + toJson(cachedEvents));
+                return validCount;
             } else {
-                System.out.println("No events found (neither online nor cached).");
+                // Si aucun événement n'a été scrapé ou s'il n'y a pas de connexion internet, essayer de charger depuis un fichier
+                List<Map<String, String>> cachedEvents = eventStorageService.loadLatestEvents(source);
+                if (!cachedEvents.isEmpty()) {
+                    System.out.println("Loaded " + cachedEvents.size() + " cached events from file.");
+                    return cachedEvents.size();
+                } else {
+                    System.out.println("No events found (neither online nor cached).");
+                    return 0;
+                }
+            }
+        } finally {
+            // Fermer le navigateur dans tous les cas
+            try {
+                driver.quit();
+            } catch (Exception e) {
+                System.err.println("Error closing WebDriver: " + e.getMessage());
             }
         }
     }

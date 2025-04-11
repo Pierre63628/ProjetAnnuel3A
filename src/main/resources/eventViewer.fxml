@@ -3,16 +3,71 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.3" xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.esgi.scraper.interfaces.EventViewController">
-    <ListView fx:id="eventListView" />
-    <VBox spacing="10">
-        <padding>
-            <Insets top="10" right="10" bottom="10" left="10"/>
-        </padding>
-        <ImageView fx:id="eventImageView" fitWidth="300" fitHeight="200" preserveRatio="true"/>
-        <TextArea fx:id="eventDetailsArea" VBox.vgrow="ALWAYS" wrapText="true" editable="false"/>
-    </VBox>
-</SplitPane>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.esgi.scraper.interfaces.EventViewController"
+           stylesheets="/styles/application.css">
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Fichier">
+                    <MenuItem text="Quitter" onAction="#handleExit"/>
+                </Menu>
+                <Menu text="Aide">
+                    <MenuItem text="À propos" onAction="#handleAbout"/>
+                </Menu>
+            </MenuBar>
+            <ToolBar styleClass="toolbar">
+                <Button fx:id="refreshButton" text="Rafraîchir les événements" onAction="#handleRefresh" styleClass="refresh-button">
+                    <graphic>
+                        <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
+                            <Image url="@/images/refresh.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Separator orientation="VERTICAL" />
+                <Label text="Filtrer par source:" />
+                <Button fx:id="allSourcesButton" text="Tous" onAction="#handleAllSources" styleClass="filter-button" />
+                <Button fx:id="eventbriteButton" text="Eventbrite" onAction="#handleEventbriteFilter" styleClass="filter-button" />
+                <Button fx:id="alleventButton" text="AllEvent" onAction="#handleAlleventFilter" styleClass="filter-button" />
+                <Button fx:id="meetupButton" text="Meetup" onAction="#handleMeetupFilter" styleClass="filter-button" />
+                <Separator orientation="VERTICAL" />
+                <ProgressBar fx:id="progressBar" progress="0.0" visible="false" prefWidth="200"/>
+                <Label fx:id="statusLabel" text="Prêt" />
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <center>
+        <SplitPane dividerPositions="0.3">
+            <VBox>
+                <Label text="Liste des événements" styleClass="section-header">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+                </Label>
+                <ListView fx:id="eventListView" VBox.vgrow="ALWAYS" styleClass="event-list"/>
+            </VBox>
+            <VBox spacing="10" styleClass="details-panel">
+                <padding>
+                    <Insets top="10" right="10" bottom="10" left="10"/>
+                </padding>
+                <Label text="Détails de l'événement" styleClass="section-header"/>
+                <ImageView fx:id="eventImageView" fitWidth="300" fitHeight="200" preserveRatio="true" styleClass="event-image"/>
+                <TextArea fx:id="eventDetailsArea" VBox.vgrow="ALWAYS" wrapText="true" editable="false" styleClass="details-area"/>
+            </VBox>
+        </SplitPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" styleClass="status-bar">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10"/>
+            </padding>
+            <Label fx:id="eventCountLabel" text="0 événements chargés"/>
+        </HBox>
+    </bottom>
+</BorderPane>
