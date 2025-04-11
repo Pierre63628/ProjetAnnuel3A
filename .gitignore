@@ -10,6 +10,10 @@ pnpm-debug.log*
 node_modules
 backend/node_modules
 
+#Packages-lock.json
+frontend/nextdoorbuddy/package-lock.json
+backend/package-lock.json
+
 # Build output
 dist
 dist-ssr
