@@ -95,10 +95,7 @@ public class EventRepository {
         }
     }
 
-    /**
-     * Compte le nombre total d'événements dans la base de données
-     * @return Le nombre d'événements
-     */
+
     public int countEvents() {
         String sql = "SELECT COUNT(*) FROM events";
 
@@ -116,10 +113,7 @@ public class EventRepository {
         }
     }
 
-    /**
-     * Récupère tous les événements de la base de données
-     * @return Liste des événements
-     */
+
     public List<Event> getAllEvents() {
         String sql = """
             SELECT id, name, url, image_url, date, source,

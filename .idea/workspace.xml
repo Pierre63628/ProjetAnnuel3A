@@ -5,30 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19657930-f5fd-4e64-a9b6-2f1bcda94716" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/build-plugins.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/DialogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDetailsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/ScrapingController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/ThemeMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/BlueNightTheme.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/DarkTheme.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/NatureGreenTheme.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/PluginLoader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/PluginManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemeManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemePlugin.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/styles/blue-night-theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/styles/dark-theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/styles/modern-theme.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/styles/nature-green-theme.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/icone/icone.icns" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Scrapper.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build-plugins.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build-plugins.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemeManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/application.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/application.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,18 +44,16 @@
     &quot;accountId&quot;: &quot;44316467-e9e2-41b7-a7ff-292131952ba1&quot;
   }
 }</component>
-  <component name="KubernetesApiProvider">{
-  &quot;contexts&quot;: [
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "configuredContexts": [
     {
-      &quot;name&quot;: &quot;minikube&quot;,
-      &quot;originalNamespace&quot;: &quot;default&quot;
+      "name": "minikube",
+      "kubeConfigUrl": "file:///Users/pes/.kube/config",
+      "originalNamespace": "default"
     }
   ],
-  &quot;isMigrated&quot;: true
-}</component>
-  <component name="KubernetesSettings">
-    <option name="contextName" value="minikube" />
-  </component>
+  "isMigrated": true
+}]]></component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -110,6 +97,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources/icone" />
       <recent name="$PROJECT_DIR$/src/main/resources/events_storage" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
     </key>
@@ -180,7 +168,7 @@
       <workItem from="1744051829648" duration="4559000" />
       <workItem from="1744359987587" duration="839000" />
       <workItem from="1744362879241" duration="111000" />
-      <workItem from="1744362997610" duration="9465000" />
+      <workItem from="1744362997610" duration="11171000" />
     </task>
     <servers />
   </component>

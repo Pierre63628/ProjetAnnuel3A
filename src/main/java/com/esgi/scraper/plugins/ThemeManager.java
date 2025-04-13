@@ -2,7 +2,6 @@ package com.esgi.scraper.plugins;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,6 @@ public class ThemeManager {
 
     private static ThemeManager instance;
     private final List<ThemePlugin> availableThemes;
-    @Getter
     private ThemePlugin currentTheme;
     private Scene scene;
 
@@ -39,6 +37,10 @@ public class ThemeManager {
 
     public List<ThemePlugin> getAvailableThemes() {
         return new ArrayList<>(availableThemes);
+    }
+
+    public ThemePlugin getCurrentTheme() {
+        return currentTheme;
     }
 
     public boolean addTheme(ThemePlugin theme) {

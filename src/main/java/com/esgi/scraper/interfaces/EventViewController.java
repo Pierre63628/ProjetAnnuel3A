@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.DatePicker;
 
 import java.net.URL;
 import java.util.List;
@@ -36,6 +37,12 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
     private Label statusLabel;
     @FXML
     private Label eventCountLabel;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private DatePicker datePicker;
+    @FXML
+    private Button clearDateButton;
 
     private EventDataLoader dataLoader;
     private EventDetailsController detailsController;
@@ -98,6 +105,22 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
     @FXML
     private void handleMeetupFilter() {
         filterController.handleMeetupFilter();
+    }
+
+    @FXML
+    private void handleSearch() {
+        filterController.handleSearch(searchField.getText());
+    }
+
+    @FXML
+    private void handleDateFilter() {
+        filterController.handleDateFilter(datePicker.getValue());
+    }
+
+    @FXML
+    private void handleClearDateFilter() {
+        datePicker.setValue(null);
+        filterController.handleClearDateFilter();
     }
 
 

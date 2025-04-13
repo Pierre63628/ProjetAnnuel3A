@@ -15,7 +15,7 @@ public class EventViewerApplication extends Application {
     public void start(Stage stage) throws IOException {
         // Charger l'interface principale
         FXMLLoader fxmlLoader = new FXMLLoader(EventViewerApplication.class.getResource("/eventViewer.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 900, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 900);
         stage.setTitle("Event Viewer - Visualiseur d'Événements");
         stage.setScene(scene);
         stage.show();

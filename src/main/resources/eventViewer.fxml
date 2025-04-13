@@ -38,6 +38,14 @@
                 <ProgressBar fx:id="progressBar" progress="0.0" visible="false" prefWidth="200"/>
                 <Label fx:id="statusLabel" text="Prêt" />
             </ToolBar>
+            <ToolBar styleClass="toolbar">
+                <Label text="Rechercher:" />
+                <TextField fx:id="searchField" promptText="Nom de l'événement" prefWidth="200" onKeyReleased="#handleSearch" />
+                <Separator orientation="VERTICAL" />
+                <Label text="Filtrer par date:" />
+                <DatePicker fx:id="datePicker" promptText="Sélectionner une date" onAction="#handleDateFilter" />
+                <Button fx:id="clearDateButton" text="Effacer" onAction="#handleClearDateFilter" styleClass="filter-button" />
+            </ToolBar>
         </VBox>
     </top>
 

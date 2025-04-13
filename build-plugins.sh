@@ -7,9 +7,7 @@ mkdir -p temp/com/esgi/scraper/plugins
 
 echo "Compilation des plugins de thème..."
 javac -d temp src/main/java/com/esgi/scraper/plugins/ThemePlugin.java
-javac -d temp -cp temp src/main/java/com/esgi/scraper/plugins/DarkTheme.java
-javac -d temp -cp temp src/main/java/com/esgi/scraper/plugins/BlueNightTheme.java
-javac -d temp -cp temp src/main/java/com/esgi/scraper/plugins/NatureGreenTheme.java
+javac -d temp -cp temp src/main/java/com/esgi/scraper/plugins/*.java
 
 mkdir -p temp/styles
 

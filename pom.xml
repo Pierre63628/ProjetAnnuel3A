@@ -184,8 +184,8 @@
                 <argument>com.esgi.scraper.launcher.Launcher</argument>
                 <argument>--dest</argument>
                 <argument>${project.build.directory}/installer</argument>
-                <!--               <argument>-icon</argument>
-                                <argument>src/main/resources/icon.icns</argument>-->
+                <argument>--icon</argument>
+                <argument>src/main/resources/icone/icone.icns</argument>
               </arguments>
             </configuration>
           </execution>

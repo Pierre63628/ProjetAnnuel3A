@@ -50,6 +50,42 @@
     -fx-border-color: #3275e4;
 }
 
+/* Champ de recherche */
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 4;
+    -fx-padding: 5 10 5 10;
+}
+
+.text-field:focused {
+    -fx-border-color: #4285f4;
+}
+
+/* DatePicker */
+.date-picker {
+    -fx-background-color: white;
+    -fx-background-radius: 4;
+    -fx-border-color: #d0d0d0;
+    -fx-border-radius: 4;
+}
+
+.date-picker:focused {
+    -fx-border-color: #4285f4;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 0 4 4 0;
+    -fx-border-color: #d0d0d0;
+    -fx-border-width: 0 0 0 1;
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
 /* Liste des événements */
 .event-list {
     -fx-background-color: white;
