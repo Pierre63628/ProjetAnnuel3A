@@ -33,11 +33,6 @@ public class ScraperService {
         this.eventRepository.createTableIfNotExists();
     }
 
-    /**
-     * Exécute le scraping des événements depuis une URL donnée
-     * @param url L'URL du site à scraper
-     * @return Le nombre d'événements scrapés
-     */
     public int runScraping(String url) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
@@ -50,7 +45,6 @@ public class ScraperService {
             List<Map<String, String>> events = null;
             String source = null;
 
-            // Déterminer la source en fonction de l'URL
             if (url.contains("eventbrite")) {
                 events = eventBriteScrapper.scrape(url, driver, wait);
                 source = "eventbrite";
@@ -77,7 +71,6 @@ public class ScraperService {
 
                 return validCount;
             } else {
-                // Si aucun événement n'a été scrapé ou s'il n'y a pas de connexion internet, essayer de charger depuis un fichier
                 List<Map<String, String>> cachedEvents = eventStorageService.loadLatestEvents(source);
                 if (!cachedEvents.isEmpty()) {
                     System.out.println("Loaded " + cachedEvents.size() + " cached events from file.");
@@ -88,7 +81,6 @@ public class ScraperService {
                 }
             }
         } finally {
-            // Fermer le navigateur dans tous les cas
             try {
                 driver.quit();
             } catch (Exception e) {
@@ -96,4 +88,5 @@ public class ScraperService {
             }
         }
     }
+
 }

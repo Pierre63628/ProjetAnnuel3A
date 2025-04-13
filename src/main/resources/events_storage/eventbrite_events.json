@@ -1,30 +1,21 @@
 [ {
-  "date" : "2025-04-12T20:00:00",
-  "detailed_date" : "sam. 12 avr. 2025 20:00 - dim. 13 avr. 2025 00:30 CEST",
-  "detailed_address" : "New Factory\n12 Rue de Rieux 44000 Nantes\nAfficher la carte",
-  "event_id" : "1046369187407",
-  "name" : "Soirée Disney Channel & 2000's NANTES",
-  "location" : "Tomorrow at 8:00 PM",
-  "category" : "film-and-media",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2000s-nantes-1046369187407?aff=ebdssbdestsearch"
+  "date" : "2025-05-04T16:00:00",
+  "detailed_date" : "2025-05-04T16:00:00Z",
+  "detailed_address" : "Cabaret Sauvage\n59 Boulevard Macdonald 75019 Paris\nShow map",
+  "event_id" : "1244101975499",
+  "name" : "ANDIA & THE URS | PARIS (Cabaret Sauvage) | 04.05.2025",
+  "location" : "Sun, May 4, 7:00 PM",
+  "category" : "music",
+  "url" : "https://www.eventbrite.co.uk/e/andia-the-urs-paris-cabaret-sauvage-04052025-tickets-1244101975499?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-20T22:00:00",
   "detailed_date" : "dim. 20 avr. 2025 22:00 - lun. 21 avr. 2025 04:00 CEST",
   "detailed_address" : "Salle Glodie Evenements\n2 Rue des Mazières 91170 Viry-Châtillon\nAfficher la carte",
   "event_id" : "1266950676579",
   "name" : "Worship Room V",
-  "location" : "Sun, Apr 20, 10:00 PM",
+  "location" : "dim. 20 avr., 22:00",
   "category" : "spirituality",
   "url" : "https://www.eventbrite.fr/e/billets-worship-room-v-1266950676579?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-04T16:00:00",
-  "detailed_date" : "2025-05-04T16:00:00Z",
-  "detailed_address" : "Cabaret Sauvage\n59 Boulevard Macdonald 75019 Paris\nShow map",
-  "event_id" : "1244101975499",
-  "name" : "ANDIA & THE URS | PARIS (Cabaret Sauvage) | 04.05.2025",
-  "location" : "dim. 4 mai, 19:00",
-  "category" : "music",
-  "url" : "https://www.eventbrite.co.uk/e/andia-the-urs-paris-cabaret-sauvage-04052025-tickets-1244101975499?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-03T20:00:00",
   "detailed_date" : "sam. 3 mai 2025 20:00 - dim. 4 mai 2025 01:00 CEST",
@@ -35,6 +26,15 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-paris-2eme-date-1216686304489?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-29T17:30:00",
+  "detailed_date" : "mar. 29 avr. 2025 17:30 - 19:00 CEST",
+  "detailed_address" : "Salle Gaveau\n45 Rue La Boétie 75008 Paris\nAfficher la carte",
+  "event_id" : "1300521387479",
+  "name" : "les Margaret by JFD",
+  "location" : "Salle Gaveau",
+  "category" : "science-and-tech",
+  "url" : "https://www.eventbrite.fr/e/billets-les-margaret-by-jfd-1300521387479?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-26T20:30:00",
   "detailed_date" : "sam. 26 avr. 2025 20:30 - dim. 27 avr. 2025 01:30 CEST",
   "detailed_address" : "montpellier\nmontpellier 34000 Montpellier\nAfficher la carte",
@@ -44,32 +44,14 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-montpellier-2-1088831015879?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-12T19:00:00",
-  "detailed_date" : "sam. 12 avr. 2025 19:00 - dim. 13 avr. 2025 02:00 CEST",
-  "detailed_address" : "La Colombe\n8 Place Oscar Niemeyer 76600 Le Havre\nAfficher la carte",
-  "event_id" : "1221252993579",
-  "name" : "LH PERK COMEDY",
-  "location" : "demain à 19:00",
-  "category" : "arts",
-  "url" : "https://www.eventbrite.fr/e/billets-lh-perk-comedy-1221252993579?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-14T10:00:00",
   "detailed_date" : "lun. 14 avr. 2025 10:00 - 18:30 CEST",
   "detailed_address" : "Château de Candie\n533 Rue du Bois de Candie 73000 Chambéry\nAfficher la carte",
   "event_id" : "935576894677",
   "name" : "Le Salon Gourmand",
-  "location" : "lundi prochain à 10:00",
+  "location" : "aujourd’hui à 10:00",
   "category" : "food-and-drink",
   "url" : "https://www.eventbrite.fr/e/inscription-le-salon-gourmand-935576894677?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-11T20:00:00",
-  "detailed_date" : "ven. 11 avr. 2025 20:00 - sam. 12 avr. 2025 00:00 CEST",
-  "detailed_address" : "Caen centre: adresse écrite sur le billet\nCaen 14000 Caen\nAfficher la carte",
-  "event_id" : "1238157585669",
-  "name" : "Soirée Disney Channel & 2010s (Caen) - 2e édition",
-  "location" : "aujourd’hui à 20:00",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-caen-2e-edition-1238157585669?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-20T09:45:00",
   "detailed_date" : "dim. 20 avr. 2025 09:45 - 12:00 CEST",
@@ -89,6 +71,42 @@
   "category" : "sports-and-fitness",
   "url" : "https://www.eventbrite.co.uk/e/billets-world-monoski-championship-2025-1248442096919?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-05-05T18:00:00",
+  "detailed_date" : "lun. 5 mai 2025 18:00 - 20:00 CEST",
+  "detailed_address" : "Tennessee - Paris\n12 Rue André Mazet 75006 Paris\nAfficher la carte",
+  "event_id" : "953524496437",
+  "name" : "Paris Business, Tech & Entrepreneur Networking Soiree",
+  "location" : "lun. 5 mai, 18:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.com/e/billets-paris-business-tech-entrepreneur-networking-soiree-953524496437?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-06T08:30:00",
+  "detailed_date" : "mar. 6 mai 2025 08:30 - 17:00 CEST",
+  "detailed_address" : "Maison de la Chimie\n28 Rue Saint-Dominique 75007 Paris\nAfficher la carte",
+  "event_id" : "1253059718349",
+  "name" : "DPO Forum Paris",
+  "location" : "Maison de la Chimie",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-dpo-forum-paris-1253059718349?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T10:00:00",
+  "detailed_date" : "2025-04-24T10:00:00Z",
+  "detailed_address" : "Maison Bonnard\n78 Rue de la Chapelle 01470 Seillonnaz\nAfficher la carte",
+  "event_id" : "1272037350959",
+  "name" : "Périgord en Bugey",
+  "location" : "sam. 26 avr., 12:00",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.fr/e/billets-perigord-en-bugey-1272037350959?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-15T18:00:00",
+  "detailed_date" : "jeu. 15 mai 2025 18:00 - 23:00 CEST",
+  "detailed_address" : "STADE PIERRE MAUROY\n261 Bd de Tournai 59650 VILLENEUVE-D'ASCQ\nAfficher la carte",
+  "event_id" : "1277471283999",
+  "name" : "SOIREE A LA CARTE 2025 - 13è édition",
+  "location" : "STADE PIERRE MAUROY",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/inscription-soiree-a-la-carte-2025-13e-edition-1277471283999?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-23T19:30:00",
   "detailed_date" : "mer. 23 avr. 2025 19:30 - 23:00 CEST",
   "detailed_address" : "Climate House Paris Sentier\n39 Rue du Caire 75002 Paris\nAfficher la carte",
@@ -107,32 +125,14 @@
   "category" : "music",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-reims-1238662736589?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-24T10:00:00",
-  "detailed_date" : "2025-04-24T10:00:00Z",
-  "detailed_address" : "Maison Bonnard\n78 Rue de la Chapelle 01470 Seillonnaz\nAfficher la carte",
-  "event_id" : "1272037350959",
-  "name" : "Périgord en Bugey",
-  "location" : "sam. 26 avr., 12:00",
-  "category" : "food-and-drink",
-  "url" : "https://www.eventbrite.fr/e/billets-perigord-en-bugey-1272037350959?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-05T18:00:00",
-  "detailed_date" : "lun. 5 mai 2025 18:00 - 20:00 CEST",
-  "detailed_address" : "Tennessee - Paris\n12 Rue André Mazet 75006 Paris\nAfficher la carte",
-  "event_id" : "953524496437",
-  "name" : "Paris Business, Tech & Entrepreneur Networking Soiree",
-  "location" : "lun. 5 mai, 18:00",
-  "category" : "business",
-  "url" : "https://www.eventbrite.com/e/billets-paris-business-tech-entrepreneur-networking-soiree-953524496437?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-15T18:00:00",
-  "detailed_date" : "jeu. 15 mai 2025 18:00 - 23:00 CEST",
-  "detailed_address" : "STADE PIERRE MAUROY\n261 Bd de Tournai 59650 VILLENEUVE-D'ASCQ\nAfficher la carte",
-  "event_id" : "1277471283999",
-  "name" : "SOIREE A LA CARTE 2025 - 13è édition",
-  "location" : "STADE PIERRE MAUROY",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/inscription-soiree-a-la-carte-2025-13e-edition-1277471283999?aff=ebdssbdestsearch"
+  "date" : "2025-04-30T20:30:00",
+  "detailed_date" : "mer. 30 avr. 2025 20:30 - jeu. 1 mai 2025 00:00 CEST",
+  "detailed_address" : "Concorde Atlantique boat\nQuai Anatole France #niveau 23 75007 Paris\nAfficher la carte",
+  "event_id" : "1279172351939",
+  "name" : "Soirée Violetta (+partie 1 Tini) - 4e édition (Paris)",
+  "location" : "Concorde Atlantique boat",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-violetta-partie-1-tini-4e-edition-paris-1279172351939?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-24T20:00:00",
   "detailed_date" : "jeu. 24 avr. 2025 20:00 - 22:30 CEST",
@@ -143,59 +143,14 @@
   "category" : "arts",
   "url" : "https://www.eventbrite.fr/e/billets-stand-up-au-pathe-le-24-avril-2025-1284628300829?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-30T20:30:00",
-  "detailed_date" : "mer. 30 avr. 2025 20:30 - jeu. 1 mai 2025 00:00 CEST",
-  "detailed_address" : "Concorde Atlantique boat\nQuai Anatole France #niveau 23 75007 Paris\nAfficher la carte",
-  "event_id" : "1279172351939",
-  "name" : "Soirée Violetta (+partie 1 Tini) - 4e édition (Paris)",
-  "location" : "Concorde Atlantique boat",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-violetta-partie-1-tini-4e-edition-paris-1279172351939?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-15T19:00:00",
   "detailed_date" : "mar. 15 avr. 2025 19:00 - 21:00 CEST",
   "detailed_address" : "Pathé Bellecour\n79 Rue de la République 69002 Lyon\nAfficher la carte",
   "event_id" : "1244125385519",
   "name" : "Projection du documentaire Skills: make it work à Lyon",
-  "location" : "mardi prochain à 19:00",
+  "location" : "Tuesday at 7:00 PM",
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-projection-du-documentaire-skills-make-it-work-a-lyon-1244125385519?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T13:30:00",
-  "detailed_date" : "sam. 12 avr. 2025 13:30 - 17:30 CEST",
-  "detailed_address" : "130 Rue de Lourmel\n130 Rue de Lourmel 75015 Paris\nAfficher la carte",
-  "event_id" : "1297771452349",
-  "name" : "Construire et accélérer sa carrière professionnelle - Muslim Mentors",
-  "location" : "demain à 13:30",
-  "category" : "N/A",
-  "url" : "https://www.eventbrite.fr/e/billets-construire-et-accelerer-sa-carriere-professionnelle-muslim-mentors-1297771452349?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-16T18:00:00",
-  "detailed_date" : "mer. 16 avr. 2025 18:00 - 20:00 CEST",
-  "detailed_address" : "TBD\nTBD TBD Paris\nAfficher la carte",
-  "event_id" : "1275961357769",
-  "name" : "Africans in Tech Global Happy Hour - Paris, France",
-  "location" : "mercredi prochain à 18:00",
-  "category" : "science-and-tech",
-  "url" : "https://www.eventbrite.com/e/billets-africans-in-tech-global-happy-hour-paris-france-1275961357769?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-29T17:30:00",
-  "detailed_date" : "mar. 29 avr. 2025 17:30 - 19:00 CEST",
-  "detailed_address" : "Salle Gaveau\n45 Rue La Boétie 75008 Paris\nAfficher la carte",
-  "event_id" : "1300521387479",
-  "name" : "les Margaret by JFD",
-  "location" : "Salle Gaveau",
-  "category" : "science-and-tech",
-  "url" : "https://www.eventbrite.fr/e/billets-les-margaret-by-jfd-1300521387479?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-25T19:00:00",
-  "detailed_date" : "ven. 25 avr. 2025 19:00 - 23:00 CEST",
-  "detailed_address" : "Restaurant Joseph Cap 3000\nAvenue Eugène Donadeï 06700 Saint-Laurent-du-Var\nAfficher la carte",
-  "event_id" : "1306710118139",
-  "name" : "Mamans Apéro",
-  "location" : "Restaurant Joseph Cap 3000",
-  "category" : "community",
-  "url" : "https://www.eventbrite.fr/e/billets-mamans-apero-1306710118139?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-15T13:30:00",
   "detailed_date" : "jeu. 15 mai 2025 13:30 - 20:00 CEST",
@@ -206,23 +161,14 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/inscription-carbonconnect-4-1252730443479?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-13T14:45:00",
-  "detailed_date" : "dim. 13 avr. 2025 14:45 - 18:00 CEST",
-  "detailed_address" : "Warwick Paris\n5 Rue de Berri 75008 Paris\nAfficher la carte",
-  "event_id" : "1288053545829",
-  "name" : "VIENS CRÉER TA RÉUSSITE TRI-DIMENSIONNELLE : MINDSET☆STRATÉGIE☆SPIRITUELLE",
-  "location" : "dimanche prochain à 14:45",
-  "category" : "spirituality",
-  "url" : "https://www.eventbrite.fr/e/billets-viens-creer-ta-reussite-tri-dimensionnelle-mindsetstrategiespirituelle-1288053545829?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-15T06:00:00",
-  "detailed_date" : "2025-04-15T06:00:00Z",
-  "detailed_address" : "New Morning\n7/9 Rue des Petites Écuries 75010 Paris\nAfficher la carte",
-  "event_id" : "1132696809649",
-  "name" : "BOB&SOUL en live au NEW MORNING",
-  "location" : "New Morning",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-bobsoul-en-live-au-new-morning-1132696809649?aff=ebdssbdestsearch"
+  "date" : "2025-04-16T18:00:00",
+  "detailed_date" : "mer. 16 avr. 2025 18:00 - 20:00 CEST",
+  "detailed_address" : "TBD\nTBD TBD Paris\nAfficher la carte",
+  "event_id" : "1275961357769",
+  "name" : "Africans in Tech Global Happy Hour - Paris, France",
+  "location" : "mercredi prochain à 18:00",
+  "category" : "science-and-tech",
+  "url" : "https://www.eventbrite.com/e/billets-africans-in-tech-global-happy-hour-paris-france-1275961357769?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-30T20:30:00",
   "detailed_date" : "mer. 30 avr. 2025 20:30 - jeu. 1 mai 2025 00:00 CEST",
@@ -232,6 +178,15 @@
   "location" : "Concorde Atlantique boat",
   "category" : "music",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-justin-bieber-partie-1-selena-gomez-paris-1272770754589?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-25T19:00:00",
+  "detailed_date" : "ven. 25 avr. 2025 19:00 - 23:00 CEST",
+  "detailed_address" : "Restaurant Joseph Cap 3000\nAvenue Eugène Donadeï 06700 Saint-Laurent-du-Var\nAfficher la carte",
+  "event_id" : "1306710118139",
+  "name" : "Mamans Apéro",
+  "location" : "Restaurant Joseph Cap 3000",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-mamans-apero-1306710118139?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-29T18:30:00",
   "detailed_date" : "mar. 29 avr. 2025 18:30 - 20:00 CEST",
@@ -251,6 +206,15 @@
   "category" : "music",
   "url" : "https://www.eventbrite.com/e/billets-krs-one-live-in-paris-1110698813049?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-15T06:00:00",
+  "detailed_date" : "2025-04-15T06:00:00Z",
+  "detailed_address" : "New Morning\n7/9 Rue des Petites Écuries 75010 Paris\nAfficher la carte",
+  "event_id" : "1132696809649",
+  "name" : "BOB&SOUL en live au NEW MORNING",
+  "location" : "jeudi prochain à 20:00",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-bobsoul-en-live-au-new-morning-1132696809649?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-16T20:00:00",
   "detailed_date" : "mer. 16 avr. 2025 20:00 - 22:00 CEST",
   "detailed_address" : "Pathé Wilson\n3 Place du Président Thomas Wilson 31000 Toulouse\nAfficher la carte",
@@ -265,45 +229,9 @@
   "detailed_address" : "Louvre Lens Vallée\n84 Rue Paul Bert 62300 Lens\nAfficher la carte",
   "event_id" : "1283555843079",
   "name" : "Matinale \"Cartes sur table\"",
-  "location" : "jeu. 24 avr., 08:30",
+  "location" : "Thu, Apr 24, 8:30 AM",
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/inscription-matinale-cartes-sur-table-1283555843079?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-26T18:00:00",
-  "detailed_date" : "sam. 26 avr. 2025 18:00 - 21:00 CEST",
-  "detailed_address" : "Hôtel Mercure Paris 15 Porte de Versailles\n6 Rue Saint-Lambert 75015 Paris\nAfficher la carte",
-  "event_id" : "1291106326779",
-  "name" : "Lifewave Europe Roadshow France: PARIS 2025",
-  "location" : "Hôtel Mercure Paris 15 Porte de Versailles",
-  "category" : "health",
-  "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-paris-2025-1291106326779?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T18:30:00",
-  "detailed_date" : "sam. 12 avr. 2025 18:30 - dim. 13 avr. 2025 02:30 CEST",
-  "detailed_address" : "Basket BBM Marmande - Collinéum Pascal Laperche de Beaupuy\n22 Avenue de La Belle Colline 47200 Beaupuy\nAfficher la carte",
-  "event_id" : "1308029374069",
-  "name" : "BBM VS ABC AUCH",
-  "location" : "demain à 18:30",
-  "category" : "sports-and-fitness",
-  "url" : "https://www.eventbrite.fr/e/billets-bbm-vs-abc-auch-1308029374069?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-31T20:00:00",
-  "detailed_date" : "sam. 31 mai 2025 20:00 - dim. 1 juin 2025 00:30 CEST",
-  "detailed_address" : "Toulon\nToulon 83000 Toulon\nAfficher la carte",
-  "event_id" : "1046372597607",
-  "name" : "Soirée Disney Channel & 2000's TOULON",
-  "location" : "sam. 31 mai, 20:00",
-  "category" : "film-and-media",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2000s-toulon-1046372597607?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-16T10:30:00",
-  "detailed_date" : "mer. 16 avr. 2025 10:30 - 13:00 CEST",
-  "detailed_address" : "76 Rue Daguerre\n76 Rue Daguerre 75014 Paris\nAfficher la carte",
-  "event_id" : "1289878373939",
-  "name" : "Atelier IDEAS Lab : « Comprendre et anticiper l’engagement de demain »",
-  "location" : "mercredi prochain à 10:30",
-  "category" : "charity-and-causes",
-  "url" : "https://www.eventbrite.fr/e/billets-atelier-ideas-lab-comprendre-et-anticiper-lengagement-de-demain-1289878373939?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-02T19:30:00",
   "detailed_date" : "ven. 2 mai 2025 19:30 - sam. 3 mai 2025 00:30 CEST",
@@ -314,32 +242,23 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-reims-2-1231247036029?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-26T16:00:00",
-  "detailed_date" : "sam. 26 avr. 2025 16:00 - 20:30 CEST",
-  "detailed_address" : "La maison des E'Toiles\n108 Rue de Verrisondre Cossanges 43150 Salettes\nAfficher la carte",
-  "event_id" : "1249314696889",
-  "name" : "La Voie Hopi: comment cultiver la paix en soi et dans le monde",
-  "location" : "sam. 26 avr., 16:00",
-  "category" : "spirituality",
-  "url" : "https://www.eventbrite.be/e/billets-la-voie-hopi-comment-cultiver-la-paix-en-soi-et-dans-le-monde-1249314696889?aff=ebdssbdestsearch"
+  "date" : "2025-05-31T20:00:00",
+  "detailed_date" : "sam. 31 mai 2025 20:00 - dim. 1 juin 2025 00:30 CEST",
+  "detailed_address" : "Toulon\nToulon 83000 Toulon\nAfficher la carte",
+  "event_id" : "1046372597607",
+  "name" : "Soirée Disney Channel & 2000's TOULON",
+  "location" : "sam. 31 mai, 20:00",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2000s-toulon-1046372597607?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-24T09:30:00",
-  "detailed_date" : "jeu. 24 avr. 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "Baya\n1 Rue du Guesclin 44000 Nantes\nAfficher la carte",
-  "event_id" : "1268753970279",
-  "name" : "Cercle Départemental en Loire-Atlantique",
-  "location" : "Baya",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-loire-atlantique-1268753970279?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-26T20:00:00",
-  "detailed_date" : "sam. 26 avr. 2025 20:00 - dim. 27 avr. 2025 00:00 CEST",
-  "detailed_address" : "Metz centre: adresse écrite sur le billet\nMetz 57000 Metz\nAfficher la carte",
-  "event_id" : "1238175699849",
-  "name" : "Soirée Disney Channel & 2010s (Metz) - 2e édition",
-  "location" : "sam. 26 avr., 20:00",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-metz-2e-edition-1238175699849?aff=ebdssbdestsearch"
+  "date" : "2025-04-26T18:00:00",
+  "detailed_date" : "sam. 26 avr. 2025 18:00 - 21:00 CEST",
+  "detailed_address" : "Hôtel Mercure Paris 15 Porte de Versailles\n6 Rue Saint-Lambert 75015 Paris\nAfficher la carte",
+  "event_id" : "1291106326779",
+  "name" : "Lifewave Europe Roadshow France: PARIS 2025",
+  "location" : "Hôtel Mercure Paris 15 Porte de Versailles",
+  "category" : "health",
+  "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-paris-2025-1291106326779?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-17T10:00:00",
   "detailed_date" : "sam. 17 mai 2025 10:00 - 18:00 CEST",
@@ -350,33 +269,6 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-makers-conference-2025-1271002716339?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-25T09:30:00",
-  "detailed_date" : "ven. 25 avr. 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "Prelys Courtage\n30 Boulevard Heurteloup 37000 Tours\nAfficher la carte",
-  "event_id" : "1258346651709",
-  "name" : "Cercle départemental en Indre-et-Loire",
-  "location" : "Prelys Courtage",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-indre-et-loire-1258346651709?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-06T08:30:00",
-  "detailed_date" : "mar. 6 mai 2025 08:30 - 17:00 CEST",
-  "detailed_address" : "Maison de la Chimie\n28 Rue Saint-Dominique 75007 Paris\nAfficher la carte",
-  "event_id" : "1253059718349",
-  "name" : "DPO Forum Paris",
-  "location" : "Maison de la Chimie",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-dpo-forum-paris-1253059718349?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T19:30:00",
-  "detailed_date" : "sam. 12 avr. 2025 19:30 - 23:30 CEST",
-  "detailed_address" : "Nantes centre: adresse écrite sur le billet\nNantes centre 44 Nantes\nAfficher la carte",
-  "event_id" : "1121916024029",
-  "name" : "Taylor Swift Eras Party (+partie 1 Olivia Rodrigo) - Nantes (2e édition)",
-  "location" : "demain à 19:30",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-taylor-swift-eras-party-partie-1-olivia-rodrigo-nantes-2e-edition-1121916024029?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-05-05T19:00:00",
   "detailed_date" : "lun. 5 mai 2025 19:00 - 21:00 CEST",
   "detailed_address" : "Espace Batignolles\n18 Rue la Condamine 75017 Paris\nAfficher la carte",
@@ -385,6 +277,42 @@
   "location" : "Espace Batignolles",
   "category" : "N/A",
   "url" : "https://www.eventbrite.com/e/billets-conference-mieux-comprendre-le-trouble-dysphorique-premenstruel-tdpm-1297778011969?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-26T16:00:00",
+  "detailed_date" : "sam. 26 avr. 2025 16:00 - 20:30 CEST",
+  "detailed_address" : "La maison des E'Toiles\n108 Rue de Verrisondre Cossanges 43150 Salettes\nAfficher la carte",
+  "event_id" : "1249314696889",
+  "name" : "La Voie Hopi: comment cultiver la paix en soi et dans le monde",
+  "location" : "sam. 26 avr., 16:00",
+  "category" : "spirituality",
+  "url" : "https://www.eventbrite.be/e/billets-la-voie-hopi-comment-cultiver-la-paix-en-soi-et-dans-le-monde-1249314696889?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-26T20:00:00",
+  "detailed_date" : "sam. 26 avr. 2025 20:00 - dim. 27 avr. 2025 00:00 CEST",
+  "detailed_address" : "Metz centre: adresse écrite sur le billet\nMetz 57000 Metz\nAfficher la carte",
+  "event_id" : "1238175699849",
+  "name" : "Soirée Disney Channel & 2010s (Metz) - 2e édition",
+  "location" : "sam. 26 avr., 20:00",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-metz-2e-edition-1238175699849?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-16T10:30:00",
+  "detailed_date" : "mer. 16 avr. 2025 10:30 - 13:00 CEST",
+  "detailed_address" : "76 Rue Daguerre\n76 Rue Daguerre 75014 Paris\nAfficher la carte",
+  "event_id" : "1289878373939",
+  "name" : "Atelier IDEAS Lab : « Comprendre et anticiper l’engagement de demain »",
+  "location" : "mercredi prochain à 10:30",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-ideas-lab-comprendre-et-anticiper-lengagement-de-demain-1289878373939?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T09:30:00",
+  "detailed_date" : "jeu. 24 avr. 2025 09:30 - 12:00 CEST",
+  "detailed_address" : "Baya\n1 Rue du Guesclin 44000 Nantes\nAfficher la carte",
+  "event_id" : "1268753970279",
+  "name" : "Cercle Départemental en Loire-Atlantique",
+  "location" : "Baya",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-loire-atlantique-1268753970279?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-15T18:00:00",
   "detailed_date" : "jeu. 15 mai 2025 18:00 - 20:00 CEST",
@@ -395,69 +323,6 @@
   "category" : "business",
   "url" : "https://www.eventbrite.com/e/billets-women-in-tech-paris-outgeekwomen-1224238292689?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-11T19:30:00",
-  "detailed_date" : "ven. 11 avr. 2025 19:30 - 22:30 CEST",
-  "detailed_address" : "Espace Icare\n31 Boulevard Gambetta 92130 Issy-les-Moulineaux\nAfficher la carte",
-  "event_id" : "1297192992159",
-  "name" : "ROBIN M Release Party + KIMRA 1ière partie",
-  "location" : "aujourd’hui à 19:30",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-robin-m-release-party-kimra-1iere-partie-1297192992159?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-15T09:00:00",
-  "detailed_date" : "mar. 15 avr. 2025 09:00 - 17:30 CEST",
-  "detailed_address" : "Rolling Beers\n226 Rue Jean Baptiste Calvignac 34670 Baillargues\nAfficher la carte",
-  "event_id" : "1280722408199",
-  "name" : "Fermentis Academy Rolling Beers",
-  "location" : "mardi prochain à 09:00",
-  "category" : "food-and-drink",
-  "url" : "https://www.eventbrite.co.uk/e/billets-fermentis-academy-rolling-beers-1280722408199?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-25T11:00:00",
-  "detailed_date" : "ven. 25 avr. 2025 11:00 - 13:30 CEST",
-  "detailed_address" : "BNP Paribas Centre d'affaires Entreprises Mont Saint Aignan\n39 Rue Raymond Aron 76130 Mont-Saint-Aignan\nAfficher la carte",
-  "event_id" : "1270647142809",
-  "name" : "Cercle Départemental en Seine-Maritime",
-  "location" : "BNP Paribas Centre d'affaires Entreprises Mont Saint Aignan",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-seine-maritime-1270647142809?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-16T19:00:00",
-  "detailed_date" : "ven. 16 mai 2025 19:00 - 23:30 CEST",
-  "detailed_address" : "56 Av. Jean de Noailles\n56 Avenue Jean de Noailles 06400 Cannes\nAfficher la carte",
-  "event_id" : "1267544502729",
-  "name" : "MAGNIFICENT FILM & TELEVISION CANNES VILLA PARTY 2025",
-  "location" : "56 Av. Jean de Noailles",
-  "category" : "film-and-media",
-  "url" : "https://www.eventbrite.co.uk/e/billets-magnificent-film-television-cannes-villa-party-2025-1267544502729?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-14T18:00:00",
-  "detailed_date" : "lun. 14 avr. 2025 18:00 - 21:30 CEST",
-  "detailed_address" : "Le studio\n9 rue de chaumont 75019 75019 Paris\nAfficher la carte",
-  "event_id" : "1235988427659",
-  "name" : "2tonnes France - Formation à l'animation à PARIS",
-  "location" : "lundi prochain à 18:00",
-  "category" : "charity-and-causes",
-  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-france-formation-a-lanimation-a-paris-1235988427659?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-11T20:00:00",
-  "detailed_date" : "ven. 11 avr. 2025 20:00 - 22:30 CEST",
-  "detailed_address" : "Delta business School\n70 Rue de Meaux 75019 Paris\nAfficher la carte",
-  "event_id" : "1252791014649",
-  "name" : "À la découverte du vignoble et des vins des Coteaux d'Ancenis",
-  "location" : "aujourd’hui à 20:00",
-  "category" : "food-and-drink",
-  "url" : "https://www.eventbrite.fr/e/billets-a-la-decouverte-du-vignoble-et-des-vins-des-coteaux-dancenis-1252791014649?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-06-19T09:00:00",
-  "detailed_date" : "jeu. 19 juin 2025 09:00 - ven. 20 juin 2025 18:00 CEST",
-  "detailed_address" : "Université Catholique de Lille\n60 Boulevard Vauban 59800 Lille\nAfficher la carte",
-  "event_id" : "1116486032779",
-  "name" : "Game Camp France 2025",
-  "location" : "Université Catholique de Lille",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-game-camp-france-2025-1116486032779?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-28T18:00:00",
   "detailed_date" : "lun. 28 avr. 2025 18:00 - 21:00 CEST",
   "detailed_address" : "Hôtel Mercure Vannes Le Port\n19 Rue Daniel Gilard 56000 Vannes\nAfficher la carte",
@@ -466,6 +331,15 @@
   "location" : "Hôtel Mercure Vannes Le Port",
   "category" : "health",
   "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-vannes-2025-1291094521469?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-25T09:30:00",
+  "detailed_date" : "ven. 25 avr. 2025 09:30 - 12:00 CEST",
+  "detailed_address" : "Prelys Courtage\n30 Boulevard Heurteloup 37000 Tours\nAfficher la carte",
+  "event_id" : "1258346651709",
+  "name" : "Cercle départemental en Indre-et-Loire",
+  "location" : "Prelys Courtage",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-indre-et-loire-1258346651709?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-28T14:30:00",
   "detailed_date" : "lun. 28 avr. 2025 14:30 - 19:30 CEST",
@@ -476,6 +350,33 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-tour-de-france-de-lentrepreneuriat-des-femmes-etape-lille-1285827196759?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-05-16T19:00:00",
+  "detailed_date" : "ven. 16 mai 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "56 Av. Jean de Noailles\n56 Avenue Jean de Noailles 06400 Cannes\nAfficher la carte",
+  "event_id" : "1267544502729",
+  "name" : "MAGNIFICENT FILM & TELEVISION CANNES VILLA PARTY 2025",
+  "location" : "56 Av. Jean de Noailles",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.co.uk/e/billets-magnificent-film-television-cannes-villa-party-2025-1267544502729?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-06-19T09:00:00",
+  "detailed_date" : "jeu. 19 juin 2025 09:00 - ven. 20 juin 2025 18:00 CEST",
+  "detailed_address" : "Université Catholique de Lille\n60 Boulevard Vauban 59800 Lille\nAfficher la carte",
+  "event_id" : "1116486032779",
+  "name" : "Game Camp France 2025",
+  "location" : "Université Catholique de Lille",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-game-camp-france-2025-1116486032779?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-15T09:00:00",
+  "detailed_date" : "mar. 15 avr. 2025 09:00 - 17:30 CEST",
+  "detailed_address" : "Rolling Beers\n226 Rue Jean Baptiste Calvignac 34670 Baillargues\nAfficher la carte",
+  "event_id" : "1280722408199",
+  "name" : "Fermentis Academy Rolling Beers",
+  "location" : "demain à 09:00",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.co.uk/e/billets-fermentis-academy-rolling-beers-1280722408199?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-06-10T09:00:00",
   "detailed_date" : "mar. 10 juin 2025 09:00 - mer. 11 juin 2025 18:00 CEST",
   "detailed_address" : "Ecole informatique Paris - Epitech\n24 Rue Pasteur 94270 Le Kremlin-Bicêtre\nAfficher la carte",
@@ -485,50 +386,23 @@
   "category" : "science-and-tech",
   "url" : "https://www.eventbrite.fr/e/billets-modern-workplace-conference-paris-2025-hybride-1232220387349?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-11T19:00:00",
-  "detailed_date" : "ven. 11 avr. 2025 19:00 - 23:30 CEST",
-  "detailed_address" : "Le Petit Clos\n28 Avenue de la Bordelaise 34110 Frontignan\nAfficher la carte",
-  "event_id" : "1259784662839",
-  "name" : "STARS AMAZIGH - FROTIGNAN",
-  "location" : "aujourd’hui à 19:00",
-  "category" : "community",
-  "url" : "https://www.eventbrite.fr/e/billets-stars-amazigh-frotignan-1259784662839?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-11T14:30:00",
-  "detailed_date" : "2025-04-11T14:30:00Z",
-  "detailed_address" : "Hôtel du Couvent\n1 Rue Honoré Ugo 06300 Nice\nAfficher la carte",
-  "event_id" : "1226626515929",
-  "name" : "Lieu Commun - Festival de poésie / Poetry festival",
-  "location" : "aujourd’hui à 17:00",
-  "category" : "arts",
-  "url" : "https://www.eventbrite.co.uk/e/billets-lieu-commun-festival-de-poesie-poetry-festival-1226626515929?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-24T19:20:00",
-  "detailed_date" : "jeu. 24 avr. 2025 19:20 - 21:00 CEST",
-  "detailed_address" : "Musée d'Art Moderne de Paris\n11 Avenue du Président Wilson 75116 Paris\nAfficher la carte",
-  "event_id" : "1277901049439",
-  "name" : "INSEAD ARTS |Visite guidée \"Matisse et Marguerite : le regard d'un père\"",
-  "location" : "Musée d'Art Moderne de Paris",
-  "category" : "community",
-  "url" : "https://www.eventbrite.fr/e/billets-insead-arts-visite-guidee-matisse-et-marguerite-le-regard-dun-pere-1277901049439?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-15T19:00:00",
-  "detailed_date" : "mar. 15 avr. 2025 19:00 - 23:30 CEST",
-  "detailed_address" : "Wagon Restaurant Bar\n32 Place de la Gare 59800 Lille\nAfficher la carte",
-  "event_id" : "1265050432899",
-  "name" : "Kovenant - Réseautage thématique : Formation, consulting et coaching",
-  "location" : "mardi prochain à 19:00",
+  "date" : "2025-04-25T11:00:00",
+  "detailed_date" : "ven. 25 avr. 2025 11:00 - 13:30 CEST",
+  "detailed_address" : "BNP Paribas Centre d'affaires Entreprises Mont Saint Aignan\n39 Rue Raymond Aron 76130 Mont-Saint-Aignan\nAfficher la carte",
+  "event_id" : "1270647142809",
+  "name" : "Cercle Départemental en Seine-Maritime",
+  "location" : "BNP Paribas Centre d'affaires Entreprises Mont Saint Aignan",
   "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/inscription-kovenant-reseautage-thematique-formation-consulting-et-coaching-1265050432899?aff=ebdssbdestsearch"
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-seine-maritime-1270647142809?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-05-23T20:30:00",
-  "detailed_date" : "ven. 23 mai 2025 20:30 - sam. 24 mai 2025 00:30 CEST",
-  "detailed_address" : "Tours\nTOURS 37000 Tours\nAfficher la carte",
-  "event_id" : "1265381352689",
-  "name" : "Soirée Disney Channel & 2010's TOURS",
-  "location" : "Tours",
-  "category" : "film-and-media",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-tours-1265381352689?aff=ebdssbdestsearch"
+  "date" : "2025-04-14T18:00:00",
+  "detailed_date" : "lun. 14 avr. 2025 18:00 - 21:30 CEST",
+  "detailed_address" : "Le studio\n9 rue de chaumont 75019 75019 Paris\nAfficher la carte",
+  "event_id" : "1235988427659",
+  "name" : "2tonnes France - Formation à l'animation à PARIS",
+  "location" : "aujourd’hui à 18:00",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-france-formation-a-lanimation-a-paris-1235988427659?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-16T20:00:00",
   "detailed_date" : "ven. 16 mai 2025 20:00 - sam. 17 mai 2025 00:30 CEST",
@@ -539,14 +413,23 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-rennes-1233119105439?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-15T19:00:00",
-  "detailed_date" : "mar. 15 avr. 2025 19:00 - 22:00 CEST",
-  "detailed_address" : "Golf Paris Val d'Europe\n40 Allee de La Mare Houleuse 77700 Magny-le-Hongre\nAfficher la carte",
-  "event_id" : "1307795705159",
-  "name" : "Afterwork Api'biz Val d'Europe - Édition Mystère au Golf !",
-  "location" : "mardi prochain à 19:00",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/inscription-afterwork-apibiz-val-deurope-edition-mystere-au-golf-1307795705159?aff=ebdssbdestsearch"
+  "date" : "2025-05-23T20:30:00",
+  "detailed_date" : "ven. 23 mai 2025 20:30 - sam. 24 mai 2025 00:30 CEST",
+  "detailed_address" : "Tours\nTOURS 37000 Tours\nAfficher la carte",
+  "event_id" : "1265381352689",
+  "name" : "Soirée Disney Channel & 2010's TOURS",
+  "location" : "Tours",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-tours-1265381352689?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-20T11:00:00",
+  "detailed_date" : "2025-04-20T11:00:00Z",
+  "detailed_address" : "2 Av. de la Prte Molitor\n2 Avenue de la Porte Molitor 75016 Paris\nAfficher la carte",
+  "event_id" : "1303961035559",
+  "name" : "Chasse aux Œufs et Atelier Street Art : Une Expérience Créative et Gourmand",
+  "location" : "2 Av. de la Prte Molitor",
+  "category" : "holiday",
+  "url" : "https://www.eventbrite.fr/e/billets-chasse-aux-ufs-et-atelier-street-art-une-experience-creative-et-gourmand-1303961035559?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-15T19:00:00",
   "detailed_date" : "jeu. 15 mai 2025 19:00 - 21:30 CEST",
@@ -566,6 +449,33 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-brest-1233130188589?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-24T19:20:00",
+  "detailed_date" : "jeu. 24 avr. 2025 19:20 - 21:00 CEST",
+  "detailed_address" : "Musée d'Art Moderne de Paris\n11 Avenue du Président Wilson 75116 Paris\nAfficher la carte",
+  "event_id" : "1277901049439",
+  "name" : "INSEAD ARTS |Visite guidée \"Matisse et Marguerite : le regard d'un père\"",
+  "location" : "Musée d'Art Moderne de Paris",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-insead-arts-visite-guidee-matisse-et-marguerite-le-regard-dun-pere-1277901049439?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-15T19:00:00",
+  "detailed_date" : "mar. 15 avr. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Wagon Restaurant Bar\n32 Place de la Gare 59800 Lille\nAfficher la carte",
+  "event_id" : "1265050432899",
+  "name" : "Kovenant - Réseautage thématique : Formation, consulting et coaching",
+  "location" : "Tuesday at 7:00 PM",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/inscription-kovenant-reseautage-thematique-formation-consulting-et-coaching-1265050432899?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-15T19:00:00",
+  "detailed_date" : "mar. 15 avr. 2025 19:00 - 22:00 CEST",
+  "detailed_address" : "Golf Paris Val d'Europe\n40 Allee de La Mare Houleuse 77700 Magny-le-Hongre\nAfficher la carte",
+  "event_id" : "1307795705159",
+  "name" : "Afterwork Api'biz Val d'Europe - Édition Mystère au Golf !",
+  "location" : "Tuesday at 7:00 PM",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/inscription-afterwork-apibiz-val-deurope-edition-mystere-au-golf-1307795705159?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-24T19:00:00",
   "detailed_date" : "jeu. 24 avr. 2025 19:00 - 22:30 CEST",
   "detailed_address" : "Modulo\n15 Quai du Général Sarrail 69006 Lyon\nAfficher la carte",
@@ -580,18 +490,9 @@
   "detailed_address" : "Cinéma Megarama Bordeaux - IMAX - 4D E-Motion\n7 Quai des Queyries 33100 Bordeaux\nAfficher la carte",
   "event_id" : "1232732458969",
   "name" : "Camp de base Bordeaux - Soirée Film de Montagne",
-  "location" : "mardi prochain à 20:00",
+  "location" : "demain à 20:00",
   "category" : "travel-and-outdoor",
   "url" : "https://www.eventbrite.fr/e/billets-camp-de-base-bordeaux-soiree-film-de-montagne-1232732458969?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-17T09:30:00",
-  "detailed_date" : "jeu. 17 avr. 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "UGOLF: Golf de Cicé-Blossac (Golf Rennes - Golf de Bruz)\nAvenue de la Chaise 35170 Bruz\nAfficher la carte",
-  "event_id" : "1263932128019",
-  "name" : "Cercle Départemental en Ille-et-Vilaine Sud",
-  "location" : "UGOLF: Golf de Cicé-Blossac (Golf Rennes - Golf de Bruz)",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-ille-et-vilaine-sud-1263932128019?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-26T11:00:00",
   "detailed_date" : "sam. 26 avr. 2025 11:00 - 18:00 CEST",
@@ -602,12 +503,21 @@
   "category" : "school-activities",
   "url" : "https://www.eventbrite.com/e/billets-isikole-fest-2025-1276019230869?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-17T09:30:00",
+  "detailed_date" : "jeu. 17 avr. 2025 09:30 - 12:00 CEST",
+  "detailed_address" : "UGOLF: Golf de Cicé-Blossac (Golf Rennes - Golf de Bruz)\nAvenue de la Chaise 35170 Bruz\nAfficher la carte",
+  "event_id" : "1263932128019",
+  "name" : "Cercle Départemental en Ille-et-Vilaine Sud",
+  "location" : "jeudi prochain à 09:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-ille-et-vilaine-sud-1263932128019?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-14T10:00:00",
   "detailed_date" : "lun. 14 avr. 2025 10:00 - 12:30 CEST",
   "detailed_address" : "Community Work - Coworking & Location de Bureau Roanne\n16 bis Boulevard de Valmy 42300 Roanne\nAfficher la carte",
   "event_id" : "1263801908529",
   "name" : "Cercle Départemental dans la Loire",
-  "location" : "lundi prochain à 10:00",
+  "location" : "aujourd’hui à 10:00",
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-la-loire-1263801908529?aff=ebdssbdestsearch"
 }, {
@@ -620,60 +530,6 @@
   "category" : "sports-and-fitness",
   "url" : "https://www.eventbrite.fr/e/billets-run-flan-tour-4-1286019842969?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-24T18:00:00",
-  "detailed_date" : "jeu. 24 avr. 2025 18:00 - 21:00 CEST",
-  "detailed_address" : "Novotel Lyon Gerland Musée des Confluences\n70, avenue Leclerc 69007 Lyon\nAfficher la carte",
-  "event_id" : "1291104561499",
-  "name" : "Lifewave Europe Roadshow France: LYON 2025",
-  "location" : "Novotel Lyon Gerland Musée des Confluences",
-  "category" : "health",
-  "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-lyon-2025-1291104561499?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-26T14:00:00",
-  "detailed_date" : "sam. 26 avr. 2025 14:00 - 18:00 CEST",
-  "detailed_address" : "Bobo Paris Bubble Tea\n11 Boulevard Montmartre 75002 Paris\nAfficher la carte",
-  "event_id" : "1237080804989",
-  "name" : "BRUNCH LITTERAIRE",
-  "location" : "Bobo Paris Bubble Tea",
-  "category" : "food-and-drink",
-  "url" : "https://www.eventbrite.fr/e/billets-brunch-litteraire-1237080804989?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-17T16:10:00",
-  "detailed_date" : "2025-04-17T16:10:00Z",
-  "detailed_address" : "Mezzanine\n64 Boulevard de Clichy 75018 Paris\nShow map",
-  "event_id" : "1291905637539",
-  "name" : "\"Quand les mots chantent\" - Bœuf Sans Viande invite Mike l'inspi",
-  "location" : "Mezzanine",
-  "category" : "arts",
-  "url" : "https://www.eventbrite.fr/e/quand-les-mots-chantent-buf-sans-viande-invite-mike-linspi-registration-1291905637539?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-24T12:00:00",
-  "detailed_date" : "jeu. 24 avr. 2025 12:00 - 14:30 CEST",
-  "detailed_address" : "SCI Le Grand Saint Mitre\n1922 Chemin de Saint-Mitre 83470 Saint-Maximin-la-Sainte-Baume\nAfficher la carte",
-  "event_id" : "1268792014069",
-  "name" : "Cercle Départemental dans le Var",
-  "location" : "SCI Le Grand Saint Mitre",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-le-var-1268792014069?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-28T20:30:00",
-  "detailed_date" : "mer. 28 mai 2025 20:30 - jeu. 29 mai 2025 00:00 CEST",
-  "detailed_address" : "La Java\n105 Rue du Faubourg du Temple 75010 Paris\nAfficher la carte",
-  "event_id" : "1303181273269",
-  "name" : "Soirée Mamma Mia + Comédies Musicales & Disco (Paris) - 2e édition",
-  "location" : "mer. 28 mai, 20:30",
-  "category" : "music",
-  "url" : "https://www.eventbrite.fr/e/billets-soiree-mamma-mia-comedies-musicales-disco-paris-2e-edition-1303181273269?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-14T11:30:00",
-  "detailed_date" : "lun. 14 avr. 2025 11:30 - 14:00 CEST",
-  "detailed_address" : "Chambre de Métiers et de l'Artisanat de la Haute-Savoie\n28 Avenue de France 74000 Annecy\nAfficher la carte",
-  "event_id" : "1268460562689",
-  "name" : "Cercle Départemental en Haute-Savoie",
-  "location" : "lundi prochain à 11:30",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-haute-savoie-1268460562689?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-29T19:00:00",
   "detailed_date" : "mar. 29 avr. 2025 19:00 - 23:00 CEST",
   "detailed_address" : "Come a casa\n4 Boulevard de la République 84350 Courthézon\nAfficher la carte",
@@ -683,23 +539,14 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-afterwork-visibilite-9-1297085861729?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-22T12:00:00",
-  "detailed_date" : "mar. 22 avr. 2025 12:00 - 14:30 CEST",
-  "detailed_address" : "Albert School\n19 Rue Henri Barbusse 13001 Marseille\nAfficher la carte",
-  "event_id" : "1272206085649",
-  "name" : "Cercle Départemental dans les Bouches-du-Rhône",
-  "location" : "mar. 22 avr., 12:00",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-les-bouches-du-rhone-1272206085649?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-24T09:30:00",
-  "detailed_date" : "jeu. 24 avr. 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "Nomad bzh\n3 Rue Camille Claudel 56890 Plescop\nAfficher la carte",
-  "event_id" : "1280917501729",
-  "name" : "Cercle Départemental dans le Morbihan",
-  "location" : "Nomad bzh",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-le-morbihan-1280917501729?aff=ebdssbdestsearch"
+  "date" : "2025-05-28T20:30:00",
+  "detailed_date" : "mer. 28 mai 2025 20:30 - jeu. 29 mai 2025 00:00 CEST",
+  "detailed_address" : "La Java\n105 Rue du Faubourg du Temple 75010 Paris\nAfficher la carte",
+  "event_id" : "1303181273269",
+  "name" : "Soirée Mamma Mia + Comédies Musicales & Disco (Paris) - 2e édition",
+  "location" : "La Java",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-mamma-mia-comedies-musicales-disco-paris-2e-edition-1303181273269?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-29T14:45:00",
   "detailed_date" : "mar. 29 avr. 2025 14:45 - 17:30 CEST",
@@ -719,30 +566,138 @@
   "category" : "arts",
   "url" : "https://www.eventbrite.fr/e/billets-faf-jauthentique-spectacle-standup-1116602641559?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-26T14:00:00",
+  "detailed_date" : "sam. 26 avr. 2025 14:00 - 18:00 CEST",
+  "detailed_address" : "Bobo Paris Bubble Tea\n11 Boulevard Montmartre 75002 Paris\nAfficher la carte",
+  "event_id" : "1237080804989",
+  "name" : "BRUNCH LITTERAIRE",
+  "location" : "Bobo Paris Bubble Tea",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.fr/e/billets-brunch-litteraire-1237080804989?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T18:00:00",
+  "detailed_date" : "jeu. 24 avr. 2025 18:00 - 21:00 CEST",
+  "detailed_address" : "Novotel Lyon Gerland Musée des Confluences\n70, avenue Leclerc 69007 Lyon\nAfficher la carte",
+  "event_id" : "1291104561499",
+  "name" : "Lifewave Europe Roadshow France: LYON 2025",
+  "location" : "Novotel Lyon Gerland Musée des Confluences",
+  "category" : "health",
+  "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-lyon-2025-1291104561499?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-17T16:10:00",
+  "detailed_date" : "2025-04-17T16:10:00Z",
+  "detailed_address" : "Mezzanine\n64 Boulevard de Clichy 75018 Paris\nShow map",
+  "event_id" : "1291905637539",
+  "name" : "\"Quand les mots chantent\" - Bœuf Sans Viande invite Mike l'inspi",
+  "location" : "jeudi prochain à 19:00",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/quand-les-mots-chantent-buf-sans-viande-invite-mike-linspi-registration-1291905637539?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T12:00:00",
+  "detailed_date" : "jeu. 24 avr. 2025 12:00 - 14:30 CEST",
+  "detailed_address" : "SCI Le Grand Saint Mitre\n1922 Chemin de Saint-Mitre 83470 Saint-Maximin-la-Sainte-Baume\nAfficher la carte",
+  "event_id" : "1268792014069",
+  "name" : "Cercle Départemental dans le Var",
+  "location" : "SCI Le Grand Saint Mitre",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-le-var-1268792014069?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-16T18:30:00",
+  "detailed_date" : "mer. 16 avr. 2025 18:30 - 22:00 CEST",
+  "detailed_address" : "Quiz Room Annecy\n78 Boulevard du Fier 74000 Annecy\nAfficher la carte",
+  "event_id" : "1317419269499",
+  "name" : "TOURNOI QUIZ - Quiz Room Annecy !",
+  "location" : "mercredi prochain à 18:30",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-tournoi-quiz-quiz-room-annecy-1317419269499?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-19T09:30:00",
+  "detailed_date" : "lun. 19 mai 2025 09:30 - 12:00 CEST",
+  "detailed_address" : "BNP Paribas Banque Privée - Centre Evry\nRue Marcel Carné 91080 Évry-Courcouronnes\nAfficher la carte",
+  "event_id" : "1267193382519",
+  "name" : "Cercle Départemental en Essonne",
+  "location" : "lun. 19 mai, 09:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-essonne-1267193382519?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-14T11:30:00",
+  "detailed_date" : "lun. 14 avr. 2025 11:30 - 14:00 CEST",
+  "detailed_address" : "Chambre de Métiers et de l'Artisanat de la Haute-Savoie\n28 Avenue de France 74000 Annecy\nAfficher la carte",
+  "event_id" : "1268460562689",
+  "name" : "Cercle Départemental en Haute-Savoie",
+  "location" : "aujourd’hui à 11:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-haute-savoie-1268460562689?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-18T19:00:00",
+  "detailed_date" : "ven. 18 avr. 2025 19:00 - 23:00 CEST",
+  "detailed_address" : "91 Quai de l'Ouest\n91 Quai de l'Ouest 59000 Lille\nAfficher la carte",
+  "event_id" : "1303011314919",
+  "name" : "Soirée Around au Sales Mômes! (23e édition)",
+  "location" : "vendredi prochain à 19:00",
+  "category" : "hobbies",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-around-au-sales-momes-23e-edition-1303011314919?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-22T12:00:00",
+  "detailed_date" : "mar. 22 avr. 2025 12:00 - 14:30 CEST",
+  "detailed_address" : "Albert School\n19 Rue Henri Barbusse 13001 Marseille\nAfficher la carte",
+  "event_id" : "1272206085649",
+  "name" : "Cercle Départemental dans les Bouches-du-Rhône",
+  "location" : "mar. 22 avr., 12:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-les-bouches-du-rhone-1272206085649?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-14T09:30:00",
   "detailed_date" : "lun. 14 avr. 2025 09:30 - 12:00 CEST",
   "detailed_address" : "Baya - Portage Salarial - Lyon\n3 Cours Charlemagne 69002 Lyon\nAfficher la carte",
   "event_id" : "1263807866349",
   "name" : "Cercle Départemental dans le Rhône",
-  "location" : "lundi prochain à 09:30",
+  "location" : "aujourd’hui à 09:30",
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-le-rhone-1263807866349?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-15T17:30:00",
+  "detailed_date" : "jeu. 15 mai 2025 17:30 - 23:00 CEST",
+  "detailed_address" : "Spaces - Paris, Spaces Réaumur\n124 Rue Réaumur 75002 Paris\nAfficher la carte",
+  "event_id" : "1143427365029",
+  "name" : "Female Founders Summit Paris | Événement pour fondatrices et investisseuses",
+  "location" : "Spaces - Paris, Spaces Réaumur",
+  "category" : "business",
+  "url" : "https://www.eventbrite.de/e/billets-female-founders-summit-paris-evenement-pour-fondatrices-et-investisseuses-1143427365029?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-02T17:00:00",
+  "detailed_date" : "ven. 2 mai 2025 17:00 - dim. 4 mai 2025 16:00 CEST",
+  "detailed_address" : "12 Rue Larmeroux\n12 Rue Larmeroux 92170 Vanves\nAfficher la carte",
+  "event_id" : "1231592930609",
+  "name" : "2025 Taira France Seminar",
+  "location" : "12 Rue Larmeroux",
+  "category" : "sports-and-fitness",
+  "url" : "https://www.eventbrite.fr/e/billets-2025-taira-france-seminar-1231592930609?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-16T16:30:00",
   "detailed_date" : "mer. 16 avr. 2025 16:30 - 18:30 CEST",
   "detailed_address" : "Batman Escape Game Immersif Paris, Avenue Corentin Cariou, Paris, France\n30 Avenue Corentin Cariou 75019 Paris\nAfficher la carte",
   "event_id" : "1304179739709",
   "name" : "Célébrez Pâques à Gotham City !",
-  "location" : "mercredi prochain à 16:30",
+  "location" : "Wednesday at 4:30 PM",
   "category" : "holiday",
   "url" : "https://www.eventbrite.fr/e/billets-celebrez-paques-a-gotham-city-1304179739709?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-29T12:00:00",
+  "detailed_date" : "mar. 29 avr. 2025 12:00 - 14:30 CEST",
+  "detailed_address" : "InnovaGrasse - Pépinière d'entreprises et espace de co-working à Grasse\n4 Traverse Dupont 06130 Grasse\nAfficher la carte",
+  "event_id" : "1297040124929",
+  "name" : "Cercle Départemental dans les Alpes-Maritimes",
+  "location" : "InnovaGrasse - Pépinière d'entreprises et espace de co-working à Grasse",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-les-alpes-maritimes-1297040124929?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-15T18:00:00",
   "detailed_date" : "mar. 15 avr. 2025 18:00 - 21:00 CEST",
   "detailed_address" : "Akelarre Café\n4 rue Pontrique 64100 Bayonne\nAfficher la carte",
   "event_id" : "1251466663479",
   "name" : "2tonnes - Atelier à BAYONNE (64100)",
-  "location" : "mardi prochain à 18:00",
+  "location" : "demain à 18:00",
   "category" : "charity-and-causes",
   "url" : "https://www.eventbrite.fr/e/billets-2tonnes-atelier-a-bayonne-64100-1251466663479?aff=ebdssbdestsearch"
 }, {
@@ -755,32 +710,14 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-mayenne-1272183147039?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-05-19T09:30:00",
-  "detailed_date" : "lun. 19 mai 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "BNP Paribas Banque Privée - Centre Evry\nRue Marcel Carné 91080 Évry-Courcouronnes\nAfficher la carte",
-  "event_id" : "1267193382519",
-  "name" : "Cercle Départemental en Essonne",
-  "location" : "lun. 19 mai, 09:30",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-essonne-1267193382519?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-14T09:00:00",
-  "detailed_date" : "lun. 14 avr. 2025 09:00 - 11:30 CEST",
-  "detailed_address" : "Café-laverie Le Jus de Chaussette\n4 Rue Thalès 17440 Aytré\nAfficher la carte",
-  "event_id" : "1301005505489",
-  "name" : "Cercle Départemental en Charente-Maritime",
-  "location" : "lundi prochain à 09:00",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-charente-maritime-1301005505489?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T13:00:00",
-  "detailed_date" : "2025-04-12T13:00:00Z",
-  "detailed_address" : "Oscillo Studio\n55 Rue Cartier Bresson 93500 Pantin\nAfficher la carte",
-  "event_id" : "1290307286829",
-  "name" : "Danse Avec Classe- L’Expérience Danse & Musique Live",
-  "location" : "demain à 16:00",
-  "category" : "other",
-  "url" : "https://www.eventbrite.fr/e/billets-danse-avec-classe-lexperience-danse-musique-live-1290307286829?aff=ebdssbdestsearch"
+  "date" : "2025-04-17T19:30:00",
+  "detailed_date" : "jeu. 17 avr. 2025 19:30 - 23:30 CEST",
+  "detailed_address" : "L'Heure du Jeu - Champs Libres\n11 Boulevard Magenta 35000 Rennes\nAfficher la carte",
+  "event_id" : "1277865483059",
+  "name" : "Soirée Loups Garous",
+  "location" : "jeudi prochain à 19:30",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-loups-garous-1277865483059?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-24T09:30:00",
   "detailed_date" : "jeu. 24 avr. 2025 09:30 - 12:00 CEST",
@@ -800,23 +737,23 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-le-finistere-nord-1270673301049?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-05-15T17:30:00",
-  "detailed_date" : "jeu. 15 mai 2025 17:30 - 23:00 CEST",
-  "detailed_address" : "Spaces - Paris, Spaces Réaumur\n124 Rue Réaumur 75002 Paris\nAfficher la carte",
-  "event_id" : "1143427365029",
-  "name" : "Female Founders Summit Paris | Événement pour fondatrices et investisseuses",
-  "location" : "Spaces - Paris, Spaces Réaumur",
+  "date" : "2025-05-20T09:45:00",
+  "detailed_date" : "mar. 20 mai 2025 09:45 - mer. 21 mai 2025 17:00 CEST",
+  "detailed_address" : "INSA Lyon\n20 Avenue Albert Einstein 69100 Villeurbanne\nAfficher la carte",
+  "event_id" : "1220721323339",
+  "name" : "Journées Technologiques Titane 2025 - [20 & 21 Mai]",
+  "location" : "INSA Lyon",
   "category" : "business",
-  "url" : "https://www.eventbrite.de/e/billets-female-founders-summit-paris-evenement-pour-fondatrices-et-investisseuses-1143427365029?aff=ebdssbdestsearch"
+  "url" : "https://www.eventbrite.fr/e/billets-journees-technologiques-titane-2025-20-21-mai-1220721323339?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-12T09:30:00",
-  "detailed_date" : "sam. 12 avr. 2025 09:30 - 16:30 CEST",
-  "detailed_address" : "L'Atelier - espace de création\nAvenue du Colonel Pechot 54200 Toul\nAfficher la carte",
-  "event_id" : "1308284085919",
-  "name" : "Stage vacances - manga et dessin numérique",
-  "location" : "demain à 09:30",
-  "category" : "hobbies",
-  "url" : "https://www.eventbrite.fr/e/billets-stage-vacances-manga-et-dessin-numerique-1308284085919?aff=ebdssbdestsearch"
+  "date" : "2025-05-17T19:30:00",
+  "detailed_date" : "sam. 17 mai 2025 19:30 - 22:30 CEST",
+  "detailed_address" : "Espace Icare\n31 Boulevard Gambetta 92130 Issy-les-Moulineaux\nAfficher la carte",
+  "event_id" : "1310038363009",
+  "name" : "LITTLE BOB BLUE BASTARDS + YOUNGER SPIRIT",
+  "location" : "Espace Icare",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-little-bob-blue-bastards-younger-spirit-1310038363009?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-22T09:30:00",
   "detailed_date" : "mar. 22 avr. 2025 09:30 - 11:30 CEST",
@@ -827,87 +764,6 @@
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-matinale-business-women-partage-dexperiences-1295820998489?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-05-02T17:00:00",
-  "detailed_date" : "ven. 2 mai 2025 17:00 - dim. 4 mai 2025 16:00 CEST",
-  "detailed_address" : "12 Rue Larmeroux\n12 Rue Larmeroux 92170 Vanves\nAfficher la carte",
-  "event_id" : "1231592930609",
-  "name" : "2025 Taira France Seminar",
-  "location" : "12 Rue Larmeroux",
-  "category" : "sports-and-fitness",
-  "url" : "https://www.eventbrite.fr/e/billets-2025-taira-france-seminar-1231592930609?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-29T12:00:00",
-  "detailed_date" : "mar. 29 avr. 2025 12:00 - 14:30 CEST",
-  "detailed_address" : "InnovaGrasse - Pépinière d'entreprises et espace de co-working à Grasse\n4 Traverse Dupont 06130 Grasse\nAfficher la carte",
-  "event_id" : "1297040124929",
-  "name" : "Cercle Départemental dans les Alpes-Maritimes",
-  "location" : "InnovaGrasse - Pépinière d'entreprises et espace de co-working à Grasse",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-les-alpes-maritimes-1297040124929?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-17T10:00:00",
-  "detailed_date" : "jeu. 17 avr. 2025 10:00 - 12:30 CEST",
-  "detailed_address" : "Whoo Bordeaux Bacalan | Hostel & Résidence\n12 Rue de Gironde 33300 Bordeaux\nAfficher la carte",
-  "event_id" : "1263819009679",
-  "name" : "Cercle Départemental en Gironde",
-  "location" : "Whoo Bordeaux Bacalan | Hostel & Résidence",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-gironde-1263819009679?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T14:30:00",
-  "detailed_date" : "sam. 12 avr. 2025 14:30 - 16:30 CEST",
-  "detailed_address" : "Le Bar Radis\n15 Rue Gustave Flaubert 38100 Grenoble\nAfficher la carte",
-  "event_id" : "1234776593029",
-  "name" : "Posez vos limites sans brusquer votre interlocuteur !",
-  "location" : "demain à 14:30",
-  "category" : "health",
-  "url" : "https://www.eventbrite.fr/e/billets-posez-vos-limites-sans-brusquer-votre-interlocuteur-1234776593029?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-05-20T09:45:00",
-  "detailed_date" : "mar. 20 mai 2025 09:45 - mer. 21 mai 2025 17:00 CEST",
-  "detailed_address" : "INSA Lyon\n20 Avenue Albert Einstein 69100 Villeurbanne\nAfficher la carte",
-  "event_id" : "1220721323339",
-  "name" : "Journées Technologiques Titane 2025 - [20 & 21 Mai]",
-  "location" : "INSA Lyon",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-journees-technologiques-titane-2025-20-21-mai-1220721323339?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-15T12:00:00",
-  "detailed_date" : "mar. 15 avr. 2025 12:00 - 14:30 CEST",
-  "detailed_address" : "Grenoble Ecole de Management\n183 Avenue Jean Lolive 93500 Pantin\nAfficher la carte",
-  "event_id" : "1263810795109",
-  "name" : "Cercle Départemental en Seine-Saint-Denis",
-  "location" : "mardi prochain à 12:00",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-seine-saint-denis-1263810795109?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-12T15:00:00",
-  "detailed_date" : "sam. 12 avr. 2025 15:00 - 17:00 CEST",
-  "detailed_address" : "LIBRAIRIE A SOI.E\n16, RUE PIZAY 69001 LYON\nAfficher la carte",
-  "event_id" : "1292645099289",
-  "name" : "Cercle de Lecture de la Librairie à soi.e avec Marion",
-  "location" : "Tomorrow at 3:00 PM",
-  "category" : "other",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-de-lecture-de-la-librairie-a-soie-avec-marion-1292645099289?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-18T08:30:00",
-  "detailed_date" : "ven. 18 avr. 2025 08:30 - 10:30 CEST",
-  "detailed_address" : "Paris (lieu secret)\nLieu secret 75009 Paris\nAfficher la carte",
-  "event_id" : "1265369888399",
-  "name" : "Petit-déjeuner networking pour femmes entrepreneurs - Paris",
-  "location" : "Paris (lieu secret)",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-petit-dejeuner-networking-pour-femmes-entrepreneurs-paris-1265369888399?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-26T14:30:00",
-  "detailed_date" : "sam. 26 avr. 2025 14:30 - 16:30 CEST",
-  "detailed_address" : "LIBRAIRIE A SOI.E\n16, RUE PIZAY 69001 LYON\nAfficher la carte",
-  "event_id" : "1303921547449",
-  "name" : "Club de lectures féministes pour hommes (en mixité choisie)",
-  "location" : "LIBRAIRIE A SOI.E",
-  "category" : "other",
-  "url" : "https://www.eventbrite.fr/e/billets-club-de-lectures-feministes-pour-hommes-en-mixite-choisie-1303921547449?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-28T18:30:00",
   "detailed_date" : "lun. 28 avr. 2025 18:30 - 20:00 CEST",
   "detailed_address" : "INSEAD Alumni Association France\n19 Rue de l'Arc de Triomphe 75017 Paris\nAfficher la carte",
@@ -916,6 +772,15 @@
   "location" : "lun. 28 avr., 18:30",
   "category" : "N/A",
   "url" : "https://www.eventbrite.fr/e/inscription-atelier-carriere-working-effectively-in-a-french-cultural-environment-1253201692999?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-17T10:00:00",
+  "detailed_date" : "jeu. 17 avr. 2025 10:00 - 12:30 CEST",
+  "detailed_address" : "Whoo Bordeaux Bacalan | Hostel & Résidence\n12 Rue de Gironde 33300 Bordeaux\nAfficher la carte",
+  "event_id" : "1263819009679",
+  "name" : "Cercle Départemental en Gironde",
+  "location" : "jeudi prochain à 10:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-gironde-1263819009679?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-17T20:00:00",
   "detailed_date" : "sam. 17 mai 2025 20:00 - dim. 18 mai 2025 00:00 CEST",
@@ -926,24 +791,6 @@
   "category" : "music",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-100-high-school-musical-camp-rock-nice-1237852402859?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-22T09:00:00",
-  "detailed_date" : "mar. 22 avr. 2025 09:00 - ven. 25 avr. 2025 17:30 CEST",
-  "detailed_address" : "Strate, Ecole de Design\n23 Rue Paul Montrochet 69002 Lyon\nAfficher la carte",
-  "event_id" : "1046741591277",
-  "name" : "STAGE DE PRINTEMPS LYON, À LA DÉCOUVERTE DU DESIGN À STRATE, ÉC. DE DESIGN",
-  "location" : "Strate, Ecole de Design",
-  "category" : "arts",
-  "url" : "https://www.eventbrite.fr/e/billets-stage-de-printemps-lyon-a-la-decouverte-du-design-a-strate-ec-de-design-1046741591277?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-26T19:00:00",
-  "detailed_date" : "sam. 26 avr. 2025 19:00 - 23:00 CEST",
-  "detailed_address" : "Novotel Paris 14 Porte d'Orleans\n21 Boulevard Romain Rolland #15, 17 75014 Paris\nAfficher la carte",
-  "event_id" : "1254043781709",
-  "name" : "Dîner: Diplomatie économique,import-subtitution investissement en Afrique",
-  "location" : "Novotel Paris 14 Porte d'Orleans",
-  "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-diner-diplomatie-economiqueimport-subtitution-investissement-en-afrique-1254043781709?aff=ebdssbdestsearch"
-}, {
   "date" : "2025-04-29T18:30:00",
   "detailed_date" : "mar. 29 avr. 2025 18:30 - 21:30 CEST",
   "detailed_address" : "PricewaterhouseCoopers Audit\n8 Rue des Trente Six Ponts 31400 Toulouse\nAfficher la carte",
@@ -953,14 +800,32 @@
   "category" : "business",
   "url" : "https://www.eventbrite.co.uk/e/billets-wia-e-toulouse-workshop-dare-to-be-bold-unleash-your-potential-1304083200959?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-17T18:30:00",
-  "detailed_date" : "jeu. 17 avr. 2025 18:30 - 21:00 CEST",
-  "detailed_address" : "Now Lyon\n35 Rue de Marseille 69007 Lyon\nAfficher la carte",
-  "event_id" : "1280955996869",
-  "name" : "Masterclass: Ose prendre la parole et rayonner",
-  "location" : "Now Lyon",
+  "date" : "2025-04-26T14:30:00",
+  "detailed_date" : "sam. 26 avr. 2025 14:30 - 16:30 CEST",
+  "detailed_address" : "LIBRAIRIE A SOI.E\n16, RUE PIZAY 69001 LYON\nAfficher la carte",
+  "event_id" : "1303921547449",
+  "name" : "Club de lectures féministes pour hommes (en mixité choisie)",
+  "location" : "LIBRAIRIE A SOI.E",
+  "category" : "other",
+  "url" : "https://www.eventbrite.fr/e/billets-club-de-lectures-feministes-pour-hommes-en-mixite-choisie-1303921547449?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-15T12:00:00",
+  "detailed_date" : "mar. 15 avr. 2025 12:00 - 14:30 CEST",
+  "detailed_address" : "Grenoble Ecole de Management\n183 Avenue Jean Lolive 93500 Pantin\nAfficher la carte",
+  "event_id" : "1263810795109",
+  "name" : "Cercle Départemental en Seine-Saint-Denis",
+  "location" : "demain à 12:00",
   "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-masterclass-ose-prendre-la-parole-et-rayonner-1280955996869?aff=ebdssbdestsearch"
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-seine-saint-denis-1263810795109?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-18T08:30:00",
+  "detailed_date" : "ven. 18 avr. 2025 08:30 - 10:30 CEST",
+  "detailed_address" : "Paris (lieu secret)\nLieu secret 75009 Paris\nAfficher la carte",
+  "event_id" : "1265369888399",
+  "name" : "Petit-déjeuner networking pour femmes entrepreneurs - Paris",
+  "location" : "vendredi prochain à 08:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-petit-dejeuner-networking-pour-femmes-entrepreneurs-paris-1265369888399?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-05-30T20:00:00",
   "detailed_date" : "ven. 30 mai 2025 20:00 - sam. 31 mai 2025 01:00 CEST",
@@ -971,6 +836,60 @@
   "category" : "film-and-media",
   "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-nice-2-1216703064619?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-26T19:00:00",
+  "detailed_date" : "sam. 26 avr. 2025 19:00 - 23:00 CEST",
+  "detailed_address" : "Novotel Paris 14 Porte d'Orleans\n21 Boulevard Romain Rolland #15, 17 75014 Paris\nAfficher la carte",
+  "event_id" : "1254043781709",
+  "name" : "Dîner: Diplomatie économique,import-subtitution investissement en Afrique",
+  "location" : "Novotel Paris 14 Porte d'Orleans",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-diner-diplomatie-economiqueimport-subtitution-investissement-en-afrique-1254043781709?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-22T09:00:00",
+  "detailed_date" : "mar. 22 avr. 2025 09:00 - ven. 25 avr. 2025 17:30 CEST",
+  "detailed_address" : "Strate, Ecole de Design\n23 Rue Paul Montrochet 69002 Lyon\nAfficher la carte",
+  "event_id" : "1046741591277",
+  "name" : "STAGE DE PRINTEMPS LYON, À LA DÉCOUVERTE DU DESIGN À STRATE, ÉC. DE DESIGN",
+  "location" : "Strate, Ecole de Design",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-stage-de-printemps-lyon-a-la-decouverte-du-design-a-strate-ec-de-design-1046741591277?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-03T10:20:00",
+  "detailed_date" : "sam. 3 mai 2025 10:20 - 12:30 CEST",
+  "detailed_address" : "Moulin Rouge\n82 boulevard de Clichy 75018 Paris\nAfficher la carte",
+  "event_id" : "1307793628949",
+  "name" : "Le Swing de la Rive Droite (en français)",
+  "location" : "Sat, May 3, 10:20 AM",
+  "category" : "travel-and-outdoor",
+  "url" : "https://www.eventbrite.fr/e/billets-le-swing-de-la-rive-droite-en-francais-1307793628949?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-17T18:30:00",
+  "detailed_date" : "jeu. 17 avr. 2025 18:30 - 21:00 CEST",
+  "detailed_address" : "Now Lyon\n35 Rue de Marseille 69007 Lyon\nAfficher la carte",
+  "event_id" : "1280955996869",
+  "name" : "Masterclass: Ose prendre la parole et rayonner",
+  "location" : "jeudi prochain à 18:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-masterclass-ose-prendre-la-parole-et-rayonner-1280955996869?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T17:30:00",
+  "detailed_date" : "jeu. 24 avr. 2025 17:30 - 20:30 CEST",
+  "detailed_address" : "SLS actiparc\n266 avenue de Savoie 38570 Le Cheylas\nAfficher la carte",
+  "event_id" : "1227448083259",
+  "name" : "2tonnes - Atelier à LE CHEYLAS (38570)",
+  "location" : "SLS actiparc",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-atelier-a-le-cheylas-38570-1227448083259?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-10T15:20:00",
+  "detailed_date" : "sam. 10 mai 2025 15:20 - 17:30 CEST",
+  "detailed_address" : "Place Édouard Herriot\n1 place édouard herriot 75007 Paris\nAfficher la carte",
+  "event_id" : "1307794160539",
+  "name" : "La Seine Noire (en français)",
+  "location" : "sam. 10 mai, 15:20",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-la-seine-noire-en-francais-1307794160539?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-18T20:00:00",
   "detailed_date" : "2025-04-18T20:00:00Z",
   "detailed_address" : "La CASA Club\n15 Rue Daval 75011 Paris\nShow map",
@@ -979,24 +898,6 @@
   "location" : "La CASA Club",
   "category" : "music",
   "url" : "https://www.eventbrite.fr/e/afronation-before-tickets-1288705285199?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-20T11:00:00",
-  "detailed_date" : "2025-04-20T11:00:00Z",
-  "detailed_address" : "2 Av. de la Prte Molitor\n2 Avenue de la Porte Molitor 75016 Paris\nAfficher la carte",
-  "event_id" : "1303961035559",
-  "name" : "Chasse aux Œufs et Atelier Street Art : Une Expérience Créative et Gourmand",
-  "location" : "2 Av. de la Prte Molitor",
-  "category" : "holiday",
-  "url" : "https://www.eventbrite.fr/e/billets-chasse-aux-ufs-et-atelier-street-art-une-experience-creative-et-gourmand-1303961035559?aff=ebdssbdestsearch"
-}, {
-  "date" : "2025-04-13T17:00:00",
-  "detailed_date" : "dim. 13 avr. 2025 17:00 - 18:30 CEST",
-  "detailed_address" : "Espace le Moulin - Nouvelle Acropole Paris 5\n48 Rue du Fer À Moulin 75005 Paris\nAfficher la carte",
-  "event_id" : "1125781325249",
-  "name" : "Café philo : Peut-on être heureux sans être utile ?",
-  "location" : "dimanche prochain à 17:00",
-  "category" : "other",
-  "url" : "https://www.eventbrite.fr/e/billets-cafe-philo-peut-on-etre-heureux-sans-etre-utile-1125781325249?aff=ebdssbdestsearch"
 }, {
   "date" : "2025-04-23T18:00:00",
   "detailed_date" : "mer. 23 avr. 2025 18:00 - 21:00 CEST",
@@ -1007,12 +908,39 @@
   "category" : "health",
   "url" : "https://www.eventbrite.ie/e/billets-lifewave-europe-roadshow-france-nice-2025-1291103769129?aff=ebdssbdestsearch"
 }, {
+  "date" : "2025-04-24T19:15:00",
+  "detailed_date" : "jeu. 24 avr. 2025 19:15 - 22:00 CEST",
+  "detailed_address" : "28 Rue Laure Diebold\n28 Rue Laure Diebold 75008 Paris\nAfficher la carte",
+  "event_id" : "1308634714659",
+  "name" : "SENSIBILISATION ET PREVENTION SUR LES VIOLENCES FAITES AUX FEMMES",
+  "location" : "28 Rue Laure Diebold",
+  "category" : "community",
+  "url" : "https://www.eventbrite.com/e/billets-sensibilisation-et-prevention-sur-les-violences-faites-aux-femmes-1308634714659?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T19:00:00",
+  "detailed_date" : "jeu. 24 avr. 2025 19:00 - 21:00 CEST",
+  "detailed_address" : "Le Ciel de Marcel\n17 Rue Étienne Marcel 75001 Paris\nAfficher la carte",
+  "event_id" : "1300416293139",
+  "name" : "Afterwork Paatch x Bellum - Paris",
+  "location" : "Le Ciel de Marcel",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-afterwork-paatch-x-bellum-paris-1300416293139?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-28T12:30:00",
+  "detailed_date" : "lun. 28 avr. 2025 12:30 - 15:00 CEST",
+  "detailed_address" : "Communauté de Communes de Costa Verde\nT10 20230 San-Nicolao\nAfficher la carte",
+  "event_id" : "1301769430409",
+  "name" : "Cercle Départemental en Corse",
+  "location" : "Communauté de Communes de Costa Verde",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-en-corse-1301769430409?aff=ebdssbdestsearch"
+}, {
   "date" : "2025-04-20T18:00:00",
   "detailed_date" : "dim. 20 avr. 2025 18:00 - 22:00 CEST",
   "detailed_address" : "PB Poulet Braisé Châtelet\n12 Rue de la Cossonnerie 75001 Paris\nAfficher la carte",
   "event_id" : "1312064222409",
   "name" : "Soirée Chill & Connect by Ezer édition 9",
-  "location" : "dim. 20 avr., 18:00",
+  "location" : "Sun, Apr 20, 6:00 PM",
   "category" : "community",
   "url" : "https://www.eventbrite.com/e/billets-soiree-chill-connect-by-ezer-edition-9-1312064222409?aff=ebdssbdestsearch"
 }, {
@@ -1021,25 +949,79 @@
   "detailed_address" : "Mairie de Coutances\n7 Place du Parvis Notre Dame 50200 Coutances\nAfficher la carte",
   "event_id" : "1249368527899",
   "name" : "Cercle Départemental dans la Manche",
-  "location" : "lundi prochain à 09:30",
+  "location" : "Tomorrow at 9:30 AM",
   "category" : "business",
   "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-la-manche-1249368527899?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-05-03T10:20:00",
-  "detailed_date" : "sam. 3 mai 2025 10:20 - 12:30 CEST",
-  "detailed_address" : "Moulin Rouge\n82 boulevard de Clichy 75018 Paris\nAfficher la carte",
-  "event_id" : "1307793628949",
-  "name" : "Le Swing de la Rive Droite (en français)",
-  "location" : "sam. 3 mai, 10:20",
-  "category" : "travel-and-outdoor",
-  "url" : "https://www.eventbrite.fr/e/billets-le-swing-de-la-rive-droite-en-francais-1307793628949?aff=ebdssbdestsearch"
+  "date" : "2025-04-15T20:00:00",
+  "detailed_date" : "mar. 15 avr. 2025 20:00 - 23:00 CEST",
+  "detailed_address" : "L'Heure du Jeu - Champs Libres\n11 Boulevard Magenta 35000 Rennes\nAfficher la carte",
+  "event_id" : "1304994827659",
+  "name" : "Quiz du mardi 15 avril",
+  "location" : "demain à 20:00",
+  "category" : "hobbies",
+  "url" : "https://www.eventbrite.fr/e/inscription-quiz-du-mardi-15-avril-1304994827659?aff=ebdssbdestsearch"
 }, {
-  "date" : "2025-04-25T09:30:00",
-  "detailed_date" : "ven. 25 avr. 2025 09:30 - 12:00 CEST",
-  "detailed_address" : "La Rampe, espace de coworking\n4 Rampe d'Olbiche 50300 Avranches\nAfficher la carte",
-  "event_id" : "1268470652869",
-  "name" : "Cercle Départemental dans la Manche",
-  "location" : "La Rampe, espace de coworking",
+  "date" : "2025-06-14T20:00:00",
+  "detailed_date" : "sam. 14 juin 2025 20:00 - dim. 15 juin 2025 00:30 CEST",
+  "detailed_address" : "Live Club\n1 Rue du Miroir 67000 Strasbourg\nAfficher la carte",
+  "event_id" : "1233444749449",
+  "name" : "Soirée Disney Channel & 2010's Strasbourg",
+  "location" : "Live Club",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-strasbourg-1233444749449?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-29T18:30:00",
+  "detailed_date" : "mar. 29 avr. 2025 18:30 - 21:30 CEST",
+  "detailed_address" : "La Briqueterie\n19 Place Jean Jaurès 13005 Marseille\nAfficher la carte",
+  "event_id" : "1287461053669",
+  "name" : "Apéro des Epaulettes - Atelier \"Booste ta productivité avec ChatGPT\"",
+  "location" : "La Briqueterie",
   "category" : "business",
-  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-la-manche-1268470652869?aff=ebdssbdestsearch"
+  "url" : "https://www.eventbrite.fr/e/billets-apero-des-epaulettes-atelier-booste-ta-productivite-avec-chatgpt-1287461053669?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-18T13:00:00",
+  "detailed_date" : "dim. 18 mai 2025 13:00 - 16:00 CEST",
+  "detailed_address" : "25hours Hotel Paris Terminus Nord\n12 Boulevard de Denain 75010 Paris\nAfficher la carte",
+  "event_id" : "1289775365839",
+  "name" : "MEET MONAT POP UP",
+  "location" : "25hours Hotel Paris Terminus Nord",
+  "category" : "fashion",
+  "url" : "https://www.eventbrite.fr/e/billets-meet-monat-pop-up-1289775365839?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-05-06T18:30:00",
+  "detailed_date" : "mar. 6 mai 2025 18:30 - 22:00 CEST",
+  "detailed_address" : "Tiers Lieu de l'Esvière\n2 Rue de l'Esvière 49000 ANGERS\nAfficher la carte",
+  "event_id" : "1273500055949",
+  "name" : "2tonnes France - Formation à l'animation à ANGERS",
+  "location" : "Tiers Lieu de l'Esvière",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-france-formation-a-lanimation-a-angers-1273500055949?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-17T20:00:00",
+  "detailed_date" : "jeu. 17 avr. 2025 20:00 - 21:30 CEST",
+  "detailed_address" : "Espace le Moulin - Nouvelle Acropole Paris 5\n48 Rue du Fer À Moulin 75005 Paris\nAfficher la carte",
+  "event_id" : "1125775507849",
+  "name" : "Si Marianne philosophait : la République a-t-elle besoin de philosophie ?",
+  "location" : "jeudi prochain à 20:00",
+  "category" : "government",
+  "url" : "https://www.eventbrite.fr/e/billets-si-marianne-philosophait-la-republique-a-t-elle-besoin-de-philosophie-1125775507849?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-28T14:30:00",
+  "detailed_date" : "lun. 28 avr. 2025 14:30 - 17:00 CEST",
+  "detailed_address" : "17 Rue du Port\n17 Rue du Port 27400 Louviers\nAfficher la carte",
+  "event_id" : "1258194837629",
+  "name" : "Cercle Départemental dans l'Eure",
+  "location" : "17 Rue du Port",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-leure-1258194837629?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-04-24T18:00:00",
+  "detailed_date" : "jeu. 24 avr. 2025 18:00 - 22:30 CEST",
+  "detailed_address" : "Centre Tesla - Rennes\n1 Boulevard du Scorff 35740 Pacé\nAfficher la carte",
+  "event_id" : "1290365611279",
+  "name" : "AFTERWORK API'BIZ - TESLA Rennes",
+  "location" : "Centre Tesla - Rennes",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-afterwork-apibiz-tesla-rennes-1290365611279?aff=ebdssbdestsearch"
 } ]

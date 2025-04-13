@@ -32,12 +32,7 @@ public class EventStorageService {
         createStorageDirectory();
     }
 
-    /**
-     * Nettoie et valide les événements scrapés
-     * @param events Liste des événements à nettoyer
-     */
     public void cleanEvents(List<Map<String, String>> events) {
-        // Réinitialiser les listes
         validEvents.clear();
         invalidEvents.clear();
 
@@ -110,8 +105,6 @@ public class EventStorageService {
             System.err.println("Error saving events: " + e.getMessage());
         }
     }
-
-
 
     public List<Map<String, String>> loadLatestEvents(String source) {
         try {

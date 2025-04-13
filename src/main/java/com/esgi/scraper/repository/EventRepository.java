@@ -11,9 +11,7 @@ import java.util.List;
 
 public class EventRepository {
 
-    /**
-     * Crée la table events si elle n'existe pas et configure les contraintes et triggers nécessaires
-     */
+
     public void createTableIfNotExists() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS events (
@@ -78,11 +76,7 @@ public class EventRepository {
         }
     }
 
-    /**
-     * Supprime les événements qui sont plus anciens qu'une certaine date
-     * @param daysToKeep Nombre de jours pendant lesquels conserver les événements
-     * @return Le nombre d'événements supprimés
-     */
+
     public int cleanupOldEvents(int daysToKeep) {
         String sql = """
             DELETE FROM events

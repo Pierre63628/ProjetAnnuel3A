@@ -1,0 +1,217 @@
+/* Thème sombre pour Event Viewer */
+
+/* Styles généraux */
+.root {
+    -fx-font-family: 'Segoe UI', Arial, sans-serif;
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Barre d'outils */
+.toolbar {
+    -fx-background-color: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5;
+}
+
+/* Bouton de rafraîchissement */
+.refresh-button {
+    -fx-background-color: #4285f4;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-padding: 5 10 5 10;
+    -fx-cursor: hand;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #3275e4;
+}
+
+.refresh-button:pressed {
+    -fx-background-color: #2265d4;
+}
+
+/* Boutons de filtre */
+.filter-button {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: #e0e0e0;
+    -fx-background-radius: 4;
+    -fx-padding: 3 8 3 8;
+    -fx-cursor: hand;
+    -fx-border-color: #1d1d1d;
+    -fx-border-radius: 4;
+}
+
+.filter-button:hover {
+    -fx-background-color: #4d4d4d;
+}
+
+.filter-button.active-filter {
+    -fx-background-color: #4285f4;
+    -fx-text-fill: white;
+    -fx-border-color: #3275e4;
+}
+
+/* Liste des événements */
+.event-list {
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: #1d1d1d;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.event-list .list-cell {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: #e0e0e0;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 0;
+}
+
+.event-list .list-cell:filled:selected {
+    -fx-background-color: #4285f4;
+    -fx-text-fill: white;
+}
+
+.event-list .list-cell:filled:hover {
+    -fx-background-color: #4d4d4d;
+}
+
+.event-list .list-cell:filled:selected:hover {
+    -fx-background-color: #3275e4;
+}
+
+/* Panneau de détails */
+.details-panel {
+    -fx-background-color: #3d3d3d;
+    -fx-border-color: #1d1d1d;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+.details-area {
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: #1d1d1d;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-size: 13px;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* En-têtes de section */
+.section-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Barre d'état */
+.status-bar {
+    -fx-background-color: linear-gradient(to bottom, #2d2d2d, #1d1d1d);
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 1 0 0 0;
+}
+
+.status-bar .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Barre de progression */
+.progress-bar {
+    -fx-accent: #4285f4;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #2d2d2d;
+}
+
+/* Image de l'événement */
+.event-image {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 2);
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: #1d1d1d;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+}
+
+/* Menu */
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #3d3d3d, #2d2d2d);
+    -fx-border-color: #1d1d1d;
+    -fx-border-width: 0 0 1 0;
+}
+
+.menu-bar .menu {
+    -fx-background-color: transparent;
+}
+
+.menu-bar .menu .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.menu-bar .menu:hover, .menu-bar .menu:showing {
+    -fx-background-color: #4d4d4d;
+}
+
+.menu-item {
+    -fx-background-color: #3d3d3d;
+}
+
+.menu-item .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.menu-item:focused {
+    -fx-background-color: #4285f4;
+}
+
+.menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+/* Séparateurs */
+.separator {
+    -fx-background-color: #1d1d1d;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #e0e0e0;
+}
+
+/* Boîtes de dialogue */
+.dialog-pane {
+    -fx-background-color: #2d2d2d;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #3d3d3d;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #e0e0e0;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #4285f4;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #3275e4;
+}
+
+/* Split Pane */
+.split-pane {
+    -fx-background-color: #2d2d2d;
+}
+
+.split-pane-divider {
+    -fx-background-color: #1d1d1d;
+    -fx-padding: 0 1 0 1;
+}
