@@ -1,3 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+    /* Définir explicitement les couleurs de base */
+    --color-green: #10B981;
+    --color-red: #EF4444;
+    --color-blue: #3B82F6;
+    --color-purple: #8B5CF6;
+}

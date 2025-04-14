@@ -1,0 +1,18 @@
+/* Classes de couleur personnalisées */
+.bg-green {
+  background-color: #10B981;
+}
+
+.bg-red {
+  background-color: #EF4444;
+}
+
+.bg-blue {
+  background-color: #3B82F6;
+}
+
+.bg-purple {
+  background-color: #8B5CF6;
+}
+
+/* Vous pouvez ajouter d'autres classes personnalisées ici */
