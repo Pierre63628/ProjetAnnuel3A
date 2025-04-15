@@ -14,17 +14,16 @@ services:
       - ./frontend/nextdoorbuddy/src:/app/src
 
   db:
-    image: mariadb:10.9
+    image: postgres:15
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: rootpass
-      MARIADB_DATABASE: nextdoorbuddy
-      MARIADB_USER: user
-      MARIADB_PASSWORD: userpass
+      POSTGRES_PASSWORD: rootpass
+      POSTGRES_USER: user
+      POSTGRES_DB: nextdoorbuddy
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d
 
 volumes:

@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import mysql from 'mysql2/promise';
+import pg from 'pg';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -23,14 +23,15 @@ const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'nextdoorbuddy_refr
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
 // Connexion à la base de données
-const pool = mysql.createPool({
+const { Pool } = pg;
+const pool = new Pool({
     host: process.env.DB_HOST || 'db',
+    port: process.env.DB_PORT || 5432,
     user: process.env.DB_USER || 'user',
-    password: process.env.DB_PASSWORD || 'userpass',
+    password: process.env.DB_PASSWORD || 'rootpass',
     database: process.env.DB_NAME || 'nextdoorbuddy',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    max: 20, // Nombre maximum de clients dans le pool
+    idleTimeoutMillis: 30000 // Temps d'inactivité avant de fermer un client
 });
 
 // Middleware d'authentification
@@ -50,7 +51,7 @@ const authenticateJWT = async (req, res, next) => {
             }
 
             // Vérifier si l'utilisateur existe toujours
-            const [rows] = await pool.query('SELECT * FROM Utilisateur WHERE id = ?', [decoded.userId]);
+            const { rows } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [decoded.userId]);
             if (rows.length === 0) {
                 return res.status(404).json({ message: 'Utilisateur non trouvé.' });
             }
@@ -71,7 +72,7 @@ app.post('/api/auth/login', async (req, res) => {
         const { email, password } = req.body;
 
         // Vérifier si l'utilisateur existe
-        const [rows] = await pool.query('SELECT * FROM Utilisateur WHERE email = ?', [email]);
+        const { rows } = await pool.query('SELECT * FROM "Utilisateur" WHERE email = $1', [email]);
         if (rows.length === 0) {
             return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
         }
@@ -126,7 +127,7 @@ app.post('/api/auth/login', async (req, res) => {
 
         // Sauvegarder le token de rafraîchissement dans la base de données
         await pool.query(
-            'INSERT INTO RefreshToken (user_id, token, expires_at) VALUES (?, ?, ?)',
+            'INSERT INTO "RefreshToken" (user_id, token, expires_at) VALUES ($1, $2, $3)',
             [user.id, refreshToken, expiryDate]
         );
 
@@ -153,7 +154,7 @@ app.post('/api/auth/register', async (req, res) => {
         const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
 
         // Vérifier si l'email existe déjà
-        const [existingUsers] = await pool.query('SELECT * FROM Utilisateur WHERE email = ?', [email]);
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE email = $1', [email]);
         if (existingUsers.length > 0) {
             return res.status(409).json({ message: 'Cet email est déjà utilisé.' });
         }
@@ -162,10 +163,10 @@ app.post('/api/auth/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Créer le nouvel utilisateur
-        const [result] = await pool.query(
-            `INSERT INTO Utilisateur
+        const result = await pool.query(
+            `INSERT INTO "Utilisateur"
             (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
             [
                 nom,
                 prenom,
@@ -178,7 +179,7 @@ app.post('/api/auth/register', async (req, res) => {
             ]
         );
 
-        const userId = result.insertId;
+        const userId = result.rows[0].id;
 
         // Générer les tokens
         const accessToken = jwt.sign(
@@ -222,7 +223,7 @@ app.post('/api/auth/register', async (req, res) => {
 
         // Sauvegarder le token de rafraîchissement dans la base de données
         await pool.query(
-            'INSERT INTO RefreshToken (user_id, token, expires_at) VALUES (?, ?, ?)',
+            'INSERT INTO "RefreshToken" (user_id, token, expires_at) VALUES ($1, $2, $3)',
             [userId, refreshToken, expiryDate]
         );
 
@@ -261,8 +262,8 @@ app.post('/api/auth/refresh-token', async (req, res) => {
             const userId = decoded.userId;
 
             // Vérification optionnelle : vérifier si le token a été révoqué (approche hybride)
-            const [tokenRecords] = await pool.query(
-                'SELECT * FROM RefreshToken WHERE token = ? AND revoked = TRUE',
+            const { rows: tokenRecords } = await pool.query(
+                'SELECT * FROM "RefreshToken" WHERE token = $1 AND revoked = TRUE',
                 [refreshToken]
             );
 
@@ -271,11 +272,11 @@ app.post('/api/auth/refresh-token', async (req, res) => {
             }
 
             // Vérifier si l'utilisateur existe toujours
-            const [users] = await pool.query('SELECT * FROM Utilisateur WHERE id = ?', [userId]);
+            const { rows: users } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
             if (users.length === 0) {
                 // Marquer le token comme révoqué si l'utilisateur n'existe plus
                 await pool.query(
-                    'UPDATE RefreshToken SET revoked = TRUE WHERE token = ?',
+                    'UPDATE "RefreshToken" SET revoked = TRUE WHERE token = $1',
                     [refreshToken]
                 );
                 return res.status(404).json({ message: 'Utilisateur non trouvé.' });
@@ -309,7 +310,7 @@ app.post('/api/auth/logout', async (req, res) => {
         }
 
         // Révoquer le token de rafraîchissement
-        await pool.query('UPDATE RefreshToken SET revoked = TRUE WHERE token = ?', [refreshToken]);
+        await pool.query('UPDATE "RefreshToken" SET revoked = TRUE WHERE token = $1', [refreshToken]);
 
         res.status(200).json({ message: 'Déconnexion réussie.' });
     } catch (error) {
@@ -341,7 +342,7 @@ app.get('/', (req, res) => {
 // Nettoyage périodique des tokens expirés (toutes les 24 heures)
 setInterval(async () => {
     try {
-        await pool.query('DELETE FROM RefreshToken WHERE expires_at < NOW() OR revoked = TRUE');
+        await pool.query('DELETE FROM "RefreshToken" WHERE expires_at < NOW() OR revoked = TRUE');
         console.log('Nettoyage des tokens expirés effectué');
     } catch (error) {
         console.error('Erreur lors du nettoyage des tokens expirés:', error);

@@ -1,14 +1,16 @@
 -- Quartier
-CREATE TABLE Quartier (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE "Quartier" (
+  id SERIAL PRIMARY KEY,
   nom_quartier VARCHAR(100) NOT NULL,
   ville VARCHAR(100),
   code_postal VARCHAR(10)
 );
 
 -- Utilisateur
-CREATE TABLE Utilisateur (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TYPE user_role AS ENUM ('user', 'admin');
+
+CREATE TABLE "Utilisateur" (
+  id SERIAL PRIMARY KEY,
   nom VARCHAR(100) NOT NULL,
   prenom VARCHAR(100),
   email VARCHAR(255) UNIQUE,
@@ -17,52 +19,67 @@ CREATE TABLE Utilisateur (
   date_naissance DATE,
   telephone VARCHAR(15),
   quartier_id INT,
-  role ENUM('user', 'admin') DEFAULT 'user',
+  role user_role DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (quartier_id) REFERENCES Quartier(id)
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (quartier_id) REFERENCES "Quartier"(id)
 );
 
 -- RefreshToken pour l'authentification
-CREATE TABLE RefreshToken (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE "RefreshToken" (
+  id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
   token VARCHAR(255) NOT NULL,
   expires_at TIMESTAMP NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   revoked BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (user_id) REFERENCES Utilisateur(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES "Utilisateur"(id) ON DELETE CASCADE
 );
 
 -- Evenement
-CREATE TABLE Evenement (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE "Evenement" (
+  id SERIAL PRIMARY KEY,
   organisateur_id INT,
   nom VARCHAR(255),
   description TEXT,
-  date_evenement DATETIME,
+  date_evenement TIMESTAMP,
   lieu VARCHAR(255),
   type_evenement VARCHAR(100),
-  FOREIGN KEY (organisateur_id) REFERENCES Utilisateur(id)
+  FOREIGN KEY (organisateur_id) REFERENCES "Utilisateur"(id)
 );
 
 -- Participation
-CREATE TABLE Participation (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE "Participation" (
+  id SERIAL PRIMARY KEY,
   utilisateur_id INT,
   evenement_id INT,
-  date_inscription DATETIME,
-  FOREIGN KEY (utilisateur_id) REFERENCES Utilisateur(id),
-  FOREIGN KEY (evenement_id) REFERENCES Evenement(id)
+  date_inscription TIMESTAMP,
+  FOREIGN KEY (utilisateur_id) REFERENCES "Utilisateur"(id),
+  FOREIGN KEY (evenement_id) REFERENCES "Evenement"(id)
 );
 
 -- Relation (type: ami, voisin, etc.)
-CREATE TABLE Relation (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE "Relation" (
+  id SERIAL PRIMARY KEY,
   utilisateur1_id INT,
   utilisateur2_id INT,
   type_relation VARCHAR(100),
   date_debut DATE,
-  FOREIGN KEY (utilisateur1_id) REFERENCES Utilisateur(id),
-  FOREIGN KEY (utilisateur2_id) REFERENCES Utilisateur(id)
+  FOREIGN KEY (utilisateur1_id) REFERENCES "Utilisateur"(id),
+  FOREIGN KEY (utilisateur2_id) REFERENCES "Utilisateur"(id)
 );
+
+-- Fonction pour mettre à jour le champ updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger pour mettre à jour le champ updated_at dans la table Utilisateur
+CREATE TRIGGER update_utilisateur_updated_at
+BEFORE UPDATE ON "Utilisateur"
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
