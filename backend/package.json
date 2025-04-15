@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node --esm src/index.ts",
-    "dev": "nodemon --exec ts-node-dev --esm src/index.ts",
+    "start": "node src/index.js",
+    "dev": "nodemon --watch src --legacy-watch src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

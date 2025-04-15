@@ -1,20 +1,39 @@
 services:
   backend:
     build: ./backend
+    container_name: nextdoorbuddy-backend
     ports:
       - "3000:3000"
     volumes:
       - ./backend/src:/app/src
+    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=user
+      - DB_PASSWORD=rootpass
+      - DB_NAME=nextdoorbuddy
+    depends_on:
+      - db
+    networks:
+      - nextdoorbuddy-network
 
   frontend:
     build: ./frontend/nextdoorbuddy
+    container_name: nextdoorbuddy-frontend
     ports:
       - "5173:5173"
     volumes:
       - ./frontend/nextdoorbuddy/src:/app/src
+    depends_on:
+      - backend
+    networks:
+      - nextdoorbuddy-network
 
   db:
     image: postgres:15
+    container_name: nextdoorbuddy-db
     restart: always
     environment:
       POSTGRES_PASSWORD: rootpass
@@ -25,6 +44,12 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - nextdoorbuddy-network
 
 volumes:
   db_data:
+
+networks:
+  nextdoorbuddy-network:
+    driver: bridge

@@ -48,10 +48,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         if (!accessToken || !refreshToken) return;
 
-        // Vérifier le token toutes les 60 secondes
         const tokenCheckInterval = setInterval(async () => {
             try {
-                // Décoder le token pour vérifier l'expiration
                 const tokenParts = accessToken.split('.');
                 if (tokenParts.length !== 3) return;
 
@@ -60,15 +58,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const currentTime = Date.now();
                 const timeUntilExpiry = expirationTime - currentTime;
 
-                // Rafraîchir le token s'il expire dans moins de 2 minutes
                 if (timeUntilExpiry < 120000) {
                     await refreshAccessToken();
                 }
             } catch (error) {
-                // En cas d'erreur, essayer de rafraîchir le token
                 await refreshAccessToken();
             }
-        }, 60000); // Vérifier toutes les 60 secondes
+        }, 60000); // 60 sec
 
         return () => clearInterval(tokenCheckInterval);
     }, [accessToken, refreshToken]);

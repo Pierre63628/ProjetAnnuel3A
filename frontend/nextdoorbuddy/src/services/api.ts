@@ -1,5 +1,6 @@
 // Service pour les appels API authentifiés
-const API_URL = 'http://localhost:3000/api';
+// Utiliser le proxy Vite pour les appels API
+const API_URL = '/api';
 
 // Fonction pour obtenir le token d'accès depuis le localStorage
 const getAccessToken = () => localStorage.getItem('accessToken');
@@ -7,11 +8,11 @@ const getAccessToken = () => localStorage.getItem('accessToken');
 // Fonction pour rafraîchir le token d'accès
 const refreshToken = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
-    
+
     if (!refreshToken) {
         throw new Error('Aucun token de rafraîchissement disponible');
     }
-    
+
     try {
         const response = await fetch(`${API_URL}/auth/refresh-token`, {
             method: 'POST',
@@ -20,14 +21,14 @@ const refreshToken = async () => {
             },
             body: JSON.stringify({ refreshToken }),
         });
-        
+
         if (!response.ok) {
             throw new Error('Échec du rafraîchissement du token');
         }
-        
+
         const data = await response.json();
         localStorage.setItem('accessToken', data.accessToken);
-        
+
         return data.accessToken;
     } catch (error) {
         // En cas d'erreur, déconnecter l'utilisateur
@@ -43,24 +44,24 @@ const refreshToken = async () => {
 export const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
     // Ajouter le token d'accès aux en-têtes si disponible
     let accessToken = getAccessToken();
-    
+
     const headers = {
         'Content-Type': 'application/json',
         ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {}),
         ...options.headers,
     };
-    
+
     // Effectuer la requête
     let response = await fetch(`${API_URL}${endpoint}`, {
         ...options,
         headers,
     });
-    
+
     // Si le token est expiré (401), essayer de le rafraîchir et réessayer
     if (response.status === 401) {
         try {
             accessToken = await refreshToken();
-            
+
             // Réessayer la requête avec le nouveau token
             response = await fetch(`${API_URL}${endpoint}`, {
                 ...options,
@@ -75,13 +76,13 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
             throw error;
         }
     }
-    
+
     // Gérer les erreurs
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || `Erreur ${response.status}`);
     }
-    
+
     // Retourner les données
     return response.json();
 };
@@ -89,11 +90,11 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
 export default {
     // Méthodes GET, POST, PUT, DELETE
     get: (endpoint: string) => apiRequest(endpoint, { method: 'GET' }),
-    post: (endpoint: string, data: any) => apiRequest(endpoint, { 
+    post: (endpoint: string, data: any) => apiRequest(endpoint, {
         method: 'POST',
         body: JSON.stringify(data),
     }),
-    put: (endpoint: string, data: any) => apiRequest(endpoint, { 
+    put: (endpoint: string, data: any) => apiRequest(endpoint, {
         method: 'PUT',
         body: JSON.stringify(data),
     }),

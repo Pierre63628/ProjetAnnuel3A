@@ -13,18 +13,18 @@ export class TokenModel {
     // Créer un nouveau token de rafraîchissement
     static async create(tokenData: RefreshToken): Promise<number> {
         try {
-            const [result]: any = await pool.query(
-                `INSERT INTO RefreshToken 
-                (user_id, token, expires_at) 
-                VALUES (?, ?, ?)`,
+            const result = await pool.query(
+                `INSERT INTO "RefreshToken"
+                (user_id, token, expires_at)
+                VALUES ($1, $2, $3) RETURNING id`,
                 [
                     tokenData.user_id,
                     tokenData.token,
                     tokenData.expires_at
                 ]
             );
-            
-            return result.insertId;
+
+            return result.rows[0].id;
         } catch (error) {
             console.error('Error creating refresh token:', error);
             throw error;
@@ -34,11 +34,11 @@ export class TokenModel {
     // Trouver un token par sa valeur
     static async findByToken(token: string): Promise<RefreshToken | null> {
         try {
-            const [rows]: any = await pool.query(
-                'SELECT * FROM RefreshToken WHERE token = ? AND revoked = FALSE',
+            const result = await pool.query(
+                'SELECT * FROM "RefreshToken" WHERE token = $1 AND revoked = FALSE',
                 [token]
             );
-            return rows.length ? rows[0] : null;
+            return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding token:', error);
             throw error;
@@ -48,11 +48,11 @@ export class TokenModel {
     // Révoquer un token
     static async revokeToken(token: string): Promise<boolean> {
         try {
-            const [result]: any = await pool.query(
-                'UPDATE RefreshToken SET revoked = TRUE WHERE token = ?',
+            const result = await pool.query(
+                'UPDATE "RefreshToken" SET revoked = TRUE WHERE token = $1',
                 [token]
             );
-            return result.affectedRows > 0;
+            return result.rowCount > 0;
         } catch (error) {
             console.error('Error revoking token:', error);
             throw error;
@@ -62,11 +62,11 @@ export class TokenModel {
     // Révoquer tous les tokens d'un utilisateur
     static async revokeAllUserTokens(userId: number): Promise<boolean> {
         try {
-            const [result]: any = await pool.query(
-                'UPDATE RefreshToken SET revoked = TRUE WHERE user_id = ?',
+            const result = await pool.query(
+                'UPDATE "RefreshToken" SET revoked = TRUE WHERE user_id = $1',
                 [userId]
             );
-            return result.affectedRows > 0;
+            return result.rowCount > 0;
         } catch (error) {
             console.error('Error revoking user tokens:', error);
             throw error;
@@ -76,10 +76,10 @@ export class TokenModel {
     // Supprimer les tokens expirés
     static async deleteExpiredTokens(): Promise<boolean> {
         try {
-            const [result]: any = await pool.query(
-                'DELETE FROM RefreshToken WHERE expires_at < NOW() OR revoked = TRUE'
+            const result = await pool.query(
+                'DELETE FROM "RefreshToken" WHERE expires_at < NOW() OR revoked = TRUE'
             );
-            return result.affectedRows > 0;
+            return result.rowCount > 0;
         } catch (error) {
             console.error('Error deleting expired tokens:', error);
             throw error;

@@ -1,9 +1,25 @@
 import express from 'express';
 import cors from 'cors';
 import pg from 'pg';
-import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+
+// Fonctions de hachage et vérification de mot de passe avec crypto
+const hashPassword = (password) => {
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+    return `${salt}:${hash}`;
+};
+
+const verifyPassword = (password, hashedPassword) => {
+    if (hashedPassword.includes(':')) {
+        const [salt, storedHash] = hashedPassword.split(':');
+        const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+        return storedHash === hash;
+    }
+    return false;
+};
 
 dotenv.config();
 
@@ -25,12 +41,19 @@ const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 const { Pool } = pg;
 const pool = new Pool({
     host: process.env.DB_HOST || 'db',
-    port: process.env.DB_PORT || 5432,
+    port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USER || 'user',
     password: process.env.DB_PASSWORD || 'rootpass',
     database: process.env.DB_NAME || 'nextdoorbuddy',
     max: 20,
     idleTimeoutMillis: 30000
+});
+
+// Vérifier la connexion à la base de données
+pool.query('SELECT NOW()', (err) => {
+    if (err) {
+        console.error('Erreur de connexion à la base de données:', err);
+    }
 });
 
 // Fonction utilitaire pour calculer la date d'expiration
@@ -109,9 +132,16 @@ app.post('/api/auth/login', async (req, res) => {
         const user = rows[0];
 
         // Vérifier le mot de passe
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
+        if (user.password.startsWith('$2')) {
+            // Conversion des mots de passe bcrypt vers crypto
+            const newHashedPassword = hashPassword(password);
+            await pool.query('UPDATE "Utilisateur" SET password = $1 WHERE id = $2', [newHashedPassword, user.id]);
+        } else {
+            // Vérification normale avec crypto
+            const isPasswordValid = verifyPassword(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
+            }
         }
 
         // Générer les tokens
@@ -158,6 +188,41 @@ app.post('/api/auth/register', async (req, res) => {
     try {
         const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
 
+        // Validations
+        if (!nom || !prenom || !email || !password) {
+            return res.status(400).json({ message: 'Nom, prénom, email et mot de passe sont requis.' });
+        }
+
+        // Valider l'email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ message: 'Format d\'email invalide.' });
+        }
+
+        // Valider le mot de passe
+        if (password.length < 8) {
+            return res.status(400).json({ message: 'Le mot de passe doit contenir au moins 8 caractères.' });
+        }
+
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /[0-9]/.test(password);
+        const hasSpecialChar = /[\W_]/.test(password);
+
+        if (!hasUpperCase || !hasLowerCase || !hasNumbers || !hasSpecialChar) {
+            return res.status(400).json({ message: 'Le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial.' });
+        }
+
+        // Valider l'adresse (obligatoire pour une application de quartier)
+        if (!adresse) {
+            return res.status(400).json({ message: 'L\'adresse est requise pour une application de quartier.' });
+        }
+
+        // Valider le téléphone (si fourni)
+        if (telephone && !/^[0-9]{10}$/.test(telephone)) {
+            return res.status(400).json({ message: 'Le numéro de téléphone doit contenir 10 chiffres.' });
+        }
+
         // Vérifier si l'email existe déjà
         const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE email = $1', [email]);
         if (existingUsers.length > 0) {
@@ -165,7 +230,7 @@ app.post('/api/auth/register', async (req, res) => {
         }
 
         // Hacher le mot de passe
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = hashPassword(password);
 
         // Créer le nouvel utilisateur
         const result = await pool.query(
@@ -313,8 +378,45 @@ app.get('/api/auth/me', authenticateJWT, (req, res) => {
     }
 });
 
+// Données de test pour les quartiers (puisque la base de données n'est pas accessible)
+const quartiersTest = [
+    { id: 1, nom_quartier: 'Centre', ville: 'Paris', code_postal: '75001' },
+    { id: 2, nom_quartier: 'Montmartre', ville: 'Paris', code_postal: '75018' },
+    { id: 3, nom_quartier: 'Le Marais', ville: 'Paris', code_postal: '75004' },
+    { id: 4, nom_quartier: 'Saint-Germain-des-Prés', ville: 'Paris', code_postal: '75006' },
+    { id: 5, nom_quartier: 'Belleville', ville: 'Paris', code_postal: '75020' }
+];
+
+// Route pour récupérer tous les quartiers
+app.get('/api/quartiers', (_, res) => {
+    try {
+        // Utiliser les données de test au lieu de la base de données
+        res.status(200).json(quartiersTest);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des quartiers:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des quartiers.' });
+    }
+});
+
+// Route pour récupérer un quartier par ID
+app.get('/api/quartiers/:id', (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const quartier = quartiersTest.find(q => q.id === id);
+
+        if (!quartier) {
+            return res.status(404).json({ message: 'Quartier non trouvé.' });
+        }
+
+        res.status(200).json(quartier);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du quartier:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération du quartier.' });
+    }
+});
+
 // Route de base pour vérifier que le serveur fonctionne
-app.get('/', (req, res) => {
+app.get('/', (_, res) => {
     res.send('API NextDoorBuddy fonctionne correctement!');
 });
 

@@ -20,11 +20,11 @@ export class UserModel {
     // Trouver un utilisateur par email
     static async findByEmail(email: string): Promise<User | null> {
         try {
-            const [rows]: any = await pool.query(
-                'SELECT * FROM Utilisateur WHERE email = ?',
+            const result = await pool.query(
+                'SELECT * FROM "Utilisateur" WHERE email = $1',
                 [email]
             );
-            return rows.length ? rows[0] : null;
+            return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by email:', error);
             throw error;
@@ -34,11 +34,11 @@ export class UserModel {
     // Trouver un utilisateur par ID
     static async findById(id: number): Promise<User | null> {
         try {
-            const [rows]: any = await pool.query(
-                'SELECT * FROM Utilisateur WHERE id = ?',
+            const result = await pool.query(
+                'SELECT * FROM "Utilisateur" WHERE id = $1',
                 [id]
             );
-            return rows.length ? rows[0] : null;
+            return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by id:', error);
             throw error;
@@ -50,11 +50,11 @@ export class UserModel {
         try {
             // Hachage du mot de passe
             const hashedPassword = await bcrypt.hash(userData.password!, 10);
-            
-            const [result]: any = await pool.query(
-                `INSERT INTO Utilisateur 
-                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+
+            const result = await pool.query(
+                `INSERT INTO "Utilisateur"
+                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
                 [
                     userData.nom,
                     userData.prenom,
@@ -66,8 +66,8 @@ export class UserModel {
                     userData.quartier_id || null
                 ]
             );
-            
-            return result.insertId;
+
+            return result.rows[0].id;
         } catch (error) {
             console.error('Error creating user:', error);
             throw error;
