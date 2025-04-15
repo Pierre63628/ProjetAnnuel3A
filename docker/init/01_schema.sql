@@ -12,11 +12,26 @@ CREATE TABLE Utilisateur (
   nom VARCHAR(100) NOT NULL,
   prenom VARCHAR(100),
   email VARCHAR(255) UNIQUE,
+  password VARCHAR(255) NOT NULL,
   adresse TEXT,
   date_naissance DATE,
   telephone VARCHAR(15),
   quartier_id INT,
+  role ENUM('user', 'admin') DEFAULT 'user',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (quartier_id) REFERENCES Quartier(id)
+);
+
+-- RefreshToken pour l'authentification
+CREATE TABLE RefreshToken (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  token VARCHAR(255) NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  revoked BOOLEAN DEFAULT FALSE,
+  FOREIGN KEY (user_id) REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
 -- Evenement
