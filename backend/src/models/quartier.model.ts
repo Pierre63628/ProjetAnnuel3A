@@ -1,4 +1,4 @@
-import pool from '../config/db';
+import pool from '../config/db.js';
 
 export interface Quartier {
     id?: number;
@@ -11,10 +11,10 @@ export class QuartierModel {
     // Récupérer tous les quartiers
     static async findAll(): Promise<Quartier[]> {
         try {
-            const [rows]: any = await pool.query(
-                'SELECT * FROM Quartier ORDER BY nom_quartier'
+            const result = await pool.query(
+                'SELECT * FROM "Quartier" ORDER BY nom_quartier'
             );
-            return rows;
+            return result.rows;
         } catch (error) {
             console.error('Error finding quartiers:', error);
             throw error;
@@ -24,11 +24,11 @@ export class QuartierModel {
     // Récupérer un quartier par ID
     static async findById(id: number): Promise<Quartier | null> {
         try {
-            const [rows]: any = await pool.query(
-                'SELECT * FROM Quartier WHERE id = ?',
+            const result = await pool.query(
+                'SELECT * FROM "Quartier" WHERE id = $1',
                 [id]
             );
-            return rows.length ? rows[0] : null;
+            return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding quartier by id:', error);
             throw error;

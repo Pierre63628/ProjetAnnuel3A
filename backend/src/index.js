@@ -420,6 +420,210 @@ app.get('/', (_, res) => {
     res.send('API NextDoorBuddy fonctionne correctement!');
 });
 
+// Routes pour la gestion des utilisateurs
+
+// Récupérer tous les utilisateurs (admin seulement)
+app.get('/api/users', authenticateJWT, async (req, res) => {
+    try {
+        // Vérifier si l'utilisateur est admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous devez être administrateur.' });
+        }
+
+        const { rows } = await pool.query('SELECT * FROM "Utilisateur" ORDER BY nom, prenom');
+
+        // Supprimer les mots de passe de la réponse
+        const usersWithoutPasswords = rows.map(user => {
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        });
+
+        res.status(200).json(usersWithoutPasswords);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des utilisateurs.' });
+    }
+});
+
+// Récupérer un utilisateur par ID
+app.get('/api/users/:id', authenticateJWT, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        // Vérifier si l'utilisateur est autorisé à accéder à ces informations
+        if (req.user.id !== id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez accéder qu\'à vos propres informations.' });
+        }
+
+        const { rows } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [id]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        const user = rows[0];
+
+        // Supprimer le mot de passe de la réponse
+        const { password, ...userWithoutPassword } = user;
+
+        res.status(200).json(userWithoutPassword);
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération de l\'utilisateur.' });
+    }
+});
+
+// Mettre à jour un utilisateur
+app.put('/api/users/:id', authenticateJWT, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        // Vérifier si l'utilisateur est autorisé à modifier ces informations
+        if (req.user.id !== id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez modifier que vos propres informations.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [id]);
+        if (existingUsers.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        const existingUser = existingUsers[0];
+
+        // Extraire les données à mettre à jour
+        const {
+            nom, prenom, email, password, adresse,
+            date_naissance, telephone, quartier_id, role
+        } = req.body;
+
+        // Vérifier si l'email est déjà utilisé par un autre utilisateur
+        if (email && email !== existingUser.email) {
+            const { rows: usersWithEmail } = await pool.query('SELECT * FROM "Utilisateur" WHERE email = $1', [email]);
+            if (usersWithEmail.length > 0 && usersWithEmail[0].id !== id) {
+                return res.status(409).json({ message: 'Cet email est déjà utilisé par un autre utilisateur.' });
+            }
+        }
+
+        // Seul un admin peut changer le rôle d'un utilisateur
+        if (role !== undefined && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Seul un administrateur peut modifier le rôle d\'un utilisateur.' });
+        }
+
+        // Préparer les champs à mettre à jour
+        const fields = [];
+        const values = [];
+        let paramIndex = 1;
+
+        if (nom !== undefined) {
+            fields.push(`nom = $${paramIndex++}`);
+            values.push(nom);
+        }
+
+        if (prenom !== undefined) {
+            fields.push(`prenom = $${paramIndex++}`);
+            values.push(prenom);
+        }
+
+        if (email !== undefined) {
+            fields.push(`email = $${paramIndex++}`);
+            values.push(email);
+        }
+
+        if (password !== undefined) {
+            fields.push(`password = $${paramIndex++}`);
+            values.push(hashPassword(password));
+        }
+
+        if (adresse !== undefined) {
+            fields.push(`adresse = $${paramIndex++}`);
+            values.push(adresse);
+        }
+
+        if (date_naissance !== undefined) {
+            fields.push(`date_naissance = $${paramIndex++}`);
+            values.push(date_naissance ? new Date(date_naissance) : null);
+        }
+
+        if (telephone !== undefined) {
+            fields.push(`telephone = $${paramIndex++}`);
+            values.push(telephone);
+        }
+
+        if (quartier_id !== undefined) {
+            fields.push(`quartier_id = $${paramIndex++}`);
+            values.push(quartier_id);
+        }
+
+        if (role !== undefined && req.user.role === 'admin') {
+            fields.push(`role = $${paramIndex++}`);
+            values.push(role);
+        }
+
+        // Si aucun champ à mettre à jour, retourner une erreur
+        if (fields.length === 0) {
+            return res.status(400).json({ message: 'Aucune donnée à mettre à jour.' });
+        }
+
+        // Ajouter l'ID à la fin des paramètres
+        values.push(id);
+
+        // Mettre à jour l'utilisateur
+        const { rows: updatedUsers } = await pool.query(
+            `UPDATE "Utilisateur" SET ${fields.join(', ')} WHERE id = $${paramIndex} RETURNING *`,
+            values
+        );
+
+        if (updatedUsers.length === 0) {
+            return res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'utilisateur.' });
+        }
+
+        // Supprimer le mot de passe de la réponse
+        const { password: _, ...userWithoutPassword } = updatedUsers[0];
+
+        res.status(200).json({
+            message: 'Utilisateur mis à jour avec succès',
+            user: userWithoutPassword
+        });
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la mise à jour de l\'utilisateur.' });
+    }
+});
+
+// Supprimer un utilisateur
+app.delete('/api/users/:id', authenticateJWT, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        // Vérifier si l'utilisateur est autorisé à supprimer ce compte
+        if (req.user.id !== id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez supprimer que votre propre compte.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [id]);
+        if (existingUsers.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Révoquer tous les tokens de l'utilisateur
+        await pool.query('UPDATE "RefreshToken" SET revoked = TRUE WHERE user_id = $1', [id]);
+
+        // Supprimer l'utilisateur
+        const { rowCount } = await pool.query('DELETE FROM "Utilisateur" WHERE id = $1', [id]);
+
+        if (rowCount === 0) {
+            return res.status(500).json({ message: 'Erreur lors de la suppression de l\'utilisateur.' });
+        }
+
+        res.status(200).json({ message: 'Utilisateur supprimé avec succès' });
+    } catch (error) {
+        console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la suppression de l\'utilisateur.' });
+    }
+});
+
 // Nettoyage périodique des tokens expirés (toutes les 24 heures)
 setInterval(async () => {
     try {

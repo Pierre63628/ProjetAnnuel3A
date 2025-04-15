@@ -1,5 +1,5 @@
 import express from 'express';
-import quartierController from '../controllers/quartier.controller';
+import quartierController from '../controllers/quartier.controller.js';
 
 const router = express.Router();
 

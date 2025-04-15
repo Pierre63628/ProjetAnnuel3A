@@ -5,7 +5,13 @@ interface User {
     nom: string;
     prenom: string;
     email: string;
+    adresse?: string;
+    date_naissance?: string;
+    telephone?: string;
+    quartier_id?: number;
     role?: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 interface AuthContextType {
@@ -18,6 +24,7 @@ interface AuthContextType {
     register: (userData: any) => Promise<void>;
     logout: () => void;
     refreshAccessToken: () => Promise<string | null>;
+    updateUserInfo: (userData: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -182,6 +189,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    const updateUserInfo = (userData: Partial<User>) => {
+        if (!user) return;
+
+        const updatedUser = { ...user, ...userData };
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+    };
+
     return (
         <AuthContext.Provider
             value={{
@@ -194,6 +209,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 register,
                 logout,
                 refreshAccessToken,
+                updateUserInfo,
             }}
         >
             {children}

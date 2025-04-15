@@ -1,5 +1,5 @@
-import pool from '../config/db';
-import bcrypt from 'bcrypt';
+import pool from '../config/db.js';
+import crypto from 'crypto';
 
 export interface User {
     id?: number;
@@ -48,8 +48,8 @@ export class UserModel {
     // Créer un nouvel utilisateur
     static async create(userData: User): Promise<number> {
         try {
-            // Hachage du mot de passe
-            const hashedPassword = await bcrypt.hash(userData.password!, 10);
+            // Hachage du mot de passe avec crypto
+            const hashedPassword = this.hashPassword(userData.password!);
 
             const result = await pool.query(
                 `INSERT INTO "Utilisateur"
@@ -74,9 +74,126 @@ export class UserModel {
         }
     }
 
-    // Vérifier le mot de passe
-    static async verifyPassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
-        return await bcrypt.compare(plainPassword, hashedPassword);
+    // Hacher un mot de passe avec crypto
+    static hashPassword(password: string): string {
+        const salt = crypto.randomBytes(16).toString('hex');
+        const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
+        return `${salt}:${hash}`;
+    }
+
+    // Vérifier le mot de passe avec crypto
+    static verifyPassword(plainPassword: string, hashedPassword: string): boolean {
+        if (hashedPassword.startsWith('$2')) {
+            // Si c'est encore un hash bcrypt, on retourne false pour forcer une mise à jour
+            return false;
+        }
+
+        if (hashedPassword.includes(':')) {
+            const [salt, storedHash] = hashedPassword.split(':');
+            const hash = crypto.pbkdf2Sync(plainPassword, salt, 10000, 64, 'sha512').toString('hex');
+            return storedHash === hash;
+        }
+        return false;
+    }
+
+    // Mettre à jour un utilisateur
+    static async update(id: number, userData: Partial<User>): Promise<boolean> {
+        try {
+            // Préparer les champs à mettre à jour
+            const fields: string[] = [];
+            const values: any[] = [];
+            let paramIndex = 1;
+
+            // Ajouter chaque champ non-null à la requête
+            if (userData.nom !== undefined) {
+                fields.push(`nom = $${paramIndex++}`);
+                values.push(userData.nom);
+            }
+
+            if (userData.prenom !== undefined) {
+                fields.push(`prenom = $${paramIndex++}`);
+                values.push(userData.prenom);
+            }
+
+            if (userData.email !== undefined) {
+                fields.push(`email = $${paramIndex++}`);
+                values.push(userData.email);
+            }
+
+            if (userData.password !== undefined) {
+                fields.push(`password = $${paramIndex++}`);
+                values.push(this.hashPassword(userData.password));
+            }
+
+            if (userData.adresse !== undefined) {
+                fields.push(`adresse = $${paramIndex++}`);
+                values.push(userData.adresse);
+            }
+
+            if (userData.date_naissance !== undefined) {
+                fields.push(`date_naissance = $${paramIndex++}`);
+                values.push(userData.date_naissance);
+            }
+
+            if (userData.telephone !== undefined) {
+                fields.push(`telephone = $${paramIndex++}`);
+                values.push(userData.telephone);
+            }
+
+            if (userData.quartier_id !== undefined) {
+                fields.push(`quartier_id = $${paramIndex++}`);
+                values.push(userData.quartier_id);
+            }
+
+            if (userData.role !== undefined) {
+                fields.push(`role = $${paramIndex++}`);
+                values.push(userData.role);
+            }
+
+            // Si aucun champ à mettre à jour, retourner true
+            if (fields.length === 0) {
+                return true;
+            }
+
+            // Ajouter l'ID à la fin des paramètres
+            values.push(id);
+
+            const result = await pool.query(
+                `UPDATE "Utilisateur" SET ${fields.join(', ')} WHERE id = $${paramIndex}`,
+                values
+            );
+
+            return result.rowCount > 0;
+        } catch (error) {
+            console.error('Error updating user:', error);
+            throw error;
+        }
+    }
+
+    // Supprimer un utilisateur
+    static async delete(id: number): Promise<boolean> {
+        try {
+            const result = await pool.query(
+                'DELETE FROM "Utilisateur" WHERE id = $1',
+                [id]
+            );
+
+            return result.rowCount > 0;
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            throw error;
+        }
+    }
+
+    // Récupérer tous les utilisateurs
+    static async findAll(): Promise<User[]> {
+        try {
+            const result = await pool.query('SELECT * FROM "Utilisateur" ORDER BY nom, prenom');
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding all users:', error);
+            throw error;
+        }
     }
 }
 

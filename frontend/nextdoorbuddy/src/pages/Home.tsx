@@ -1,34 +1,13 @@
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 
 const Home = () => {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+    const { user } = useAuth();
 
     return (
         <div className="min-h-screen bg-gray-100">
-            {/* Header */}
-            <header className="bg-white p-4 shadow">
-                <div className="container mx-auto flex items-center justify-between">
-                    <h1 className="text-2xl font-bold text-blue-600">NextDoorBuddy</h1>
-                    <div className="flex items-center space-x-4">
-                        <span className="text-gray-700">
-                            Bonjour, {user?.prenom} {user?.nom}
-                        </span>
-                        <button
-                            onClick={handleLogout}
-                            className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-600"
-                        >
-                            Déconnexion
-                        </button>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             {/* Main content */}
             <main className="container mx-auto p-6">
@@ -63,6 +42,11 @@ const Home = () => {
                             <p className="text-gray-700">{user?.role || 'Utilisateur'}</p>
                         </div>
                     </div>
+                    <div className="mt-4">
+                        <Link to="/profile" className="text-blue-600 hover:text-blue-800 hover:underline">
+                            Gérer mon profil
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Admin section */}
@@ -73,9 +57,9 @@ const Home = () => {
                             Vous avez accès à des fonctionnalités d'administration supplémentaires.
                         </p>
                         <div className="mt-4 flex space-x-4">
-                            <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                            <Link to="/admin/users" className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                                 Gérer les utilisateurs
-                            </button>
+                            </Link>
                             <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                                 Gérer les quartiers
                             </button>

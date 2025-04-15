@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel, User } from '../models/user.model';
-import { TokenModel } from '../models/token.model';
-import jwtConfig from '../config/jwt';
+import { UserModel, User } from '../models/user.model.js';
+import { TokenModel } from '../models/token.model.js';
+import jwtConfig from '../config/jwt.js';
 
 // Générer les tokens JWT
 const generateTokens = (userId: number) => {
@@ -121,7 +121,7 @@ export const login = async (req: Request, res: Response) => {
         }
 
         // Vérifier le mot de passe
-        const isPasswordValid = await UserModel.verifyPassword(password, user.password!);
+        const isPasswordValid = UserModel.verifyPassword(password, user.password!);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
         }

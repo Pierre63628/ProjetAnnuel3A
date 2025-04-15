@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { QuartierModel } from '../models/quartier.model';
+import { QuartierModel } from '../models/quartier.model.js';
 
 // Récupérer tous les quartiers
 export const getAllQuartiers = async (req: Request, res: Response) => {
@@ -17,11 +17,11 @@ export const getQuartierById = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
         const quartier = await QuartierModel.findById(id);
-        
+
         if (!quartier) {
             return res.status(404).json({ message: 'Quartier non trouvé.' });
         }
-        
+
         res.status(200).json(quartier);
     } catch (error) {
         console.error('Erreur lors de la récupération du quartier:', error);

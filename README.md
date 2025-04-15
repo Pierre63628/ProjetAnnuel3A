@@ -31,8 +31,3 @@ docker-compose up --build -d
 
 - **Frontend** : http://localhost:5173
 - **Backend API** : http://localhost:3000
-
-## Utilisateur de test
-
-- **Email** : lucas.verrecchia@gmail.com
-- **Mot de passe** : password123
