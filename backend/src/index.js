@@ -5,7 +5,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-// Charger les variables d'environnement
 dotenv.config();
 
 const app = express();
@@ -30,9 +29,39 @@ const pool = new Pool({
     user: process.env.DB_USER || 'user',
     password: process.env.DB_PASSWORD || 'rootpass',
     database: process.env.DB_NAME || 'nextdoorbuddy',
-    max: 20, // Nombre maximum de clients dans le pool
-    idleTimeoutMillis: 30000 // Temps d'inactivité avant de fermer un client
+    max: 20,
+    idleTimeoutMillis: 30000
 });
+
+// Fonction utilitaire pour calculer la date d'expiration
+const calculateExpiryDate = (expiresIn) => {
+    let expiryDate = new Date();
+
+    if (typeof expiresIn === 'string') {
+        const unit = expiresIn.slice(-1);
+        const value = parseInt(expiresIn.slice(0, -1));
+
+        switch (unit) {
+            case 'd': // jours
+                expiryDate.setDate(expiryDate.getDate() + value);
+                break;
+            case 'h': // heures
+                expiryDate.setHours(expiryDate.getHours() + value);
+                break;
+            case 'm': // minutes
+                expiryDate.setMinutes(expiryDate.getMinutes() + value);
+                break;
+            default:
+                // Par défaut, 7 jours
+                expiryDate.setDate(expiryDate.getDate() + 7);
+        }
+    } else {
+        // Si c'est un nombre (en secondes)
+        expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
+    }
+
+    return expiryDate;
+};
 
 // Middleware d'authentification
 const authenticateJWT = async (req, res, next) => {
@@ -99,31 +128,7 @@ app.post('/api/auth/login', async (req, res) => {
         );
 
         // Calculer la date d'expiration du token de rafraîchissement
-        let expiryDate = new Date();
-        const expiresIn = JWT_REFRESH_EXPIRES_IN;
-
-        if (typeof expiresIn === 'string') {
-            const unit = expiresIn.slice(-1);
-            const value = parseInt(expiresIn.slice(0, -1));
-
-            switch (unit) {
-                case 'd': // jours
-                    expiryDate.setDate(expiryDate.getDate() + value);
-                    break;
-                case 'h': // heures
-                    expiryDate.setHours(expiryDate.getHours() + value);
-                    break;
-                case 'm': // minutes
-                    expiryDate.setMinutes(expiryDate.getMinutes() + value);
-                    break;
-                default:
-                    // Par défaut, 7 jours
-                    expiryDate.setDate(expiryDate.getDate() + 7);
-            }
-        } else {
-            // Si c'est un nombre (en secondes)
-            expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
-        }
+        const expiryDate = calculateExpiryDate(JWT_REFRESH_EXPIRES_IN);
 
         // Sauvegarder le token de rafraîchissement dans la base de données
         await pool.query(
@@ -195,31 +200,7 @@ app.post('/api/auth/register', async (req, res) => {
         );
 
         // Calculer la date d'expiration du token de rafraîchissement
-        let expiryDate = new Date();
-        const expiresIn = JWT_REFRESH_EXPIRES_IN;
-
-        if (typeof expiresIn === 'string') {
-            const unit = expiresIn.slice(-1);
-            const value = parseInt(expiresIn.slice(0, -1));
-
-            switch (unit) {
-                case 'd': // jours
-                    expiryDate.setDate(expiryDate.getDate() + value);
-                    break;
-                case 'h': // heures
-                    expiryDate.setHours(expiryDate.getHours() + value);
-                    break;
-                case 'm': // minutes
-                    expiryDate.setMinutes(expiryDate.getMinutes() + value);
-                    break;
-                default:
-                    // Par défaut, 7 jours
-                    expiryDate.setDate(expiryDate.getDate() + 7);
-            }
-        } else {
-            // Si c'est un nombre (en secondes)
-            expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
-        }
+        const expiryDate = calculateExpiryDate(JWT_REFRESH_EXPIRES_IN);
 
         // Sauvegarder le token de rafraîchissement dans la base de données
         await pool.query(
@@ -253,7 +234,6 @@ app.post('/api/auth/refresh-token', async (req, res) => {
             return res.status(400).json({ message: 'Token de rafraîchissement requis.' });
         }
 
-        // Approche stateless : Vérifier uniquement la validité du token par sa signature
         jwt.verify(refreshToken, JWT_REFRESH_SECRET, async (err, decoded) => {
             if (err) {
                 return res.status(403).json({ message: 'Token de rafraîchissement invalide.' });
@@ -261,7 +241,7 @@ app.post('/api/auth/refresh-token', async (req, res) => {
 
             const userId = decoded.userId;
 
-            // Vérification optionnelle : vérifier si le token a été révoqué (approche hybride)
+            // Vérifier si le token a été révoqué
             const { rows: tokenRecords } = await pool.query(
                 'SELECT * FROM "RefreshToken" WHERE token = $1 AND revoked = TRUE',
                 [refreshToken]
@@ -283,11 +263,10 @@ app.post('/api/auth/refresh-token', async (req, res) => {
             }
 
             // Générer un nouveau token d'accès
-            const expiresIn = JWT_ACCESS_EXPIRES_IN;
             const newAccessToken = jwt.sign(
                 { userId },
                 JWT_ACCESS_SECRET,
-                { expiresIn }
+                { expiresIn: JWT_ACCESS_EXPIRES_IN }
             );
 
             // Retourner le nouveau token d'accès
