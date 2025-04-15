@@ -1,17 +1,17 @@
-import mysql from 'mysql2/promise';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Création du pool de connexions
-const pool = mysql.createPool({
+// Création du pool de connexions PostgreSQL
+const pool = new Pool({
     host: process.env.DB_HOST || 'db',
+    port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USER || 'user',
-    password: process.env.DB_PASSWORD || 'userpass',
+    password: process.env.DB_PASSWORD || 'rootpass',
     database: process.env.DB_NAME || 'nextdoorbuddy',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+    max: 20,
+    idleTimeoutMillis: 30000
 });
 
 export default pool;

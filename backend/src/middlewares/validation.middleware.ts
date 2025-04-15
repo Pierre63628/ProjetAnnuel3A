@@ -23,11 +23,18 @@ export const registerValidationRules = [
         .matches(/[a-z]/)
         .withMessage('Le mot de passe doit contenir au moins une minuscule')
         .matches(/[0-9]/)
-        .withMessage('Le mot de passe doit contenir au moins un chiffre'),
+        .withMessage('Le mot de passe doit contenir au moins un chiffre')
+        .matches(/[\W_]/)
+        .withMessage('Le mot de passe doit contenir au moins un caractère spécial'),
+    body('adresse').notEmpty().withMessage('L\'adresse est requise pour une application de quartier'),
     body('telephone')
         .optional()
         .matches(/^[0-9]{10}$/)
-        .withMessage('Le numéro de téléphone doit contenir 10 chiffres')
+        .withMessage('Le numéro de téléphone doit contenir 10 chiffres'),
+    body('date_naissance')
+        .optional()
+        .isISO8601()
+        .withMessage('La date de naissance doit être au format YYYY-MM-DD')
 ];
 
 // Règles de validation pour la connexion

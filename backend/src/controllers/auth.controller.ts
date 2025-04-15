@@ -24,14 +24,14 @@ const generateTokens = (userId: number) => {
 };
 
 // Calculer la date d'expiration du token de rafraîchissement
-const calculateExpiryDate = () => {
+const calculateExpiryDate = (): Date => {
     const expiresIn = jwtConfig.refreshToken.expiresIn;
-    let expiryDate = new Date();
-    
+    const expiryDate = new Date();
+
     if (typeof expiresIn === 'string') {
         const unit = expiresIn.slice(-1);
         const value = parseInt(expiresIn.slice(0, -1));
-        
+
         switch (unit) {
             case 'd': // jours
                 expiryDate.setDate(expiryDate.getDate() + value);
@@ -46,15 +46,17 @@ const calculateExpiryDate = () => {
                 // Par défaut, 7 jours
                 expiryDate.setDate(expiryDate.getDate() + 7);
         }
-    } else {
+    } else if (typeof expiresIn === 'number') {
         // Si c'est un nombre (en secondes)
         expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
+    } else {
+        // Par défaut, 7 jours
+        expiryDate.setDate(expiryDate.getDate() + 7);
     }
-    
+
     return expiryDate;
 };
 
-// Inscription d'un nouvel utilisateur
 export const register = async (req: Request, res: Response) => {
     try {
         const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
