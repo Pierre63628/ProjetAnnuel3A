@@ -1,6 +1,7 @@
 package com.esgi.scraper.service;
 
 import com.esgi.scraper.config.DatabaseConfig;
+import com.esgi.scraper.utils.AddressUtils;
 import com.esgi.scraper.utils.DateValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -67,24 +68,29 @@ public class EventStorageService {
 
     public void saveEventsToDB(String source) {
         String sql = """
-        INSERT INTO events (name, url, image_url, date, source)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO events (name, url, image_url, date, source, detailed_address)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT (url) DO UPDATE SET
             name = EXCLUDED.name,
             image_url = EXCLUDED.image_url,
             date = EXCLUDED.date,
             source = EXCLUDED.source,
-            created_at = CURRENT_TIMESTAMP
+            detailed_address = EXCLUDED.detailed_address,
+            updated_at = CURRENT_TIMESTAMP
     """;
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             for (Map<String, String> event : validEvents) {
+                String rawAddress = event.get("detailed_address");
+                String cleanedAddress = AddressUtils.cleanAddress(rawAddress);
+
                 pstmt.setString(1, event.get("name"));
                 pstmt.setString(2, event.get("url"));
                 pstmt.setString(3, event.get("image_url"));
                 pstmt.setString(4, event.get("date"));
                 pstmt.setString(5, source);
+                pstmt.setString(6, cleanedAddress);
                 pstmt.addBatch();
             }
 

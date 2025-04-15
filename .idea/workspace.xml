@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19657930-f5fd-4e64-a9b6-2f1bcda94716" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/icone/icone.icns" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/utils/AddressUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Scrapper.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build-plugins.sh" beforeDir="false" afterPath="$PROJECT_DIR$/build-plugins.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewerApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/plugins/ThemeManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/application.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/application.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/events_storage/eventbrite_events.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/events_storage/eventbrite_events.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +160,7 @@
       <workItem from="1744051829648" duration="4559000" />
       <workItem from="1744359987587" duration="839000" />
       <workItem from="1744362879241" duration="111000" />
-      <workItem from="1744362997610" duration="11171000" />
+      <workItem from="1744362997610" duration="23235000" />
     </task>
     <servers />
   </component>

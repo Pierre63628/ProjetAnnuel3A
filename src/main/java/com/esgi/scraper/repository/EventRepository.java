@@ -21,6 +21,7 @@ public class EventRepository {
                 image_url TEXT,
                 date VARCHAR(100),
                 source VARCHAR(50),
+                detailed_address TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 CONSTRAINT unique_event_url UNIQUE (url)
@@ -31,21 +32,40 @@ public class EventRepository {
             stmt.execute(sql);
 
             // Vérifier si la colonne updated_at existe déjà
-            String checkColumnSql = """
+            String checkUpdatedAtSql = """
                 SELECT column_name
                 FROM information_schema.columns
                 WHERE table_name = 'events' AND column_name = 'updated_at'
             """;
 
-            boolean columnExists = false;
-            try (var rs = stmt.executeQuery(checkColumnSql)) {
-                columnExists = rs.next();
+            boolean updatedAtExists = false;
+            try (var rs = stmt.executeQuery(checkUpdatedAtSql)) {
+                updatedAtExists = rs.next();
             }
 
-            // Ajouter la colonne si elle n'existe pas
-            if (!columnExists) {
+            // Ajouter la colonne updated_at si elle n'existe pas
+            if (!updatedAtExists) {
                 String alterTableSql = "ALTER TABLE events ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
                 stmt.execute(alterTableSql);
+            }
+
+            // Vérifier si la colonne detailed_address existe déjà
+            String checkAddressSql = """
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = 'events' AND column_name = 'detailed_address'
+            """;
+
+            boolean addressExists = false;
+            try (var rs = stmt.executeQuery(checkAddressSql)) {
+                addressExists = rs.next();
+            }
+
+            // Ajouter la colonne detailed_address si elle n'existe pas
+            if (!addressExists) {
+                String alterTableSql = "ALTER TABLE events ADD COLUMN IF NOT EXISTS detailed_address TEXT";
+                stmt.execute(alterTableSql);
+                System.out.println("Colonne detailed_address ajoutée à la table events");
             }
 
             // Créer un trigger pour mettre à jour updated_at automatiquement
@@ -116,7 +136,7 @@ public class EventRepository {
 
     public List<Event> getAllEvents() {
         String sql = """
-            SELECT id, name, url, image_url, date, source,
+            SELECT id, name, url, image_url, date, source, detailed_address,
                    created_at, updated_at
             FROM events
             ORDER BY date DESC
@@ -138,6 +158,7 @@ public class EventRepository {
                     // TODO: Charger l'image si nécessaire
                 }
                 event.setDate(rs.getString("date"));
+                event.setDetailedAddress(rs.getString("detailed_address"));
                 event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
 
                 events.add(event);
@@ -158,7 +179,7 @@ public class EventRepository {
      */
     public List<com.esgi.scraper.models.Event> getEventsBySource(String source) {
         String sql = """
-            SELECT id, name, url, image_url, date, source,
+            SELECT id, name, url, image_url, date, source, detailed_address,
                    created_at, updated_at
             FROM events
             WHERE source = ?
@@ -183,6 +204,7 @@ public class EventRepository {
                         // TODO: Charger l'image si nécessaire
                     }
                     event.setDate(rs.getString("date"));
+                    event.setDetailedAddress(rs.getString("detailed_address"));
                     event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
 
                     events.add(event);
