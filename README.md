@@ -45,7 +45,7 @@ Application de mise en relation entre voisins pour favoriser l'entraide et la co
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-utilisateur/ProjetAnnuel-NextDoorBuddy.git
+git clone https://github.com/Pierre63628/ProjetAnnuel3A.git
 cd ProjetAnnuel-NextDoorBuddy
 
 # Lancer les conteneurs Docker
