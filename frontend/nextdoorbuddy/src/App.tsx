@@ -4,6 +4,7 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
+import AdminQuartiers from "./pages/AdminQuartiers"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 
 // Composant pour les routes protégées
@@ -56,6 +57,11 @@ function AppRoutes() {
       <Route path="/admin/users" element={
         <AdminRoute>
           <AdminUsers />
+        </AdminRoute>
+      } />
+      <Route path="/admin/quartiers" element={
+        <AdminRoute>
+          <AdminQuartiers />
         </AdminRoute>
       } />
       <Route path="/login" element={<Login />} />

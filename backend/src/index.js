@@ -40,7 +40,7 @@ const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 // Connexion à la base de données
 const { Pool } = pg;
 const pool = new Pool({
-    host: process.env.DB_HOST || 'db',
+    host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
     user: process.env.DB_USER || 'user',
     password: process.env.DB_PASSWORD || 'rootpass',
@@ -622,6 +622,225 @@ app.delete('/api/users/:id', authenticateJWT, async (req, res) => {
     } catch (error) {
         console.error('Erreur lors de la suppression de l\'utilisateur:', error);
         res.status(500).json({ message: 'Erreur serveur lors de la suppression de l\'utilisateur.' });
+    }
+});
+
+// Routes pour la gestion des quartiers d'utilisateurs
+
+// Récupérer tous les quartiers d'un utilisateur
+app.get('/api/users/:userId/quartiers', authenticateJWT, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        console.log(`Backend: Getting quartiers for user ${userId}`);
+
+        // Vérifier si l'utilisateur est autorisé à voir ces informations
+        if (req.user.id !== userId && req.user.role !== 'admin') {
+            console.log(`Backend: Access denied for user ${req.user.id} trying to access quartiers of user ${userId}`);
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez voir que vos propres quartiers.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
+        if (existingUsers.length === 0) {
+            console.log(`Backend: User ${userId} not found`);
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Récupérer les quartiers de l'utilisateur
+        const { rows: quartiers } = await pool.query(
+            `SELECT uq.*, q.nom_quartier, q.ville, q.code_postal
+            FROM "UtilisateurQuartier" uq
+            JOIN "Quartier" q ON uq.quartier_id = q.id
+            WHERE uq.utilisateur_id = $1 AND uq.statut = 'actif'
+            ORDER BY uq.est_principal DESC, q.ville, q.nom_quartier`,
+            [userId]
+        );
+
+        console.log(`Backend: Found ${quartiers.length} quartiers for user ${userId}:`, quartiers);
+        res.status(200).json(quartiers);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des quartiers de l\'utilisateur:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des quartiers de l\'utilisateur.' });
+    }
+});
+
+// Ajouter un quartier à un utilisateur
+app.post('/api/users/:userId/quartiers', authenticateJWT, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const { quartier_id, est_principal } = req.body;
+
+        // Vérifier si l'utilisateur est autorisé à modifier ces informations
+        if (req.user.id !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez modifier que vos propres quartiers.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
+        if (existingUsers.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Vérifier si le quartier existe
+        const { rows: existingQuartiers } = await pool.query('SELECT * FROM "Quartier" WHERE id = $1', [quartier_id]);
+        if (existingQuartiers.length === 0) {
+            return res.status(404).json({ message: 'Quartier non trouvé.' });
+        }
+
+        // Si c'est le quartier principal, mettre tous les autres quartiers comme non principaux
+        if (est_principal) {
+            await pool.query(
+                'UPDATE "UtilisateurQuartier" SET est_principal = false WHERE utilisateur_id = $1',
+                [userId]
+            );
+        }
+
+        // Vérifier si la relation existe déjà
+        const { rows: existingRelations } = await pool.query(
+            'SELECT id FROM "UtilisateurQuartier" WHERE utilisateur_id = $1 AND quartier_id = $2',
+            [userId, quartier_id]
+        );
+
+        let id;
+        if (existingRelations.length > 0) {
+            // Mettre à jour la relation existante
+            await pool.query(
+                'UPDATE "UtilisateurQuartier" SET est_principal = $1, statut = \'actif\' WHERE id = $2',
+                [est_principal || false, existingRelations[0].id]
+            );
+            id = existingRelations[0].id;
+        } else {
+            // Créer une nouvelle relation
+            const result = await pool.query(
+                `INSERT INTO "UtilisateurQuartier"
+                (utilisateur_id, quartier_id, est_principal, statut)
+                VALUES ($1, $2, $3, 'actif') RETURNING id`,
+                [userId, quartier_id, est_principal || false]
+            );
+            id = result.rows[0].id;
+        }
+
+        // Si c'est le quartier principal, mettre à jour le quartier_id dans la table Utilisateur
+        if (est_principal) {
+            await pool.query(
+                'UPDATE "Utilisateur" SET quartier_id = $1 WHERE id = $2',
+                [quartier_id, userId]
+            );
+        }
+
+        res.status(201).json({
+            message: 'Quartier ajouté avec succès à l\'utilisateur.',
+            id
+        });
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout du quartier:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de l\'ajout du quartier.' });
+    }
+});
+
+// Définir un quartier comme principal pour un utilisateur
+app.put('/api/users/:userId/quartiers/:quartierId/principal', authenticateJWT, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const quartierId = parseInt(req.params.quartierId);
+
+        // Vérifier si l'utilisateur est autorisé à modifier ces informations
+        if (req.user.id !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez modifier que vos propres quartiers.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
+        if (existingUsers.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Vérifier si le quartier existe
+        const { rows: existingQuartiers } = await pool.query('SELECT * FROM "Quartier" WHERE id = $1', [quartierId]);
+        if (existingQuartiers.length === 0) {
+            return res.status(404).json({ message: 'Quartier non trouvé.' });
+        }
+
+        // D'abord, on met tous les quartiers de l'utilisateur comme non principaux
+        await pool.query(
+            'UPDATE "UtilisateurQuartier" SET est_principal = false WHERE utilisateur_id = $1',
+            [userId]
+        );
+
+        // Ensuite, on définit le quartier spécifié comme principal
+        const { rowCount } = await pool.query(
+            'UPDATE "UtilisateurQuartier" SET est_principal = true WHERE utilisateur_id = $1 AND quartier_id = $2',
+            [userId, quartierId]
+        );
+
+        // Si la relation n'existe pas encore, on la crée
+        if (rowCount === 0) {
+            await pool.query(
+                `INSERT INTO "UtilisateurQuartier"
+                (utilisateur_id, quartier_id, est_principal, statut)
+                VALUES ($1, $2, true, 'actif')`,
+                [userId, quartierId]
+            );
+        }
+
+        // Mettre à jour le quartier_id dans la table Utilisateur
+        await pool.query(
+            'UPDATE "Utilisateur" SET quartier_id = $1 WHERE id = $2',
+            [quartierId, userId]
+        );
+
+        res.status(200).json({ message: 'Quartier défini comme principal avec succès.' });
+    } catch (error) {
+        console.error('Erreur lors de la définition du quartier comme principal:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la définition du quartier comme principal.' });
+    }
+});
+
+// Supprimer un quartier d'un utilisateur
+app.delete('/api/users/:userId/quartiers/:relationId', authenticateJWT, async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+        const relationId = parseInt(req.params.relationId);
+
+        // Vérifier si l'utilisateur est autorisé à modifier ces informations
+        if (req.user.id !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez modifier que vos propres quartiers.' });
+        }
+
+        // Vérifier si l'utilisateur existe
+        const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
+        if (existingUsers.length === 0) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+        }
+
+        // Vérifier si la relation existe et appartient à l'utilisateur
+        const { rows: relations } = await pool.query(
+            'SELECT * FROM "UtilisateurQuartier" WHERE id = $1 AND utilisateur_id = $2',
+            [relationId, userId]
+        );
+
+        if (relations.length === 0) {
+            return res.status(404).json({ message: 'Relation quartier-utilisateur non trouvée.' });
+        }
+
+        const relation = relations[0];
+
+        // Empêcher la suppression du quartier principal
+        if (relation.est_principal) {
+            return res.status(400).json({ message: 'Vous ne pouvez pas supprimer votre quartier principal. Définissez d\'abord un autre quartier comme principal.' });
+        }
+
+        // Supprimer la relation
+        const { rowCount } = await pool.query('DELETE FROM "UtilisateurQuartier" WHERE id = $1', [relationId]);
+
+        if (rowCount === 0) {
+            return res.status(500).json({ message: 'Erreur lors de la suppression du quartier.' });
+        }
+
+        res.status(200).json({ message: 'Quartier supprimé avec succès.' });
+    } catch (error) {
+        console.error('Erreur lors de la suppression du quartier:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la suppression du quartier.' });
     }
 });
 

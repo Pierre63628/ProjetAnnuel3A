@@ -60,9 +60,9 @@ const Home = () => {
                             <Link to="/admin/users" className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                                 Gérer les utilisateurs
                             </Link>
-                            <button className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+                            <Link to="/admin/quartiers" className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
                                 Gérer les quartiers
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 )}

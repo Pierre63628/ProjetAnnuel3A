@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, removeQuartierFromUser, Quartier, UserQuartier } from '../services/quartier.service';
 
 const Profile = () => {
     const { user, accessToken, refreshAccessToken, logout, updateUserInfo } = useAuth();
@@ -22,7 +23,9 @@ const Profile = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [quartiers, setQuartiers] = useState<any[]>([]);
+    const [quartiers, setQuartiers] = useState<Quartier[]>([]);
+    const [userQuartiers, setUserQuartiers] = useState<UserQuartier[]>([]);
+    const [selectedQuartier, setSelectedQuartier] = useState<string>('');
 
     // Charger les données de l'utilisateur
     useEffect(() => {
@@ -42,23 +45,75 @@ const Profile = () => {
         }
     }, [user]);
 
-    // Charger les quartiers
+    // Charger les quartiers et les quartiers de l'utilisateur
     useEffect(() => {
-        const fetchQuartiers = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/quartiers');
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des quartiers');
+                // Charger tous les quartiers
+                console.log('Fetching all quartiers');
+                const quartiersData = await getQuartiers();
+                console.log('All quartiers data received:', quartiersData);
+                setQuartiers(quartiersData);
+
+                // Charger les quartiers de l'utilisateur si l'utilisateur est connecté
+                if (user && user.id) {
+                    console.log('Fetching quartiers for user with ID:', user.id);
+                    console.log('User info:', user);
+                    console.log('Access token available:', !!accessToken);
+
+                    try {
+                        const userQuartiersData = await getUserQuartiers(user.id);
+                        console.log('User quartiers data received:', userQuartiersData);
+                        setUserQuartiers(userQuartiersData);
+
+                        // Vérifier si le quartier principal de l'utilisateur est dans la liste des quartiers
+                        if (user.quartier_id && userQuartiersData.length > 0) {
+                            const quartierPrincipalExiste = userQuartiersData.some(q =>
+                                q.quartier_id === user.quartier_id && q.est_principal);
+
+                            if (!quartierPrincipalExiste) {
+                                console.log('Le quartier principal n\'est pas dans la liste des quartiers de l\'utilisateur ou n\'est pas marqué comme principal');
+
+                                // Trouver le quartier principal dans la liste des quartiers disponibles
+                                const quartierPrincipal = quartiersData.find(q => q.id === user.quartier_id);
+
+                                if (quartierPrincipal) {
+                                    console.log(`Ajout du quartier principal ${quartierPrincipal.nom_quartier} à l'utilisateur`);
+
+                                    // Vérifier si le quartier existe déjà dans la liste des quartiers de l'utilisateur
+                                    const quartierExisteDeja = userQuartiersData.some(q => q.quartier_id === user.quartier_id);
+
+                                    if (quartierExisteDeja) {
+                                        // Si le quartier existe déjà, le définir comme principal
+                                        await setQuartierAsPrincipal(user.id, user.quartier_id);
+                                    } else {
+                                        // Si le quartier n'existe pas encore, l'ajouter comme principal
+                                        await addQuartierToUser(user.id, user.quartier_id, true);
+                                    }
+
+                                    // Recharger les quartiers de l'utilisateur
+                                    const updatedUserQuartiers = await getUserQuartiers(user.id);
+                                    setUserQuartiers(updatedUserQuartiers);
+                                }
+                            }
+                        }
+                    } catch (quartierError) {
+                        console.error('Error fetching user quartiers:', quartierError);
+                        if (quartierError instanceof Error) {
+                            setError(`Erreur lors du chargement des quartiers de l'utilisateur: ${quartierError.message}`);
+                        } else {
+                            setError('Erreur lors du chargement des quartiers de l\'utilisateur');
+                        }
+                    }
                 }
-                const data = await response.json();
-                setQuartiers(data);
             } catch (error) {
-                console.error('Erreur:', error);
+                console.error('Erreur lors du chargement des données:', error);
+                setError('Erreur lors du chargement des quartiers');
             }
         };
 
-        fetchQuartiers();
-    }, []);
+        fetchData();
+    }, [user, accessToken]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -66,6 +121,130 @@ const Profile = () => {
             ...formData,
             [name]: value
         });
+
+        // Si c'est le sélecteur de quartier à ajouter
+        if (name === 'selectedQuartier') {
+            setSelectedQuartier(value);
+        }
+    };
+
+    // Ajouter un quartier à l'utilisateur
+    const handleAddQuartier = async () => {
+        if (!selectedQuartier || !user?.id) return;
+
+        setIsLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            // Vérifier si le quartier est déjà dans la liste des quartiers de l'utilisateur
+            const isAlreadyAdded = userQuartiers.some(q => q.quartier_id === parseInt(selectedQuartier));
+            if (isAlreadyAdded) {
+                setError('Ce quartier est déjà dans votre liste de quartiers');
+                return;
+            }
+
+            // Ajouter le quartier à l'utilisateur (non principal par défaut)
+            const success = await addQuartierToUser(user.id, parseInt(selectedQuartier), false);
+
+            if (success) {
+                setSuccess('Quartier ajouté avec succès');
+
+                // Recharger les quartiers de l'utilisateur
+                const userQuartiersData = await getUserQuartiers(user.id);
+                setUserQuartiers(userQuartiersData);
+
+                // Réinitialiser le sélecteur
+                setSelectedQuartier('');
+            } else {
+                setError('Erreur lors de l\'ajout du quartier');
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout du quartier:', error);
+            setError('Erreur lors de l\'ajout du quartier');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Définir un quartier comme principal
+    const handleSetAsPrincipal = async (quartierId: number) => {
+        if (!user?.id) return;
+
+        setIsLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const success = await setQuartierAsPrincipal(user.id, quartierId);
+
+            if (success) {
+                setSuccess('Quartier défini comme principal avec succès');
+
+                // Mettre à jour le quartier_id dans le formulaire
+                setFormData({
+                    ...formData,
+                    quartier_id: quartierId.toString()
+                });
+
+                // Recharger les quartiers de l'utilisateur
+                const userQuartiersData = await getUserQuartiers(user.id);
+                setUserQuartiers(userQuartiersData);
+
+                // Mettre à jour les informations de l'utilisateur dans le contexte
+                if (user) {
+                    updateUserInfo({
+                        ...user,
+                        quartier_id: quartierId
+                    });
+                }
+            } else {
+                setError('Erreur lors de la définition du quartier comme principal');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la définition du quartier comme principal:', error);
+            setError('Erreur lors de la définition du quartier comme principal');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Supprimer un quartier de l'utilisateur
+    const handleRemoveQuartier = async (relationId: number, isPrincipal: boolean) => {
+        if (!user?.id) return;
+
+        // Si c'est le quartier principal, empêcher la suppression
+        if (isPrincipal) {
+            setError('Vous ne pouvez pas supprimer votre quartier principal. Définissez d\'abord un autre quartier comme principal.');
+            return;
+        }
+
+        if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce quartier de votre liste ?')) {
+            return;
+        }
+
+        setIsLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const success = await removeQuartierFromUser(user.id, relationId);
+
+            if (success) {
+                setSuccess('Quartier supprimé avec succès');
+
+                // Recharger les quartiers de l'utilisateur
+                const userQuartiersData = await getUserQuartiers(user.id);
+                setUserQuartiers(userQuartiersData);
+            } else {
+                setError('Erreur lors de la suppression du quartier');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du quartier:', error);
+            setError('Erreur lors de la suppression du quartier');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const validateForm = () => {
@@ -150,7 +329,7 @@ const Profile = () => {
             }
 
             // Envoyer la requête de mise à jour
-            const response = await fetch(`http://localhost:3000/api/users/${user?.id}`, {
+            const response = await fetch(`/api/users/${user?.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,6 +355,37 @@ const Profile = () => {
 
             // Mettre à jour les informations de l'utilisateur dans le contexte
             updateUserInfo(data.user);
+
+            // Si le quartier principal a été modifié, mettre à jour également la table UtilisateurQuartier
+            if (user && formData.quartier_id && parseInt(formData.quartier_id) !== user.quartier_id) {
+                try {
+                    console.log(`Mise à jour du quartier principal dans UtilisateurQuartier: ${formData.quartier_id}`);
+                    const quartierIdInt = parseInt(formData.quartier_id);
+
+                    // Vérifier si le quartier existe déjà dans la liste des quartiers de l'utilisateur
+                    const quartierExisteDeja = userQuartiers.some(q => q.quartier_id === quartierIdInt);
+
+                    let success = false;
+
+                    if (quartierExisteDeja) {
+                        // Si le quartier existe déjà, le définir comme principal
+                        success = await setQuartierAsPrincipal(user.id, quartierIdInt);
+                    } else {
+                        // Si le quartier n'existe pas encore, l'ajouter comme principal
+                        success = await addQuartierToUser(user.id, quartierIdInt, true);
+                    }
+
+                    if (success) {
+                        // Recharger les quartiers de l'utilisateur pour mettre à jour l'affichage
+                        const userQuartiersData = await getUserQuartiers(user.id);
+                        setUserQuartiers(userQuartiersData);
+                    } else {
+                        console.error('Erreur lors de la mise à jour du quartier principal dans UtilisateurQuartier');
+                    }
+                } catch (quartierError) {
+                    console.error('Erreur lors de la mise à jour du quartier principal:', quartierError);
+                }
+            }
         } catch (error: any) {
             setError(error.message || 'Erreur lors de la mise à jour du profil');
         } finally {
@@ -199,7 +409,7 @@ const Profile = () => {
             }
 
             // Envoyer la requête de suppression
-            const response = await fetch(`http://localhost:3000/api/users/${user?.id}`, {
+            const response = await fetch(`/api/users/${user?.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -355,6 +565,112 @@ const Profile = () => {
                                     </option>
                                 ))}
                             </select>
+                        </div>
+                    </div>
+
+                    <div className="border-t border-gray-200 pt-6">
+                        <h2 className="mb-4 text-lg font-semibold">Mes quartiers</h2>
+
+                        {/* Liste des quartiers de l'utilisateur */}
+                        <div className="mb-6">
+                            <h3 className="mb-2 text-md font-medium">Quartiers auxquels vous êtes rattaché</h3>
+
+                            {userQuartiers.length === 0 ? (
+                                <p className="text-gray-500">Vous n'êtes rattaché à aucun quartier pour le moment.</p>
+                            ) : (
+                                <div className="mt-2 overflow-x-auto">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Quartier</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Ville</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Statut</th>
+                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-200 bg-white">
+                                            {userQuartiers.map((quartier) => (
+                                                <tr key={quartier.id}>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                                                        {quartier.nom_quartier}
+                                                    </td>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                                                        {quartier.ville || '-'}
+                                                    </td>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                                                        {quartier.est_principal ? (
+                                                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                                                                Principal
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800">
+                                                                Secondaire
+                                                            </span>
+                                                        )}
+                                                    </td>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                                                        {!quartier.est_principal && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => handleSetAsPrincipal(quartier.quartier_id)}
+                                                                className="mr-2 text-blue-600 hover:text-blue-900"
+                                                                disabled={isLoading}
+                                                            >
+                                                                Définir comme principal
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleRemoveQuartier(quartier.id, quartier.est_principal)}
+                                                            className="text-red-600 hover:text-red-900"
+                                                            disabled={isLoading}
+                                                        >
+                                                            Supprimer
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Ajouter un nouveau quartier */}
+                        <div className="mb-6">
+                            <h3 className="mb-2 text-md font-medium">Ajouter un quartier</h3>
+                            <div className="flex items-end space-x-2">
+                                <div className="flex-grow">
+                                    <label htmlFor="selectedQuartier" className="block text-sm font-medium text-gray-700">
+                                        Sélectionnez un quartier
+                                    </label>
+                                    <select
+                                        id="selectedQuartier"
+                                        name="selectedQuartier"
+                                        value={selectedQuartier}
+                                        onChange={handleChange}
+                                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                                    >
+                                        <option value="">Sélectionnez un quartier</option>
+                                        {quartiers.map((quartier) => (
+                                            <option key={quartier.id} value={quartier.id}>
+                                                {quartier.nom_quartier} ({quartier.ville})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={handleAddQuartier}
+                                    disabled={!selectedQuartier || isLoading}
+                                    className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                                >
+                                    Ajouter
+                                </button>
+                            </div>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Vous pouvez ajouter des quartiers secondaires pour accéder aux informations de plusieurs quartiers.
+                            </p>
                         </div>
                     </div>
 

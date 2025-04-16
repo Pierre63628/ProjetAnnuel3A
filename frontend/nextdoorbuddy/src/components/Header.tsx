@@ -27,9 +27,14 @@ const Header = () => {
                                 Mon Profil
                             </Link>
                             {user.role === 'admin' && (
-                                <Link to="/admin/users" className="text-gray-600 hover:text-blue-600">
-                                    Gestion Utilisateurs
-                                </Link>
+                                <>
+                                    <Link to="/admin/users" className="text-gray-600 hover:text-blue-600">
+                                        Gestion Utilisateurs
+                                    </Link>
+                                    <Link to="/admin/quartiers" className="text-gray-600 hover:text-blue-600">
+                                        Gestion Quartiers
+                                    </Link>
+                                </>
                             )}
                         </nav>
                     )}

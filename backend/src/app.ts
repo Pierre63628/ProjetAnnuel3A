@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import quartierRoutes from './routes/quartier.routes.js';
+import utilisateurQuartierRoutes from './routes/utilisateur-quartier.routes.js';
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/quartiers', quartierRoutes);
+app.use('/api/users', utilisateurQuartierRoutes);
 
 // Route de base pour vérifier que le serveur fonctionne
 app.get('/', (_, res) => {

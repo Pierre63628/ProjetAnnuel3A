@@ -3,7 +3,10 @@ CREATE TABLE "Quartier" (
   id SERIAL PRIMARY KEY,
   nom_quartier VARCHAR(100) NOT NULL,
   ville VARCHAR(100),
-  code_postal VARCHAR(10)
+  code_postal VARCHAR(10),
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Utilisateur
@@ -69,6 +72,19 @@ CREATE TABLE "Relation" (
   FOREIGN KEY (utilisateur2_id) REFERENCES "Utilisateur"(id)
 );
 
+-- Relation Utilisateur-Quartier (pour les quartiers secondaires)
+CREATE TABLE "UtilisateurQuartier" (
+  id SERIAL PRIMARY KEY,
+  utilisateur_id INT NOT NULL,
+  quartier_id INT NOT NULL,
+  est_principal BOOLEAN DEFAULT FALSE,
+  date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  statut VARCHAR(20) DEFAULT 'actif',
+  FOREIGN KEY (utilisateur_id) REFERENCES "Utilisateur"(id) ON DELETE CASCADE,
+  FOREIGN KEY (quartier_id) REFERENCES "Quartier"(id) ON DELETE CASCADE,
+  UNIQUE(utilisateur_id, quartier_id)
+);
+
 -- Fonction pour mettre à jour le champ updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
@@ -81,5 +97,11 @@ $$ LANGUAGE plpgsql;
 -- Trigger pour mettre à jour le champ updated_at dans la table Utilisateur
 CREATE TRIGGER update_utilisateur_updated_at
 BEFORE UPDATE ON "Utilisateur"
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();
+
+-- Trigger pour mettre à jour le champ updated_at dans la table Quartier
+CREATE TRIGGER update_quartier_updated_at
+BEFORE UPDATE ON "Quartier"
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
