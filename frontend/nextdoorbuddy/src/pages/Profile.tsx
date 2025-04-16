@@ -50,38 +50,55 @@ const Profile = () => {
         const fetchData = async () => {
             try {
                 // Charger tous les quartiers
+                console.log('Fetching all quartiers');
                 const quartiersData = await getQuartiers();
+                console.log('All quartiers data received:', quartiersData);
                 setQuartiers(quartiersData);
 
                 // Charger les quartiers de l'utilisateur si l'utilisateur est connecté
                 if (user && user.id) {
+                    console.log('Fetching quartiers for user with ID:', user.id);
+                    console.log('User info:', user);
+                    console.log('Access token available:', !!accessToken);
+
                     try {
                         const userQuartiersData = await getUserQuartiers(user.id);
+                        console.log('User quartiers data received:', userQuartiersData);
                         setUserQuartiers(userQuartiersData);
 
-                        // Synchroniser le quartier principal entre Utilisateur et UtilisateurQuartier
+                        // Vérifier si le quartier principal de l'utilisateur est dans la liste des quartiers
                         if (user.quartier_id && userQuartiersData.length > 0) {
                             const quartierPrincipalExiste = userQuartiersData.some(q =>
                                 q.quartier_id === user.quartier_id && q.est_principal);
 
                             if (!quartierPrincipalExiste) {
+                                console.log('Le quartier principal n\'est pas dans la liste des quartiers de l\'utilisateur ou n\'est pas marqué comme principal');
+
+                                // Trouver le quartier principal dans la liste des quartiers disponibles
                                 const quartierPrincipal = quartiersData.find(q => q.id === user.quartier_id);
 
                                 if (quartierPrincipal) {
+                                    console.log(`Ajout du quartier principal ${quartierPrincipal.nom_quartier} à l'utilisateur`);
+
+                                    // Vérifier si le quartier existe déjà dans la liste des quartiers de l'utilisateur
                                     const quartierExisteDeja = userQuartiersData.some(q => q.quartier_id === user.quartier_id);
 
                                     if (quartierExisteDeja) {
+                                        // Si le quartier existe déjà, le définir comme principal
                                         await setQuartierAsPrincipal(user.id, user.quartier_id);
                                     } else {
+                                        // Si le quartier n'existe pas encore, l'ajouter comme principal
                                         await addQuartierToUser(user.id, user.quartier_id, true);
                                     }
 
+                                    // Recharger les quartiers de l'utilisateur
                                     const updatedUserQuartiers = await getUserQuartiers(user.id);
                                     setUserQuartiers(updatedUserQuartiers);
                                 }
                             }
                         }
                     } catch (quartierError) {
+                        console.error('Error fetching user quartiers:', quartierError);
                         if (quartierError instanceof Error) {
                             setError(`Erreur lors du chargement des quartiers de l'utilisateur: ${quartierError.message}`);
                         } else {
@@ -90,6 +107,7 @@ const Profile = () => {
                     }
                 }
             } catch (error) {
+                console.error('Erreur lors du chargement des données:', error);
                 setError('Erreur lors du chargement des quartiers');
             }
         };
@@ -135,11 +153,14 @@ const Profile = () => {
                 // Recharger les quartiers de l'utilisateur
                 const userQuartiersData = await getUserQuartiers(user.id);
                 setUserQuartiers(userQuartiersData);
+
+                // Réinitialiser le sélecteur
                 setSelectedQuartier('');
             } else {
                 setError('Erreur lors de l\'ajout du quartier');
             }
         } catch (error) {
+            console.error('Erreur lors de l\'ajout du quartier:', error);
             setError('Erreur lors de l\'ajout du quartier');
         } finally {
             setIsLoading(false);
@@ -171,14 +192,17 @@ const Profile = () => {
                 setUserQuartiers(userQuartiersData);
 
                 // Mettre à jour les informations de l'utilisateur dans le contexte
-                updateUserInfo({
-                    ...user,
-                    quartier_id: quartierId
-                });
+                if (user) {
+                    updateUserInfo({
+                        ...user,
+                        quartier_id: quartierId
+                    });
+                }
             } else {
                 setError('Erreur lors de la définition du quartier comme principal');
             }
         } catch (error) {
+            console.error('Erreur lors de la définition du quartier comme principal:', error);
             setError('Erreur lors de la définition du quartier comme principal');
         } finally {
             setIsLoading(false);
@@ -216,6 +240,7 @@ const Profile = () => {
                 setError('Erreur lors de la suppression du quartier');
             }
         } catch (error) {
+            console.error('Erreur lors de la suppression du quartier:', error);
             setError('Erreur lors de la suppression du quartier');
         } finally {
             setIsLoading(false);
@@ -331,26 +356,34 @@ const Profile = () => {
             // Mettre à jour les informations de l'utilisateur dans le contexte
             updateUserInfo(data.user);
 
-            // Synchroniser le quartier principal entre Utilisateur et UtilisateurQuartier
+            // Si le quartier principal a été modifié, mettre à jour également la table UtilisateurQuartier
             if (user && formData.quartier_id && parseInt(formData.quartier_id) !== user.quartier_id) {
                 try {
+                    console.log(`Mise à jour du quartier principal dans UtilisateurQuartier: ${formData.quartier_id}`);
                     const quartierIdInt = parseInt(formData.quartier_id);
+
+                    // Vérifier si le quartier existe déjà dans la liste des quartiers de l'utilisateur
                     const quartierExisteDeja = userQuartiers.some(q => q.quartier_id === quartierIdInt);
 
                     let success = false;
 
                     if (quartierExisteDeja) {
+                        // Si le quartier existe déjà, le définir comme principal
                         success = await setQuartierAsPrincipal(user.id, quartierIdInt);
                     } else {
+                        // Si le quartier n'existe pas encore, l'ajouter comme principal
                         success = await addQuartierToUser(user.id, quartierIdInt, true);
                     }
 
                     if (success) {
+                        // Recharger les quartiers de l'utilisateur pour mettre à jour l'affichage
                         const userQuartiersData = await getUserQuartiers(user.id);
                         setUserQuartiers(userQuartiersData);
+                    } else {
+                        console.error('Erreur lors de la mise à jour du quartier principal dans UtilisateurQuartier');
                     }
                 } catch (quartierError) {
-                    // Erreur silencieuse - déjà gérée par les fonctions appelées
+                    console.error('Erreur lors de la mise à jour du quartier principal:', quartierError);
                 }
             }
         } catch (error: any) {

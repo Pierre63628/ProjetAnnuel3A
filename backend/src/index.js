@@ -631,14 +631,18 @@ app.delete('/api/users/:id', authenticateJWT, async (req, res) => {
 app.get('/api/users/:userId/quartiers', authenticateJWT, async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
+        console.log(`Backend: Getting quartiers for user ${userId}`);
+
         // Vérifier si l'utilisateur est autorisé à voir ces informations
         if (req.user.id !== userId && req.user.role !== 'admin') {
+            console.log(`Backend: Access denied for user ${req.user.id} trying to access quartiers of user ${userId}`);
             return res.status(403).json({ message: 'Accès refusé. Vous ne pouvez voir que vos propres quartiers.' });
         }
 
         // Vérifier si l'utilisateur existe
         const { rows: existingUsers } = await pool.query('SELECT * FROM "Utilisateur" WHERE id = $1', [userId]);
         if (existingUsers.length === 0) {
+            console.log(`Backend: User ${userId} not found`);
             return res.status(404).json({ message: 'Utilisateur non trouvé.' });
         }
 
@@ -652,6 +656,7 @@ app.get('/api/users/:userId/quartiers', authenticateJWT, async (req, res) => {
             [userId]
         );
 
+        console.log(`Backend: Found ${quartiers.length} quartiers for user ${userId}:`, quartiers);
         res.status(200).json(quartiers);
     } catch (error) {
         console.error('Erreur lors de la récupération des quartiers de l\'utilisateur:', error);
