@@ -28,3 +28,4 @@ backend/.env
 .vscode/*
 !.vscode/extensions.json
 .DS_Store
+.idea/*
