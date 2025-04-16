@@ -175,6 +175,10 @@ app.post('/api/auth/login', async (req, res) => {
                 nom: user.nom,
                 prenom: user.prenom,
                 email: user.email,
+                adresse: user.adresse,
+                telephone: user.telephone,
+                date_naissance: user.date_naissance,
+                quartier_id: user.quartier_id,
                 role: user.role
             }
         });
@@ -282,7 +286,12 @@ app.post('/api/auth/register', async (req, res) => {
                 id: userId,
                 nom,
                 prenom,
-                email
+                email,
+                adresse,
+                telephone,
+                date_naissance,
+                quartier_id,
+                role: 'user' // Par défaut, les nouveaux utilisateurs ont le rôle 'user'
             }
         });
     } catch (error) {
@@ -378,20 +387,12 @@ app.get('/api/auth/me', authenticateJWT, (req, res) => {
     }
 });
 
-// Données de test pour les quartiers (puisque la base de données n'est pas accessible)
-const quartiersTest = [
-    { id: 1, nom_quartier: 'Centre', ville: 'Paris', code_postal: '75001' },
-    { id: 2, nom_quartier: 'Montmartre', ville: 'Paris', code_postal: '75018' },
-    { id: 3, nom_quartier: 'Le Marais', ville: 'Paris', code_postal: '75004' },
-    { id: 4, nom_quartier: 'Saint-Germain-des-Prés', ville: 'Paris', code_postal: '75006' },
-    { id: 5, nom_quartier: 'Belleville', ville: 'Paris', code_postal: '75020' }
-];
-
 // Route pour récupérer tous les quartiers
-app.get('/api/quartiers', (_, res) => {
+app.get('/api/quartiers', async (_, res) => {
     try {
-        // Utiliser les données de test au lieu de la base de données
-        res.status(200).json(quartiersTest);
+        // Récupérer les quartiers depuis la base de données
+        const { rows } = await pool.query('SELECT * FROM "Quartier" ORDER BY nom_quartier');
+        res.status(200).json(rows);
     } catch (error) {
         console.error('Erreur lors de la récupération des quartiers:', error);
         res.status(500).json({ message: 'Erreur serveur lors de la récupération des quartiers.' });
@@ -399,16 +400,16 @@ app.get('/api/quartiers', (_, res) => {
 });
 
 // Route pour récupérer un quartier par ID
-app.get('/api/quartiers/:id', (req, res) => {
+app.get('/api/quartiers/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const quartier = quartiersTest.find(q => q.id === id);
+        const { rows } = await pool.query('SELECT * FROM "Quartier" WHERE id = $1', [id]);
 
-        if (!quartier) {
+        if (rows.length === 0) {
             return res.status(404).json({ message: 'Quartier non trouvé.' });
         }
 
-        res.status(200).json(quartier);
+        res.status(200).json(rows[0]);
     } catch (error) {
         console.error('Erreur lors de la récupération du quartier:', error);
         res.status(500).json({ message: 'Erreur serveur lors de la récupération du quartier.' });
