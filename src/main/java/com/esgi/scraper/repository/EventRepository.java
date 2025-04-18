@@ -2,6 +2,7 @@ package com.esgi.scraper.repository;
 
 import com.esgi.scraper.config.DatabaseConfig;
 import com.esgi.scraper.models.Event;
+import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,8 +10,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Log4j2
 public class EventRepository {
 
+    public EventRepository() {
+        // Créer le schéma et la table au moment de l'instanciation du repository
+        createSchemaIfNotExists();
+        createTableIfNotExists();
+    }
+
+    public void createSchemaIfNotExists() {
+        String sql = """
+                CREATE SCHEMA IF NOT EXISTS public
+            """;
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            log.info("Error creating schema: " + e.getMessage());
+        }
+    }
 
     public void createTableIfNotExists() {
         String sql = """
@@ -24,6 +44,7 @@ public class EventRepository {
                 detailed_address TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                coordinates TEXT,
                 CONSTRAINT unique_event_url UNIQUE (url)
                 )
                """;
@@ -65,7 +86,26 @@ public class EventRepository {
             if (!addressExists) {
                 String alterTableSql = "ALTER TABLE events ADD COLUMN IF NOT EXISTS detailed_address TEXT";
                 stmt.execute(alterTableSql);
-                System.out.println("Colonne detailed_address ajoutée à la table events");
+                log.debug("Colonne detailed_address ajoutée à la table events");
+            }
+
+            // Vérifier si la colonne coordinates existe déjà
+            String checkCoordinatesSql = """
+                SELECT column_name
+                FROM information_schema.columns
+                WHERE table_name = 'events' AND column_name = 'coordinates'
+            """;
+
+            boolean coordinatesExists = false;
+            try (var rs = stmt.executeQuery(checkCoordinatesSql)) {
+                coordinatesExists = rs.next();
+            }
+
+            // Ajouter la colonne coordinates si elle n'existe pas
+            if (!coordinatesExists) {
+                String alterTableSql = "ALTER TABLE events ADD COLUMN IF NOT EXISTS coordinates TEXT";
+                stmt.execute(alterTableSql);
+                log.debug("Colonne coordinates ajoutée à la table events");
             }
 
             // Créer un trigger pour mettre à jour updated_at automatiquement
@@ -90,9 +130,9 @@ public class EventRepository {
             stmt.execute(createTriggerFunctionSql);
             stmt.execute(createTriggerSql);
 
-            System.out.println("Database schema initialized successfully.");
+            log.debug("Database schema initialized successfully.");
         } catch (SQLException e) {
-            System.err.println("Error creating table: " + e.getMessage());
+           log.error("Error creating table: " + e.getMessage());
         }
     }
 
@@ -107,10 +147,10 @@ public class EventRepository {
              var pstmt = conn.prepareStatement(sql.replace("?", String.valueOf(daysToKeep)))) {
 
             int deletedCount = pstmt.executeUpdate();
-            System.out.println("Cleaned up " + deletedCount + " old events from database.");
+            log.debug("Cleaned up " + deletedCount + " old events from database.");
             return deletedCount;
         } catch (SQLException e) {
-            System.err.println("Error cleaning up old events: " + e.getMessage());
+           log.error("Error cleaning up old events: " + e.getMessage());
             return 0;
         }
     }
@@ -128,7 +168,7 @@ public class EventRepository {
             }
             return 0;
         } catch (SQLException e) {
-            System.err.println("Error counting events: " + e.getMessage());
+           log.error("Error counting events: " + e.getMessage());
             return 0;
         }
     }
@@ -136,7 +176,7 @@ public class EventRepository {
 
     public List<Event> getAllEvents() {
         String sql = """
-            SELECT id, name, url, image_url, date, source, detailed_address,
+            SELECT id, name, url, image_url, date, source, detailed_address, coordinates,
                    created_at, updated_at
             FROM events
             ORDER BY date DESC
@@ -159,15 +199,16 @@ public class EventRepository {
                 }
                 event.setDate(rs.getString("date"));
                 event.setDetailedAddress(rs.getString("detailed_address"));
+                event.setCoordinates(rs.getString("coordinates"));
                 event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
 
                 events.add(event);
             }
 
-            System.out.println("Loaded " + events.size() + " events from database.");
+            log.debug("Loaded " + events.size() + " events from database.");
             return events;
         } catch (SQLException e) {
-            System.err.println("Error loading events from database: " + e.getMessage());
+           log.error("Error loading events from database: " + e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -179,7 +220,7 @@ public class EventRepository {
      */
     public List<com.esgi.scraper.models.Event> getEventsBySource(String source) {
         String sql = """
-            SELECT id, name, url, image_url, date, source, detailed_address,
+            SELECT id, name, url, image_url, date, source, detailed_address, coordinates,
                    created_at, updated_at
             FROM events
             WHERE source = ?
@@ -205,16 +246,17 @@ public class EventRepository {
                     }
                     event.setDate(rs.getString("date"));
                     event.setDetailedAddress(rs.getString("detailed_address"));
+                    event.setCoordinates(rs.getString("coordinates"));
                     event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
 
                     events.add(event);
                 }
             }
 
-            System.out.println("Loaded " + events.size() + " events from database for source: " + source);
+            log.debug("Loaded " + events.size() + " events from database for source: " + source);
             return events;
         } catch (SQLException e) {
-            System.err.println("Error loading events from database: " + e.getMessage());
+           log.error("Error loading events from database: " + e.getMessage());
             return new ArrayList<>();
         }
     }

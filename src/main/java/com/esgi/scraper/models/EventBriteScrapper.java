@@ -1,5 +1,6 @@
 package com.esgi.scraper.models;
 
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -15,27 +16,28 @@ import java.util.Map;
 
 import static com.esgi.scraper.utils.Utils.isValid;
 
+@Log4j2
 public class EventBriteScrapper {
 
-    public List<Map<String, String>> scrape(String baseUrl, WebDriver driver, WebDriverWait wait) {
+    public List<Map<String, String>> scrape(String baseUrl, WebDriver driver, WebDriverWait wait, int maxPages) {
         List<Map<String, String>> allEvents = new ArrayList<>();
 
-        for (int page = 1; page <= 10; page++) {
+        for (int page = 1; page <= maxPages; page++) {
             String url = baseUrl + "?page=" + page;
             driver.get(url);
-            System.out.println("Scraping page: " + page);
+            log.debug("Scraping page: " + page);
             try {
                 wait.until(ExpectedConditions.presenceOfElementLocated(
                         By.cssSelector("div.event-card.event-card__horizontal")
                 ));
             } catch (Exception e) {
-                System.out.println("No event cards found on page " + page + ". Ending pagination.");
+                log.debug("No event cards found on page " + page + ". Ending pagination.");
                 break;
             }
 
             List<Map<String, String>> pageEvents = scrapeCurrentPage(driver);
             if (pageEvents.isEmpty()) {
-                System.out.println("No events found on page " + page + ". Ending pagination.");
+                log.debug("No events found on page " + page + ". Ending pagination.");
                 break;
             }
             allEvents.addAll(pageEvents);

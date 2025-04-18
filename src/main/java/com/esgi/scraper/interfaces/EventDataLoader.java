@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 public class EventDataLoader {
     private final ListView<Event> eventListView;
     private final Label statusLabel;
@@ -55,7 +57,7 @@ public class EventDataLoader {
                 return;
             }
         } catch (Exception e) {
-            System.err.println("Erreur lors du chargement depuis la BDD: " + e.getMessage());
+            log.error("Erreur lors du chargement depuis la BDD: " + e.getMessage());
         }
 
         loadEventsFromJson("eventbrite");
@@ -81,7 +83,7 @@ public class EventDataLoader {
                 loadEventsFromJson(source);
             }
         } catch (Exception e) {
-            System.err.println("Erreur lors du chargement des événements depuis la BDD: " + e.getMessage());
+            log.error("Erreur lors du chargement des événements depuis la BDD: " + e.getMessage());
             statusLabel.setText("Erreur de chargement");
             loadEventsFromJson(source);
         }
@@ -104,7 +106,7 @@ public class EventDataLoader {
                 statusLabel.setText("Aucun événement trouvé");
             }
         } catch (IOException e) {
-            System.err.println("Erreur lors du chargement du fichier JSON: " + e.getMessage());
+            log.error("Erreur lors du chargement du fichier JSON: " + e.getMessage());
             eventDetailsArea.setText("Erreur lors du chargement des événements: " + e.getMessage());
             statusLabel.setText("Erreur de chargement");
         }

@@ -24,6 +24,8 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
     @FXML
     private Button refreshButton;
     @FXML
+    private Spinner<Integer> pagesSpinner;
+    @FXML
     private Button allSourcesButton;
     @FXML
     private Button eventbriteButton;
@@ -62,7 +64,7 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
         dataLoader = new EventDataLoader(eventListView, statusLabel, eventCountLabel, eventDetailsArea);
         detailsController = new EventDetailsController(eventListView, eventDetailsArea, eventImageView);
         filterController = new FilterController(allSourcesButton, eventbriteButton, alleventButton, meetupButton, dataLoader);
-        scrapingController = new ScrapingController(refreshButton, progressBar, statusLabel, dataLoader);
+        scrapingController = new ScrapingController(refreshButton, progressBar, statusLabel, dataLoader, pagesSpinner);
         themeMenuController = new ThemeMenuController(eventListView);
         dialogController = new DialogController(eventListView);
     }

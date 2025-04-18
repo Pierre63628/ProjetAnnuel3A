@@ -5,10 +5,12 @@ import com.esgi.scraper.plugins.PluginManager.ThemeMenuHandler;
 import com.esgi.scraper.plugins.ThemePlugin;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.util.List;
 
+@Log4j2
 public class ThemeMenuController implements ThemeMenuHandler {
     private final Control control;
 
@@ -21,7 +23,7 @@ public class ThemeMenuController implements ThemeMenuHandler {
         Menu themeMenu = null;
 
         if (control.getScene() == null) {
-            System.err.println("Erreur: Le contrôle n'est pas encore attaché à une scène.");
+            log.error("Erreur: Le contrôle n'est pas encore attaché à une scène.");
             return;
         }
 

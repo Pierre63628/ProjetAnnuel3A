@@ -1,5 +1,7 @@
 package com.esgi.scraper.plugins;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+
+@Log4j2
 public class PluginLoader {
     
     private static final String PLUGINS_DIRECTORY = "plugins";
@@ -21,13 +25,13 @@ public class PluginLoader {
         File pluginsDir = new File(PLUGINS_DIRECTORY);
         if (!pluginsDir.exists()) {
             pluginsDir.mkdirs();
-            System.out.println("Répertoire des plugins créé: " + pluginsDir.getAbsolutePath());
+            log.debug("Répertoire des plugins créé: " + pluginsDir.getAbsolutePath());
             return plugins;
         }
         
         File[] jarFiles = pluginsDir.listFiles((dir, name) -> name.endsWith(".jar"));
         if (jarFiles == null || jarFiles.length == 0) {
-            System.out.println("Aucun plugin trouvé dans " + pluginsDir.getAbsolutePath());
+            log.debug("Aucun plugin trouvé dans " + pluginsDir.getAbsolutePath());
             return plugins;
         }
         
@@ -49,17 +53,17 @@ public class PluginLoader {
                             if (ThemePlugin.class.isAssignableFrom(clazz) && !clazz.isInterface()) {
                                 ThemePlugin plugin = (ThemePlugin) clazz.getDeclaredConstructor().newInstance();
                                 plugins.add(plugin);
-                                System.out.println("Plugin de thème chargé: " + plugin.getName() + " (" + plugin.getVersion() + ")");
+                                log.info("Plugin de thème chargé: " + plugin.getName() + " (" + plugin.getVersion() + ")");
                             }
                         } catch (Exception e) {
-                            System.err.println("Erreur lors du chargement de la classe " + className + ": " + e.getMessage());
+                            log.error("Erreur lors du chargement de la classe " + className + ": " + e.getMessage());
                         }
                     }
                 }
                 
                 jar.close();
             } catch (IOException e) {
-                System.err.println("Erreur lors du chargement du plugin " + jarFile.getName() + ": " + e.getMessage());
+                log.error("Erreur lors du chargement du plugin " + jarFile.getName() + ": " + e.getMessage());
             }
         }
         

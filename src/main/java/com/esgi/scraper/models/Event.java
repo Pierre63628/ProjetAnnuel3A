@@ -10,6 +10,7 @@ public class Event {
     private String eventId;
     private String name;
     private String location;
+    private String coordinates;
     private String category;
     private String url;
 
@@ -94,5 +95,11 @@ public class Event {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setCoordinates(String coordinates) {
+    }
+    public String getCoordinates() {
+        return coordinates;
     }
 }

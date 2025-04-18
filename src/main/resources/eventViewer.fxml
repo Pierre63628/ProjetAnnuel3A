@@ -21,6 +21,8 @@
                 </Menu>
             </MenuBar>
             <ToolBar styleClass="toolbar">
+                <Label text="Pages Eventbrite:" />
+                <Spinner fx:id="pagesSpinner" min="1" max="30" initialValue="1" editable="true" prefWidth="60" />
                 <Button fx:id="refreshButton" text="Rafraîchir les événements" onAction="#handleRefresh" styleClass="refresh-button">
                     <graphic>
                         <ImageView fitHeight="16" fitWidth="16" preserveRatio="true">
