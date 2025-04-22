@@ -156,7 +156,7 @@ export class UtilisateurQuartierModel {
                 values
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error updating utilisateur-quartier relation:', error);
             throw error;
@@ -171,7 +171,7 @@ export class UtilisateurQuartierModel {
                 [id]
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error deleting utilisateur-quartier relation:', error);
             throw error;
@@ -186,7 +186,7 @@ export class UtilisateurQuartierModel {
                 [id]
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error deactivating utilisateur-quartier relation:', error);
             throw error;

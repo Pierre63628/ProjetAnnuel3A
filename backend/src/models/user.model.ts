@@ -163,7 +163,7 @@ export class UserModel {
                 values
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error updating user:', error);
             throw error;
@@ -178,7 +178,7 @@ export class UserModel {
                 [id]
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error deleting user:', error);
             throw error;

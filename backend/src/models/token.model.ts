@@ -52,7 +52,7 @@ export class TokenModel {
                 'UPDATE "RefreshToken" SET revoked = TRUE WHERE token = $1',
                 [token]
             );
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error revoking token:', error);
             throw error;
@@ -66,7 +66,7 @@ export class TokenModel {
                 'UPDATE "RefreshToken" SET revoked = TRUE WHERE user_id = $1',
                 [userId]
             );
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error revoking user tokens:', error);
             throw error;
@@ -79,7 +79,7 @@ export class TokenModel {
             const result = await pool.query(
                 'DELETE FROM "RefreshToken" WHERE expires_at < NOW() OR revoked = TRUE'
             );
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error deleting expired tokens:', error);
             throw error;

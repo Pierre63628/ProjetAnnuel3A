@@ -120,7 +120,7 @@ export class QuartierModel {
                 values
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error updating quartier:', error);
             throw error;
@@ -155,7 +155,7 @@ export class QuartierModel {
                 [id]
             );
 
-            return result.rowCount > 0;
+            return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error deleting quartier:', error);
             throw error;

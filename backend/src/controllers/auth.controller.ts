@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { UserModel, User } from '../models/user.model.js';
 import { TokenModel } from '../models/token.model.js';
 import jwtConfig from '../config/jwt.js';
@@ -10,14 +10,14 @@ const generateTokens = (userId: number) => {
     const accessToken = jwt.sign(
         { userId },
         jwtConfig.accessToken.secret,
-        { expiresIn: jwtConfig.accessToken.expiresIn }
+        { expiresIn: jwtConfig.accessToken.expiresIn } as SignOptions
     );
 
     // Token de rafraîchissement (longue durée)
     const refreshToken = jwt.sign(
         { userId },
         jwtConfig.refreshToken.secret,
-        { expiresIn: jwtConfig.refreshToken.expiresIn }
+        { expiresIn: jwtConfig.refreshToken.expiresIn } as SignOptions
     );
 
     return { accessToken, refreshToken };
@@ -195,7 +195,7 @@ export const refreshToken = async (req: Request, res: Response) => {
             const newAccessToken = jwt.sign(
                 { userId },
                 jwtConfig.accessToken.secret,
-                { expiresIn: jwtConfig.accessToken.expiresIn }
+                { expiresIn: jwtConfig.accessToken.expiresIn } as SignOptions
             );
 
             // Retourner le nouveau token d'accès

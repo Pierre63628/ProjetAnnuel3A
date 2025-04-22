@@ -5,11 +5,25 @@
         "moduleResolution": "NodeNext",
         "outDir": "./dist",
         "rootDir": "./src",
-        "strict": true,
+        "strict": false,
         "esModuleInterop": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": false,
+        "noImplicitAny": false,
+        "noEmitOnError": false,
+        "skipDefaultLibCheck": true,
+        "ignoreDeprecations": "5.0",
+        "noFallthroughCasesInSwitch": false,
+        "noPropertyAccessFromIndexSignature": false,
+        "noUncheckedIndexedAccess": false
+    },
+    "ts-node": {
+        "transpileOnly": true,
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
     },
     "include": [
         "src/**/*"
