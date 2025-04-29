@@ -18,18 +18,13 @@ router.get('/ville/:ville', quartierController.getQuartiersByVille);
 router.get('/search', quartierController.searchQuartiers);
 
 // Routes protégées (admin seulement)
-// Route pour créer un nouveau quartier
+
 router.post('/', authenticateJWT, isAdmin, quartierController.createQuartier);
 
-// Route pour mettre à jour un quartier
 router.put('/:id', authenticateJWT, isAdmin, quartierController.updateQuartier);
 
-// Route pour supprimer un quartier
 router.delete('/:id', authenticateJWT, isAdmin, quartierController.deleteQuartier);
 
-
-
-// Route pour récupérer les utilisateurs d'un quartier
 router.get('/:id/users', authenticateJWT, isAdmin, quartierController.getQuartierUsers);
 
 export default router;

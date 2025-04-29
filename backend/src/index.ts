@@ -11,6 +11,7 @@ import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import quartierRoutes from './routes/quartier.routes.js';
 import utilisateurQuartierRoutes from './routes/utilisateur-quartier.routes.js';
+import evenementRoutes from './routes/evenement.routes.js';
 
 // Import database connection
 import './config/db.js';
@@ -31,6 +32,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/quartiers', quartierRoutes);
 app.use('/api/users-quartiers', utilisateurQuartierRoutes);
+app.use('/api/evenements', evenementRoutes);
 
 // Root route
 app.get('/', (_, res) => {

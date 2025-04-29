@@ -5,6 +5,9 @@ import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
+import Events from "./pages/Events"
+import EventDetail from "./pages/EventDetail"
+import EventForm from "./pages/EventForm"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 
 // Composant pour les routes protégées
@@ -52,6 +55,26 @@ function AppRoutes() {
       <Route path="/profile" element={
         <ProtectedRoute>
           <Profile />
+        </ProtectedRoute>
+      } />
+      <Route path="/events" element={
+        <ProtectedRoute>
+          <Events />
+        </ProtectedRoute>
+      } />
+      <Route path="/events/:id" element={
+        <ProtectedRoute>
+          <EventDetail />
+        </ProtectedRoute>
+      } />
+      <Route path="/events/create" element={
+        <ProtectedRoute>
+          <EventForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/events/edit/:id" element={
+        <ProtectedRoute>
+          <EventForm />
         </ProtectedRoute>
       } />
       <Route path="/admin/users" element={

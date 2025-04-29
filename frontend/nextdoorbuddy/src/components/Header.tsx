@@ -23,6 +23,9 @@ const Header = () => {
                             <Link to="/" className="text-gray-600 hover:text-blue-600">
                                 Accueil
                             </Link>
+                            <Link to="/events" className="text-gray-600 hover:text-blue-600">
+                                Événements
+                            </Link>
                             <Link to="/profile" className="text-gray-600 hover:text-blue-600">
                                 Mon Profil
                             </Link>
