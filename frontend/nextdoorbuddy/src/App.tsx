@@ -6,7 +6,6 @@ import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import Events from "./pages/Events"
-import EventDetail from "./pages/EventDetail"
 import EventForm from "./pages/EventForm"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 
@@ -60,11 +59,6 @@ function AppRoutes() {
       <Route path="/events" element={
         <ProtectedRoute>
           <Events />
-        </ProtectedRoute>
-      } />
-      <Route path="/events/:id" element={
-        <ProtectedRoute>
-          <EventDetail />
         </ProtectedRoute>
       } />
       <Route path="/events/create" element={
