@@ -2,13 +2,11 @@ package com.esgi.scraper.plugins;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@Log4j2
 public class ThemeManager {
 
     private static ThemeManager instance;
@@ -79,9 +77,11 @@ public class ThemeManager {
             scene.getStylesheets().clear();
             String stylesheetPath = currentTheme.getStylesheetPath();
             scene.getStylesheets().add(getClass().getResource(stylesheetPath).toExternalForm());
+
+            System.out.println("Thème appliqué: " + currentTheme.getName());
             return true;
         } catch (Exception e) {
-            log.error("Erreur lors de l'application du thème: " + e.getMessage());
+            System.err.println("Erreur lors de l'application du thème: " + e.getMessage());
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de thème");

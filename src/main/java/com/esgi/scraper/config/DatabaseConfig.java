@@ -5,23 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConfig {
-    private static final String HOST = "localhost";
-    private static final int PORT = 5432;
-    public static final String DB_NAME = "events_db";
-    public static final String USER = "user";
-    public static final String PASSWORD = "rootpass";
-
-    private static final String DB_URL = "jdbc:postgresql://" + HOST + ":" + PORT + "/" + DB_NAME;
-
-    static {
-        try {
-            DatabaseInitializer.initialize();
-        } catch (Exception e) {
-            System.err.println("Erreur lors de l'initialisation de la base de données: " + e.getMessage());
-        }
-    }
+    private static final String URL = "jdbc:postgresql://localhost:5432/events_db";
+    private static final String USER = "admin";
+    private static final String PASSWORD = "admin123";
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

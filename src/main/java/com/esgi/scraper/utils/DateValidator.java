@@ -1,6 +1,5 @@
 package com.esgi.scraper.utils;
 
-import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -10,7 +9,6 @@ import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-@Log4j2
 public class DateValidator {
 
     private static final Pattern TIME_PATTERN = Pattern.compile(".*\\b\\d{1,2}:\\d{2}(?::\\d{2})?(\\s*(AM|PM|am|pm))?\\b.*");
@@ -70,7 +68,7 @@ public class DateValidator {
             LocalDateTime dateTime = LocalDateTime.parse(cleanDate, formatter);
             return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         } catch (DateTimeParseException ignored) {
-            log.info(("Date string is not in a recognized format: " + dateStr));
+            System.out.println(("Date string is not in a recognized format: " + dateStr));
         }
         return "N/A";
     }

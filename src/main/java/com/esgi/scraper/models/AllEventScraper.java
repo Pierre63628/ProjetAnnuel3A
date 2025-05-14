@@ -1,6 +1,5 @@
 package com.esgi.scraper.models;
 
-import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +13,6 @@ import java.util.Map;
 
 import static com.esgi.scraper.utils.Utils.isValid;
 
-@Log4j2
 public class AllEventScraper {
 
 
@@ -50,7 +48,7 @@ public class AllEventScraper {
                     events.add(eventDetails);
                 }
             } catch (Exception e) {
-                log.error("Error extracting event: " + e.getMessage());
+                System.err.println("Error extracting event: " + e.getMessage());
             }
         }
 

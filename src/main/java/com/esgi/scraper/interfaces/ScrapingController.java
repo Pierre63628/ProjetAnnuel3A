@@ -7,22 +7,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Spinner;
 
 public class ScrapingController {
     private final Button refreshButton;
     private final ProgressBar progressBar;
     private final Label statusLabel;
     private final EventDataLoader dataLoader;
-    private final Spinner<Integer> pagesSpinner;
     private Task<Void> scrapingTask;
 
-    public ScrapingController(Button refreshButton, ProgressBar progressBar, Label statusLabel, EventDataLoader dataLoader, Spinner<Integer> pagesSpinner) {
+    public ScrapingController(Button refreshButton, ProgressBar progressBar, Label statusLabel, EventDataLoader dataLoader) {
         this.refreshButton = refreshButton;
         this.progressBar = progressBar;
         this.statusLabel = statusLabel;
         this.dataLoader = dataLoader;
-        this.pagesSpinner = pagesSpinner;
     }
 
     public void handleRefresh() {
@@ -32,16 +29,15 @@ public class ScrapingController {
 
         progressBar.setVisible(true);
         progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-        statusLabel.setText("Scraping en cours de " + pagesSpinner.getValue().toString() + " pages...");
+        statusLabel.setText("Scraping en cours...");
         refreshButton.setDisable(true);
 
         scrapingTask = new Task<Void>() {
             @Override
             protected Void call() {
                 ScraperService scraperService = new ScraperService();
-                int maxPages = pagesSpinner.getValue();
-                int eventCount = scraperService.runScraping("https://www.eventbrite.fr/d/france/all-events/", maxPages);
-                System.out.println("Scraping completed with " + eventCount + " events from " + maxPages + " pages.");
+                int eventCount = scraperService.runScraping("https://www.eventbrite.fr/d/france/all-events/");
+                System.out.println("Scraping completed with " + eventCount + " events.");
                 return null;
             }
 

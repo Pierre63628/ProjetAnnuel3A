@@ -5,7 +5,6 @@ import com.esgi.scraper.models.EventBriteScrapper;
 import com.esgi.scraper.models.MeetupEventScraper;
 import com.esgi.scraper.repository.EventRepository;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -15,7 +14,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
-@Log4j2
+import static com.esgi.scraper.utils.Utils.toJson;
+
 public class ScraperService {
     private final EventBriteScrapper eventBriteScrapper;
     private final AllEventScraper allEventScraper;
@@ -31,15 +31,9 @@ public class ScraperService {
         this.eventRepository = new EventRepository();
         this.eventStorageService = new EventStorageService();
         this.eventRepository.createTableIfNotExists();
-        this.eventRepository.createSchemaIfNotExists();
     }
 
     public int runScraping(String url) {
-        // Par défaut, scraper 1 page
-        return runScraping(url, 1);
-    }
-
-    public int runScraping(String url, int maxPages) {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless=new");
@@ -52,7 +46,7 @@ public class ScraperService {
             String source = null;
 
             if (url.contains("eventbrite")) {
-                events = eventBriteScrapper.scrape(url, driver, wait, maxPages);
+                events = eventBriteScrapper.scrape(url, driver, wait);
                 source = "eventbrite";
             } else if (url.contains("allevent")) {
                 events = allEventScraper.scrape(url, driver, wait);
@@ -65,12 +59,12 @@ public class ScraperService {
             eventRepository.cleanupOldEvents(30);
 
             if (events != null && !events.isEmpty()) {
-                log.debug("Scraped " + events.size() + " events.");
+                System.out.println("Scraped " + events.size() + " events.");
 
                 eventStorageService.cleanEvents(events);
                 int validCount = eventStorageService.validEvents.size();
                 int invalidCount = eventStorageService.invalidEvents.size();
-                log.debug("Valid events: " + validCount + ", Invalid events: " + invalidCount);
+                System.out.println("Valid events: " + validCount + ", Invalid events: " + invalidCount);
 
                 eventStorageService.saveEventsToDB(source);
                 eventStorageService.saveEventsToJson(source);
@@ -79,10 +73,10 @@ public class ScraperService {
             } else {
                 List<Map<String, String>> cachedEvents = eventStorageService.loadLatestEvents(source);
                 if (!cachedEvents.isEmpty()) {
-                    log.debug("Loaded " + cachedEvents.size() + " cached events from file.");
+                    System.out.println("Loaded " + cachedEvents.size() + " cached events from file.");
                     return cachedEvents.size();
                 } else {
-                    log.debug("No events found (neither online nor cached).");
+                    System.out.println("No events found (neither online nor cached).");
                     return 0;
                 }
             }
@@ -90,7 +84,7 @@ public class ScraperService {
             try {
                 driver.quit();
             } catch (Exception e) {
-               log.error("Error closing WebDriver: " + e.getMessage());
+                System.err.println("Error closing WebDriver: " + e.getMessage());
             }
         }
     }

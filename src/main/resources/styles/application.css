@@ -86,30 +86,6 @@
     -fx-background-color: #e0e0e0;
 }
 
-/* Spinner */
-.spinner {
-    -fx-background-color: white;
-    -fx-background-radius: 4;
-    -fx-border-color: #d0d0d0;
-    -fx-border-radius: 4;
-}
-
-.spinner:focused {
-    -fx-border-color: #4285f4;
-}
-
-.spinner .increment-arrow-button,
-.spinner .decrement-arrow-button {
-    -fx-background-color: #f0f0f0;
-    -fx-background-radius: 0 4 4 0;
-    -fx-border-color: #d0d0d0;
-}
-
-.spinner .increment-arrow-button:hover,
-.spinner .decrement-arrow-button:hover {
-    -fx-background-color: #e0e0e0;
-}
-
 /* Liste des événements */
 .event-list {
     -fx-background-color: white;

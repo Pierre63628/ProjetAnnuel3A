@@ -5,7 +5,6 @@ import com.esgi.scraper.utils.AddressUtils;
 import com.esgi.scraper.utils.DateValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-@Log4j2
 public class EventStorageService {
     private static final String STORAGE_DIR = "events_storage";
     public List<Map<String, String>> validEvents = new ArrayList<>();
@@ -54,7 +52,7 @@ public class EventStorageService {
         try {
             Files.createDirectories(Path.of("src/main/resources/" + STORAGE_DIR));
         } catch (IOException e) {
-            log.error("Error creating storage directory: " + e.getMessage());
+            System.err.println("Error creating storage directory: " + e.getMessage());
         }
     }
 
@@ -62,23 +60,22 @@ public class EventStorageService {
         String fileName = String.format("src/main/resources/%s/%s_events.json", STORAGE_DIR, source);
         try {
             objectMapper.writeValue(new File(fileName), validEvents);
-            log.debug("Events saved to file: " + fileName);
+            System.out.println("Events saved to file: " + fileName);
         } catch (IOException e) {
-            log.debug("Error saving events to file: " + e.getMessage());
+            System.err.println("Error saving events to file: " + e.getMessage());
         }
     }
 
     public void saveEventsToDB(String source) {
         String sql = """
-        INSERT INTO events (name, url, image_url, date, source, detailed_address,coordinates)
-        VALUES (?, ?, ?, ?, ?, ?,?)
+        INSERT INTO events (name, url, image_url, date, source, detailed_address)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT (url) DO UPDATE SET
             name = EXCLUDED.name,
             image_url = EXCLUDED.image_url,
             date = EXCLUDED.date,
             source = EXCLUDED.source,
             detailed_address = EXCLUDED.detailed_address,
-            coordinates = EXCLUDED.coordinates,
             updated_at = CURRENT_TIMESTAMP
     """;
         try (Connection conn = DatabaseConfig.getConnection();
@@ -86,26 +83,32 @@ public class EventStorageService {
 
             for (Map<String, String> event : validEvents) {
                 String rawAddress = event.get("detailed_address");
-                Map<String, String> adressesInfo = AddressUtils.extractAddress(rawAddress);
+                String cleanedAddress = AddressUtils.cleanAddress(rawAddress);
 
                 pstmt.setString(1, event.get("name"));
                 pstmt.setString(2, event.get("url"));
                 pstmt.setString(3, event.get("image_url"));
                 pstmt.setString(4, event.get("date"));
                 pstmt.setString(5, source);
-                pstmt.setString(6, adressesInfo.get("adresse"));
-                pstmt.setString(7, adressesInfo.get("location"));
-
-                if(adressesInfo.get("location") == null || adressesInfo.get("adresse") == null) {
-                    log.debug("Adresse ou location null");
-                }else {
+                pstmt.setString(6, cleanedAddress);
                 pstmt.addBatch();
+            }
+
+            int[] results = pstmt.executeBatch();
+            int insertedCount = 0;
+            int updatedCount = 0;
+
+            for (int result : results) {
+                if (result > 0) {
+                    insertedCount++;
+                } else if (result == 0) {
+                    updatedCount++;
                 }
             }
-            pstmt.executeBatch();
 
+            System.out.println("Events saved to database: " + insertedCount + " inserted, " + updatedCount + " updated.");
         } catch (SQLException e) {
-            log.debug("Error saving events: " + e.getMessage());
+            System.err.println("Error saving events: " + e.getMessage());
         }
     }
 
@@ -127,7 +130,7 @@ public class EventStorageService {
                         objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
             }
         } catch (IOException e) {
-            log.debug("Error loading events from file: " + e.getMessage());
+            System.err.println("Error loading events from file: " + e.getMessage());
         }
         return new ArrayList<>();
     }
