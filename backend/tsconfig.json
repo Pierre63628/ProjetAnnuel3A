@@ -13,7 +13,7 @@
         "allowJs": true,
         "checkJs": false,
         "noImplicitAny": false,
-        "noEmitOnError": false,
+        "noEmitOnError": true,
         "skipDefaultLibCheck": true,
         "ignoreDeprecations": "5.0",
         "noFallthroughCasesInSwitch": false,
