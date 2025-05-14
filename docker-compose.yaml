@@ -6,6 +6,7 @@ services:
       - "3000:3000"
     volumes:
       - ./backend/src:/app/src
+      - ./backend/dist:/app/dist
     command: npm run dev
     environment:
       - NODE_ENV=development

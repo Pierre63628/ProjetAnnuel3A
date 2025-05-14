@@ -23,8 +23,5 @@ COPY . .
 
 EXPOSE 3000
 
-# Build TypeScript code
-RUN npm run build
-
-# Start the server using the compiled JavaScript
-CMD ["node", "dist/index.js"]
+# Start the server in development mode
+CMD ["npm", "run", "dev"]
