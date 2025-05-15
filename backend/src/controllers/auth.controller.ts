@@ -1,19 +1,25 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { UserModel, User } from '../models/user.model.js';
 import { TokenModel } from '../models/token.model.js';
 import jwtConfig from '../config/jwt.js';
+import { promisify } from 'util';
+import { ApiErrors } from "../errors/ApiErrors.js";
+
+const verifyJwt = promisify(jwt.verify.bind(jwt));
+
+// Wrapper async pour éviter de répéter try/catch partout
+const asyncHandler = (fn: Function) => (req: Request, res: Response, next: NextFunction) =>
+    Promise.resolve(fn(req, res, next)).catch(next);
 
 // Générer les tokens JWT
 const generateTokens = (userId: number) => {
-    // Token d'accès (courte durée)
     const accessToken = jwt.sign(
         { userId },
         jwtConfig.accessToken.secret,
         { expiresIn: jwtConfig.accessToken.expiresIn } as SignOptions
     );
 
-    // Token de rafraîchissement (longue durée)
     const refreshToken = jwt.sign(
         { userId },
         jwtConfig.refreshToken.secret,
@@ -33,216 +39,158 @@ const calculateExpiryDate = (): Date => {
         const value = parseInt(expiresIn.slice(0, -1));
 
         switch (unit) {
-            case 'd': // jours
+            case 'd':
                 expiryDate.setDate(expiryDate.getDate() + value);
                 break;
-            case 'h': // heures
+            case 'h':
                 expiryDate.setHours(expiryDate.getHours() + value);
                 break;
-            case 'm': // minutes
+            case 'm':
                 expiryDate.setMinutes(expiryDate.getMinutes() + value);
                 break;
             default:
-                // Par défaut, 7 jours
                 expiryDate.setDate(expiryDate.getDate() + 7);
         }
     } else if (typeof expiresIn === 'number') {
-        // Si c'est un nombre (en secondes)
         expiryDate.setSeconds(expiryDate.getSeconds() + expiresIn);
     } else {
-        // Par défaut, 7 jours
         expiryDate.setDate(expiryDate.getDate() + 7);
     }
 
     return expiryDate;
 };
 
-export const register = async (req: Request, res: Response) => {
-    try {
-        const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
+export const register = asyncHandler(async (req: Request, res: Response) => {
+    const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
 
-        // Vérifier si l'email existe déjà
-        const existingUser = await UserModel.findByEmail(email);
-        if (existingUser) {
-            return res.status(409).json({ message: 'Cet email est déjà utilisé.' });
-        }
+    const existingUser = await UserModel.findByEmail(email);
+    if (existingUser) {
+        throw new ApiErrors('Cet email est déjà utilisé.', 409);
+    }
 
-        // Créer le nouvel utilisateur
-        const userData: User = {
+    const userData: User = {
+        nom,
+        prenom,
+        email,
+        password,
+        adresse,
+        date_naissance: date_naissance ? new Date(date_naissance) : undefined,
+        telephone,
+        quartier_id
+    };
+
+    const userId = await UserModel.create(userData);
+
+    const { accessToken, refreshToken } = generateTokens(userId);
+
+    await TokenModel.create({
+        user_id: userId,
+        token: refreshToken,
+        expires_at: calculateExpiryDate()
+    });
+
+    res.status(201).json({
+        message: 'Utilisateur créé avec succès',
+        accessToken,
+        refreshToken,
+        user: {
+            id: userId,
             nom,
             prenom,
-            email,
-            password,
-            adresse,
-            date_naissance: date_naissance ? new Date(date_naissance) : undefined,
-            telephone,
-            quartier_id
-        };
+            email
+        }
+    });
+});
 
-        const userId = await UserModel.create(userData);
+export const login = asyncHandler(async (req: Request, res: Response) => {
+    const { email, password } = req.body;
 
-        // Générer les tokens
-        const { accessToken, refreshToken } = generateTokens(userId);
-
-        // Sauvegarder le token de rafraîchissement dans la base de données
-        await TokenModel.create({
-            user_id: userId,
-            token: refreshToken,
-            expires_at: calculateExpiryDate()
-        });
-
-        // Retourner les tokens et les informations de l'utilisateur
-        res.status(201).json({
-            message: 'Utilisateur créé avec succès',
-            accessToken,
-            refreshToken,
-            user: {
-                id: userId,
-                nom,
-                prenom,
-                email
-            }
-        });
-    } catch (error) {
-        console.error('Erreur lors de l\'inscription:', error);
-        res.status(500).json({ message: 'Erreur serveur lors de l\'inscription.' });
+    const user = await UserModel.findByEmail(email);
+    if (!user || !UserModel.verifyPassword(password, user.password!)) {
+        throw new ApiErrors('Email ou mot de passe incorrect.', 401);
     }
-};
 
-// Connexion d'un utilisateur
-export const login = async (req: Request, res: Response) => {
-    try {
-        const { email, password } = req.body;
+    const { accessToken, refreshToken } = generateTokens(user.id!);
 
-        // Vérifier si l'utilisateur existe
-        const user = await UserModel.findByEmail(email);
-        if (!user) {
-            return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
+    await TokenModel.create({
+        user_id: user.id!,
+        token: refreshToken,
+        expires_at: calculateExpiryDate()
+    });
+
+    res.status(200).json({
+        accessToken,
+        refreshToken,
+        user: {
+            id: user.id,
+            nom: user.nom,
+            prenom: user.prenom,
+            email: user.email,
+            role: user.role
         }
+    });
+});
 
-        // Vérifier le mot de passe
-        const isPasswordValid = UserModel.verifyPassword(password, user.password!);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
-        }
-
-        // Générer les tokens
-        const { accessToken, refreshToken } = generateTokens(user.id!);
-
-        // Sauvegarder le token de rafraîchissement dans la base de données
-        await TokenModel.create({
-            user_id: user.id!,
-            token: refreshToken,
-            expires_at: calculateExpiryDate()
-        });
-
-        // Retourner les tokens et les informations de l'utilisateur
-        res.status(200).json({
-            accessToken,
-            refreshToken,
-            user: {
-                id: user.id,
-                nom: user.nom,
-                prenom: user.prenom,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        console.error('Erreur lors de la connexion:', error);
-        res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
+export const refreshToken = asyncHandler(async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+        throw new ApiErrors('Token de rafraîchissement requis.', 400);
     }
-};
 
-// Rafraîchir le token d'accès
-export const refreshToken = async (req: Request, res: Response) => {
-    try {
-        const { refreshToken } = req.body;
-
-        if (!refreshToken) {
-            return res.status(400).json({ message: 'Token de rafraîchissement requis.' });
-        }
-
-        // Vérifier si le token existe dans la base de données
-        const tokenRecord = await TokenModel.findByToken(refreshToken);
-        if (!tokenRecord) {
-            return res.status(403).json({ message: 'Token de rafraîchissement invalide ou révoqué.' });
-        }
-
-        // Vérifier si le token est expiré
-        if (new Date() > new Date(tokenRecord.expires_at)) {
-            await TokenModel.revokeToken(refreshToken);
-            return res.status(403).json({ message: 'Token de rafraîchissement expiré.' });
-        }
-
-        // Vérifier la validité du token
-        jwt.verify(refreshToken, jwtConfig.refreshToken.secret, async (err: any, decoded: any) => {
-            if (err) {
-                await TokenModel.revokeToken(refreshToken);
-                return res.status(403).json({ message: 'Token de rafraîchissement invalide.' });
-            }
-
-            const userId = decoded.userId;
-
-            // Vérifier si l'utilisateur existe toujours
-            const user = await UserModel.findById(userId);
-            if (!user) {
-                await TokenModel.revokeToken(refreshToken);
-                return res.status(404).json({ message: 'Utilisateur non trouvé.' });
-            }
-
-            // Générer un nouveau token d'accès
-            const newAccessToken = jwt.sign(
-                { userId },
-                jwtConfig.accessToken.secret,
-                { expiresIn: jwtConfig.accessToken.expiresIn } as SignOptions
-            );
-
-            // Retourner le nouveau token d'accès
-            res.status(200).json({
-                accessToken: newAccessToken
-            });
-        });
-    } catch (error) {
-        console.error('Erreur lors du rafraîchissement du token:', error);
-        res.status(500).json({ message: 'Erreur serveur lors du rafraîchissement du token.' });
+    const tokenRecord = await TokenModel.findByToken(refreshToken);
+    if (!tokenRecord) {
+        throw new ApiErrors('Token de rafraîchissement invalide ou révoqué.', 403);
     }
-};
 
-// Déconnexion d'un utilisateur
-export const logout = async (req: Request, res: Response) => {
-    try {
-        const { refreshToken } = req.body;
-
-        if (!refreshToken) {
-            return res.status(400).json({ message: 'Token de rafraîchissement requis.' });
-        }
-
-        // Révoquer le token de rafraîchissement
+    if (new Date() > new Date(tokenRecord.expires_at)) {
         await TokenModel.revokeToken(refreshToken);
-
-        res.status(200).json({ message: 'Déconnexion réussie.' });
-    } catch (error) {
-        console.error('Erreur lors de la déconnexion:', error);
-        res.status(500).json({ message: 'Erreur serveur lors de la déconnexion.' });
+        throw new ApiErrors('Token de rafraîchissement expiré.', 403);
     }
-};
 
-// Obtenir les informations de l'utilisateur connecté
-export const getMe = async (req: Request, res: Response) => {
+    let decoded: any;
     try {
-        // L'utilisateur est déjà attaché à la requête par le middleware authenticateJWT
-        const user = req.user;
-
-        // Supprimer le mot de passe de la réponse
-        const { password, ...userWithoutPassword } = user;
-
-        res.status(200).json(userWithoutPassword);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des informations utilisateur:', error);
-        res.status(500).json({ message: 'Erreur serveur lors de la récupération des informations utilisateur.' });
+        decoded = await verifyJwt(refreshToken, jwtConfig.refreshToken.secret);
+    } catch {
+        await TokenModel.revokeToken(refreshToken);
+        throw new ApiErrors('Token de rafraîchissement invalide.', 403);
     }
-};
+
+    const userId = decoded.userId;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+        await TokenModel.revokeToken(refreshToken);
+        throw new ApiErrors('Utilisateur non trouvé.', 404);
+    }
+
+    const newAccessToken = jwt.sign(
+        { userId },
+        jwtConfig.accessToken.secret,
+        { expiresIn: jwtConfig.accessToken.expiresIn } as SignOptions
+    );
+
+    res.status(200).json({ accessToken: newAccessToken });
+});
+
+export const logout = asyncHandler(async (req: Request, res: Response) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+        throw new ApiErrors('Token de rafraîchissement requis.', 400);
+    }
+
+    await TokenModel.revokeToken(refreshToken);
+
+    res.status(200).json({ message: 'Déconnexion réussie.' });
+});
+
+export const getMe = asyncHandler(async (req: Request, res: Response) => {
+    const user = req.user;
+    if (!user) {
+        throw new ApiErrors('Utilisateur non authentifié.', 401);
+    }
+
+    const { password, ...userWithoutPassword } = user;
+    res.status(200).json(userWithoutPassword);
+});
 
 export default {
     register,
