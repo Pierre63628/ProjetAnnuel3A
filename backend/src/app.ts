@@ -9,6 +9,7 @@ import utilisateurQuartierRoutes from './routes/utilisateur-quartier.routes.js';
 import evenementRoutes from './routes/evenement.routes.js';
 
 import { errorHandler } from './controllers/errors.controller.js';
+import {ApiErrors} from "./errors/ApiErrors.js";
 
 // Charger les variables d'environnement
 dotenv.config();
@@ -27,9 +28,11 @@ app.use('/api/quartiers', quartierRoutes);
 app.use('/api/users-quartiers', utilisateurQuartierRoutes);
 app.use('/api/evenements', evenementRoutes);
 
-// Route de base
-app.get('/', (_, res) => {
-    res.send('API NextDoorBuddy fonctionne correctement!');
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: 404,
+        message: "La ressource demandée est introuvable.",
+    });
 });
 
 // Middleware de gestion des erreurs (à la fin)

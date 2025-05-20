@@ -8,17 +8,16 @@ import AdminQuartiers from "./pages/AdminQuartiers"
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
+import EventDetails from "./pages/EventsDetail.tsx";
 
 // Composant pour les routes protégées
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
-  // Afficher un indicateur de chargement pendant la vérification de l'authentification
   if (isLoading) {
     return <div>Chargement...</div>;
   }
 
-  // Rediriger vers la page de connexion si l'utilisateur n'est pas authentifié
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -30,12 +29,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
 
-  // Afficher un indicateur de chargement pendant la vérification de l'authentification
   if (isLoading) {
     return <div>Chargement...</div>;
   }
 
-  // Rediriger vers la page d'accueil si l'utilisateur n'est pas authentifié ou n'est pas admin
   if (!isAuthenticated || user?.role !== 'admin') {
     return <Navigate to="/" replace />;
   }
@@ -59,6 +56,10 @@ function AppRoutes() {
       <Route path="/events" element={
         <ProtectedRoute>
           <Events />
+        </ProtectedRoute>
+      } />      <Route path="/events/:id" element={
+        <ProtectedRoute>
+          <EventDetails />
         </ProtectedRoute>
       } />
       <Route path="/events/create" element={

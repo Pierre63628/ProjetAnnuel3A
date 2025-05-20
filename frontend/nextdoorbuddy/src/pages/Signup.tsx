@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { getQuartiers, Quartier } from '../services/quartier.service'
+import AddressAutocomplete from '../components/AddressAutocomplete'
 
 const Signup = () => {
     const [nom, setNom] = useState('')
@@ -11,18 +12,12 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [telephone, setTelephone] = useState('')
     const [adresse, setAdresse] = useState('')
+    const [latitude, setLatitude] = useState<number | null>(null)
+    const [longitude, setLongitude] = useState<number | null>(null)
     const [dateNaissance, setDateNaissance] = useState('')
     const [quartierId, setQuartierId] = useState('')
-    // Quartiers de test (au cas où l'API ne fonctionne pas)
-    const quartiersTest = [
-        { id: 1, nom_quartier: 'Centre', ville: 'Paris', code_postal: '75001' },
-        { id: 2, nom_quartier: 'Montmartre', ville: 'Paris', code_postal: '75018' },
-        { id: 3, nom_quartier: 'Le Marais', ville: 'Paris', code_postal: '75004' },
-        { id: 4, nom_quartier: 'Saint-Germain-des-Prés', ville: 'Paris', code_postal: '75006' },
-        { id: 5, nom_quartier: 'Belleville', ville: 'Paris', code_postal: '75020' }
-    ];
 
-    const [quartiers, setQuartiers] = useState<Quartier[]>(quartiersTest)
+    const [quartiers, setQuartiers] = useState<Quartier[]>()
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingQuartiers, setIsLoadingQuartiers] = useState(false)
@@ -113,6 +108,8 @@ const Signup = () => {
                 password,
                 telephone,
                 adresse,
+                latitude: latitude || undefined,
+                longitude: longitude || undefined,
                 date_naissance: dateNaissance || undefined,
                 quartier_id: quartierId ? parseInt(quartierId) : undefined
             })
@@ -234,42 +231,40 @@ const Signup = () => {
                         <label htmlFor="adresse" className="mb-2 block text-sm font-medium text-gray-700">
                             Adresse
                         </label>
-                        <input
-                            id="adresse"
-                            type="text"
-                            placeholder="Votre adresse"
-                            value={adresse}
-                            onChange={e => setAdresse(e.target.value)}
-                            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                            required
+                        <AddressAutocomplete
+                            initialValue={adresse}
+                            required={true}
+                            onAddressSelect={(selectedAddress) => {
+                                setAdresse(selectedAddress.adresse);
+                                setLatitude(selectedAddress.latitude);
+                                setLongitude(selectedAddress.longitude);
+                                console.log(selectedAddress);
+
+                                // Si un quartier a été trouvé par l'API, l'utiliser
+                                if (selectedAddress.quartierFound && selectedAddress.quartier_id) {
+                                    setQuartierId(String(selectedAddress.quartier_id));                                }
+                                // Sinon, essayer de trouver un quartier par code postal
+                                else if (selectedAddress.postcode && quartiers.length > 0) {
+                                    const matchingQuartier = quartiers.find(
+                                        q => q.code_postal === selectedAddress.postcode
+                                    );
+                                    if (matchingQuartier) {
+                                        setQuartierId(String(matchingQuartier.id));
+                                    } else {
+                                        // Réinitialiser le quartier si aucun n'est trouvé
+                                        setQuartierId('');
+                                    }
+                                } else {
+                                    // Réinitialiser le quartier si aucun n'est trouvé
+                                    setQuartierId('');
+                                }
+                            }}
                         />
+                        <p className="mt-1 text-xs text-gray-500">
+                            Commencez à saisir votre adresse pour voir les suggestions
+                        </p>
                     </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="quartier" className="mb-2 block text-sm font-medium text-gray-700">
-                            Quartier
-                        </label>
-                        <select
-                            id="quartier"
-                            value={quartierId}
-                            onChange={e => setQuartierId(e.target.value)}
-                            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
-                            required
-                            disabled={isLoadingQuartiers}
-                        >
-                            <option value="">Sélectionnez un quartier</option>
-                            {quartiers && quartiers.length > 0 ? (
-                                quartiers.map(quartier => (
-                                    <option key={quartier.id} value={quartier.id}>
-                                        {quartier.nom_quartier} {quartier.ville && `- ${quartier.ville}`} {quartier.code_postal && `(${quartier.code_postal})`}
-                                    </option>
-                                ))
-                            ) : (
-                                <option value="" disabled>Aucun quartier disponible</option>
-                            )}
-                        </select>
-                        {isLoadingQuartiers && <p className="mt-1 text-xs text-gray-500">Chargement des quartiers...</p>}
-                    </div>
 
                     <div className="mb-6">
                         <label htmlFor="dateNaissance" className="mb-2 block text-sm font-medium text-gray-700">

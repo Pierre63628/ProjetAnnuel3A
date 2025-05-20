@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
-import { getAllEvenements, getUpcomingEvenements, getPastEvenements, Evenement } from '../services/evenement.service';
+import {
+    getAllEvenements,
+    getUpcomingEvenements,
+    getPastEvenements,
+    Evenement,
+    deleteEvenement
+} from '../services/evenement.service';
 
 const Events = () => {
     const { user } = useAuth();
@@ -59,6 +65,18 @@ const Events = () => {
             setFilteredEvenements(filtered);
         }
     }, [searchTerm, evenements]);
+
+    const handleDeleteEvenement = async (id: number) => {
+        try {
+            await deleteEvenement(id);
+            setEvenements((prev) => prev.filter((e) => e.id !== id));
+            setFilteredEvenements((prev) => prev.filter((e) => e.id !== id));
+        } catch (error) {
+            console.error("Erreur lors de la suppression de l'événement :", error);
+            alert("Une erreur est survenue lors de la suppression.");
+        }
+    };
+
 
     // Formater la date
     const formatDate = (dateString: string) => {
@@ -201,13 +219,20 @@ const Events = () => {
                                             : evenement.description}
                                     </p>
                                 )}
-                                <div className="mt-4">
+                                <div className="mt-4 flex gap-20">
                                     <Link
                                         to={`/events/${evenement.id}`}
                                         className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                                     >
                                         Voir les détails
                                     </Link>
+
+                                    <button
+                                        onClick={() =>handleDeleteEvenement(evenement.id)}
+                                        className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-900-600"
+                                    >
+                                        Supprimer
+                                    </button>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { QuartierModel, Quartier } from '../models/quartier.model.js';
+import { GeoService } from '../services/geo.service.js';
 import { UtilisateurQuartierModel } from '../models/utilisateur-quartier.model.js';
 
 // Récupérer tous les quartiers
@@ -30,7 +31,16 @@ export const getQuartiersByVille = async (req: Request, res: Response) => {
 // Récupérer un quartier par ID
 export const getQuartierById = async (req: Request, res: Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const idParam = req.params.id;
+
+        // Vérifier que l'ID est un nombre valide
+        const id = parseInt(idParam);
+        if (isNaN(id)) {
+            return res.status(400).json({
+                message: `L'ID du quartier doit être un nombre valide, reçu: ${idParam}`
+            });
+        }
+
         const quartier = await QuartierModel.findById(id);
 
         if (!quartier) {
@@ -200,6 +210,58 @@ export const getQuartierUsers = async (req: Request, res: Response) => {
     }
 };
 
+// Rechercher un quartier par coordonnées géographiques
+export const findQuartierByCoordinates = async (req: Request, res: Response) => {
+    try {
+        const { longitude, latitude } = req.query;
+
+        if (!longitude || !latitude) {
+            return res.status(400).json({
+                message: 'Les coordonnées (longitude et latitude) sont requises',
+                quartierFound: false
+            });
+        }
+
+        // Convertir les coordonnées en nombres et vérifier qu'elles sont valides
+        const lon = parseFloat(longitude as string);
+        const lat = parseFloat(latitude as string);
+
+        if (isNaN(lon) || isNaN(lat)) {
+            console.warn(`Coordonnées invalides reçues: longitude=${longitude}, latitude=${latitude}`);
+            return res.status(400).json({
+                message: 'Les coordonnées doivent être des nombres valides',
+                quartierFound: false
+            });
+        }
+
+        console.log(`Recherche de quartier pour les coordonnées: longitude=${lon}, latitude=${lat}`);
+
+        // Rechercher le quartier
+        const quartier = await GeoService.findQuartierByCoordinates(lon, lat);
+
+        if (!quartier) {
+            console.log(`Aucun quartier trouvé pour les coordonnées: longitude=${lon}, latitude=${lat}`);
+            return res.status(404).json({
+                message: 'Aucun quartier trouvé pour ces coordonnées',
+                quartierFound: false
+            });
+        }
+
+        console.log(`Quartier trouvé:`, JSON.stringify(quartier, null, 2));
+
+        res.status(200).json({
+            quartier,
+            quartierFound: true,
+        });
+    } catch (error) {
+        console.error('Erreur lors de la recherche du quartier par coordonnées:', error);
+        res.status(500).json({
+            message: 'Erreur serveur lors de la recherche du quartier',
+            quartierFound: false
+        });
+    }
+};
+
 export default {
     getAllQuartiers,
     getQuartiersByVille,
@@ -208,5 +270,6 @@ export default {
     updateQuartier,
     deleteQuartier,
     searchQuartiers,
-    getQuartierUsers
+    getQuartierUsers,
+    findQuartierByCoordinates
 };

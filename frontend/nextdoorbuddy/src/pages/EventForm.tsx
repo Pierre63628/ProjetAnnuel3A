@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
-import { createEvenement, getEvenementById, updateEvenement, Evenement } from '../services/evenement.service';
+import { createEvenement, getEvenementById, updateEvenement } from '../services/evenement.service';
 
 const EventForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -245,35 +245,6 @@ const EventForm = () => {
                             className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                             placeholder="Ex: fête, atelier, réunion..."
                         />
-                    </div>
-
-                    <div className="mb-6">
-                        <label htmlFor="photo_url" className="mb-2 block font-medium text-gray-700">
-                            URL de la photo
-                        </label>
-                        <input
-                            type="url"
-                            id="photo_url"
-                            name="photo_url"
-                            value={formData.photo_url}
-                            onChange={handleChange}
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-                            placeholder="https://example.com/image.jpg"
-                        />
-                        {formData.photo_url && (
-                            <div className="mt-2">
-                                <p className="mb-1 text-sm text-gray-600">Aperçu :</p>
-                                <img
-                                    src={formData.photo_url}
-                                    alt="Aperçu"
-                                    className="h-40 w-auto rounded-md object-cover"
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).style.display = 'none';
-                                        setError('L\'URL de l\'image est invalide');
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
 
                     <div className="flex justify-between">

@@ -61,6 +61,29 @@ export const searchQuartiers = async (query: string): Promise<Quartier[]> => {
     }
 };
 
+export const findQuartierByCoordinates = async (longitude: number, latitude: number): Promise<{quartier: Quartier | null, quartierFound: boolean}> => {
+    try {
+        // Vérifier que les coordonnées sont valides
+        if (isNaN(longitude) || isNaN(latitude)) {
+            console.error(`Coordonnées invalides: longitude=${longitude}, latitude=${latitude}`);
+            return { quartier: null, quartierFound: false };
+        }
+
+        console.log(`Appel API pour les coordonnées: longitude=${longitude}, latitude=${latitude}`);
+        const data = await api.get(`/quartiers/coordinates?longitude=${longitude}&latitude=${latitude}`);
+        console.log('Réponse API:', data);
+        return data;
+    } catch (error: any) {
+        // Afficher plus de détails sur l'erreur
+        if (error.response) {
+            console.error(`Erreur API (${error.response.status}):`, error.response.data);
+        } else {
+            console.error(`Erreur lors de la recherche du quartier par coordonnées:`, error);
+        }
+        return { quartier: null, quartierFound: false };
+    }
+};
+
 export const createQuartier = async (quartier: Omit<Quartier, 'id'>): Promise<Quartier | null> => {
     try {
         const data = await api.post('/quartiers', quartier);
@@ -139,6 +162,7 @@ export default {
     getQuartierById,
     getQuartiersByVille,
     searchQuartiers,
+    findQuartierByCoordinates,
     createQuartier,
     updateQuartier,
     deleteQuartier,

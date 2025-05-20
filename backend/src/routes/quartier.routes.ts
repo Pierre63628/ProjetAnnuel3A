@@ -8,14 +8,17 @@ const router = express.Router();
 // Route pour récupérer tous les quartiers
 router.get('/', quartierController.getAllQuartiers);
 
-// Route pour récupérer un quartier par ID
-router.get('/:id', quartierController.getQuartierById);
+// Route pour rechercher des quartiers
+router.get('/search', quartierController.searchQuartiers);
+
+// Route pour rechercher un quartier par coordonnées
+router.get('/coordinates', quartierController.findQuartierByCoordinates);
 
 // Route pour récupérer les quartiers par ville
 router.get('/ville/:ville', quartierController.getQuartiersByVille);
 
-// Route pour rechercher des quartiers
-router.get('/search', quartierController.searchQuartiers);
+// Route pour récupérer un quartier par ID (doit être définie après les routes spécifiques)
+router.get('/:id', quartierController.getQuartierById);
 
 // Routes protégées (admin seulement)
 

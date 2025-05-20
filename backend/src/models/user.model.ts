@@ -130,6 +130,7 @@ export class UserModel {
                 values.push(userData.adresse);
             }
 
+
             if (userData.date_naissance !== undefined) {
                 fields.push(`date_naissance = $${paramIndex++}`);
                 values.push(userData.date_naissance);

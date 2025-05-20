@@ -5,6 +5,7 @@ import { TokenModel } from '../models/token.model.js';
 import jwtConfig from '../config/jwt.js';
 import { promisify } from 'util';
 import { ApiErrors } from "../errors/ApiErrors.js";
+import { GeoService } from '../services/geo.service.js';
 
 const verifyJwt = promisify(jwt.verify.bind(jwt));
 
@@ -61,11 +62,51 @@ const calculateExpiryDate = (): Date => {
 };
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
-    const { nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id } = req.body;
+    const {
+        nom, prenom, email, password,
+        adresse, latitude, longitude,
+        date_naissance, telephone, quartier_id
+    } = req.body;
 
     const existingUser = await UserModel.findByEmail(email);
     if (existingUser) {
         throw new ApiErrors('Cet email est déjà utilisé.', 409);
+    }
+
+    // Déterminer le quartier en fonction des coordonnées géographiques
+    let finalQuartierId = quartier_id;
+    let quartierInfo = null;
+
+    // Si des coordonnées sont fournies et qu'aucun quartier n'est spécifié, essayer de trouver le quartier
+    if (latitude && longitude && !quartier_id) {
+        try {
+            // Vérifier que les coordonnées sont valides
+            const lon = parseFloat(String(longitude));
+            const lat = parseFloat(String(latitude));
+
+            if (isNaN(lon) || isNaN(lat)) {
+                console.warn(`Coordonnées invalides lors de l'inscription: longitude=${longitude}, latitude=${latitude}`);
+            } else {
+                console.log(`Recherche de quartier pour les coordonnées: longitude=${lon}, latitude=${lat}`);
+                const quartier = await GeoService.findQuartierByCoordinates(lon, lat);
+
+                if (quartier) {
+                    console.log(`Quartier trouvé:`, JSON.stringify(quartier, null, 2));
+                    finalQuartierId = quartier.id;
+                    quartierInfo = {
+                        id: quartier.id,
+                        nom: quartier.nom_quartier,
+                        ville: quartier.ville,
+                        code_postal: quartier.code_postal
+                    };
+                } else {
+                    console.log(`Aucun quartier trouvé pour les coordonnées: longitude=${lon}, latitude=${lat}`);
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors de la recherche du quartier par coordonnées:', error);
+            // On continue l'inscription même si la recherche de quartier échoue
+        }
     }
 
     const userData: User = {
@@ -76,7 +117,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
         adresse,
         date_naissance: date_naissance ? new Date(date_naissance) : undefined,
         telephone,
-        quartier_id
+        quartier_id: finalQuartierId
     };
 
     const userId = await UserModel.create(userData);
@@ -97,8 +138,11 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
             id: userId,
             nom,
             prenom,
-            email
-        }
+            email,
+            quartier_id: finalQuartierId
+        },
+        quartierInfo: quartierInfo,
+        quartierFound: !!quartierInfo
     });
 });
 

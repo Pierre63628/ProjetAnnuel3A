@@ -6,6 +6,9 @@ interface User {
     prenom: string;
     email: string;
     adresse?: string;
+    adresse_complete?: string;
+    latitude?: number;
+    longitude?: number;
     date_naissance?: string;
     telephone?: string;
     quartier_id?: number;

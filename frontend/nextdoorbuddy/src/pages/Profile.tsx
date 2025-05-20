@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, removeQuartierFromUser, Quartier, UserQuartier } from '../services/quartier.service';
+import AddressAutocomplete from '../components/AddressAutocomplete';
 
 const Profile = () => {
     const { user, accessToken, refreshAccessToken, logout, updateUserInfo } = useAuth();
@@ -13,6 +14,8 @@ const Profile = () => {
         prenom: '',
         email: '',
         adresse: '',
+        latitude: null as number | null,
+        longitude: null as number | null,
         telephone: '',
         date_naissance: '',
         quartier_id: '',
@@ -36,6 +39,8 @@ const Profile = () => {
                 prenom: user.prenom || '',
                 email: user.email || '',
                 adresse: user.adresse || '',
+                latitude: user.latitude || null,
+                longitude: user.longitude || null,
                 telephone: user.telephone || '',
                 date_naissance: user.date_naissance ? new Date(user.date_naissance).toISOString().split('T')[0] : '',
                 quartier_id: user.quartier_id ? user.quartier_id.toString() : '',
@@ -45,7 +50,7 @@ const Profile = () => {
         }
     }, [user]);
 
-    // Charger les quartiers et les quartiers de l'utilisateur
+    // Charger les quartiers de l'utilisateur
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -107,118 +112,6 @@ const Profile = () => {
         // Si c'est le sélecteur de quartier à ajouter
         if (name === 'selectedQuartier') {
             setSelectedQuartier(value);
-        }
-    };
-
-    // Ajouter un quartier à l'utilisateur
-    const handleAddQuartier = async () => {
-        if (!selectedQuartier || !user?.id) return;
-
-        setIsLoading(true);
-        setError('');
-        setSuccess('');
-
-        try {
-            // Vérifier si le quartier est déjà dans la liste des quartiers de l'utilisateur
-            const isAlreadyAdded = userQuartiers.some(q => q.quartier_id === parseInt(selectedQuartier));
-            if (isAlreadyAdded) {
-                setError('Ce quartier est déjà dans votre liste de quartiers');
-                return;
-            }
-
-            // Ajouter le quartier à l'utilisateur (non principal par défaut)
-            const success = await addQuartierToUser(user.id, parseInt(selectedQuartier), false);
-
-            if (success) {
-                setSuccess('Quartier ajouté avec succès');
-
-                // Recharger les quartiers de l'utilisateur
-                const userQuartiersData = await getUserQuartiers(user.id);
-                setUserQuartiers(userQuartiersData);
-                setSelectedQuartier('');
-            } else {
-                setError('Erreur lors de l\'ajout du quartier');
-            }
-        } catch (error) {
-            setError('Erreur lors de l\'ajout du quartier');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // Définir un quartier comme principal
-    const handleSetAsPrincipal = async (quartierId: number) => {
-        if (!user?.id) return;
-
-        setIsLoading(true);
-        setError('');
-        setSuccess('');
-
-        try {
-            const success = await setQuartierAsPrincipal(user.id, quartierId);
-
-            if (success) {
-                setSuccess('Quartier défini comme principal avec succès');
-
-                // Mettre à jour le quartier_id dans le formulaire
-                setFormData({
-                    ...formData,
-                    quartier_id: quartierId.toString()
-                });
-
-                // Recharger les quartiers de l'utilisateur
-                const userQuartiersData = await getUserQuartiers(user.id);
-                setUserQuartiers(userQuartiersData);
-
-                // Mettre à jour les informations de l'utilisateur dans le contexte
-                updateUserInfo({
-                    ...user,
-                    quartier_id: quartierId
-                });
-            } else {
-                setError('Erreur lors de la définition du quartier comme principal');
-            }
-        } catch (error) {
-            setError('Erreur lors de la définition du quartier comme principal');
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    // Supprimer un quartier de l'utilisateur
-    const handleRemoveQuartier = async (relationId: number, isPrincipal: boolean) => {
-        if (!user?.id) return;
-
-        // Si c'est le quartier principal, empêcher la suppression
-        if (isPrincipal) {
-            setError('Vous ne pouvez pas supprimer votre quartier principal. Définissez d\'abord un autre quartier comme principal.');
-            return;
-        }
-
-        if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce quartier de votre liste ?')) {
-            return;
-        }
-
-        setIsLoading(true);
-        setError('');
-        setSuccess('');
-
-        try {
-            const success = await removeQuartierFromUser(user.id, relationId);
-
-            if (success) {
-                setSuccess('Quartier supprimé avec succès');
-
-                // Recharger les quartiers de l'utilisateur
-                const userQuartiersData = await getUserQuartiers(user.id);
-                setUserQuartiers(userQuartiersData);
-            } else {
-                setError('Erreur lors de la suppression du quartier');
-            }
-        } catch (error) {
-            setError('Erreur lors de la suppression du quartier');
-        } finally {
-            setIsLoading(false);
         }
     };
 
@@ -289,6 +182,8 @@ const Profile = () => {
                 nom: formData.nom,
                 prenom: formData.prenom,
                 adresse: formData.adresse,
+                latitude: formData.latitude || undefined,
+                longitude: formData.longitude || undefined,
                 telephone: formData.telephone || undefined,
                 quartier_id: formData.quartier_id ? parseInt(formData.quartier_id) : undefined
             };
@@ -475,15 +370,53 @@ const Profile = () => {
                             <label htmlFor="adresse" className="block text-sm font-medium text-gray-700">
                                 Adresse
                             </label>
-                            <input
-                                type="text"
-                                id="adresse"
-                                name="adresse"
-                                value={formData.adresse}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+                            <AddressAutocomplete
+                                initialValue={formData.adresse}
+                                required={true}
+                                onAddressSelect={(selectedAddress) => {
+                                    setFormData({
+                                        ...formData,
+                                        adresse: selectedAddress.adresse,
+                                        latitude: selectedAddress.latitude,
+                                        longitude: selectedAddress.longitude
+                                    });
+
+                                    // Si un quartier a été trouvé par l'API, l'utiliser
+                                    if (selectedAddress.quartierFound && selectedAddress.quartier_id) {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            quartier_id: String(selectedAddress.quartier_id)
+                                        }));
+                                    }
+                                    // Sinon, essayer de trouver un quartier par code postal
+                                    else if (selectedAddress.postcode && quartiers.length > 0) {
+                                        const matchingQuartier = quartiers.find(
+                                            q => q.code_postal === selectedAddress.postcode
+                                        );
+                                        if (matchingQuartier) {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                quartier_id: String(matchingQuartier.id)
+                                            }));
+                                        } else {
+                                            // Réinitialiser le quartier si aucun n'est trouvé
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                quartier_id: ''
+                                            }));
+                                        }
+                                    } else {
+                                        // Réinitialiser le quartier si aucun n'est trouvé
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            quartier_id: ''
+                                        }));
+                                    }
+                                }}
                             />
+                            <p className="mt-1 text-xs text-gray-500">
+                                Commencez à saisir votre adresse pour voir les suggestions
+                            </p>
                         </div>
 
                         <div>
@@ -532,6 +465,11 @@ const Profile = () => {
                                     </option>
                                 ))}
                             </select>
+                            {!formData.quartier_id && formData.latitude && formData.longitude && (
+                                <p className="mt-1 text-xs text-amber-600">
+                                    ⚠️ Aucun quartier n'a été trouvé pour cette adresse. Veuillez en sélectionner un manuellement.
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -575,69 +513,12 @@ const Profile = () => {
                                                             </span>
                                                         )}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
-                                                        {!quartier.est_principal && (
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleSetAsPrincipal(quartier.quartier_id)}
-                                                                className="mr-2 text-blue-600 hover:text-blue-900"
-                                                                disabled={isLoading}
-                                                            >
-                                                                Définir comme principal
-                                                            </button>
-                                                        )}
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleRemoveQuartier(quartier.id, quartier.est_principal)}
-                                                            className="text-red-600 hover:text-red-900"
-                                                            disabled={isLoading}
-                                                        >
-                                                            Supprimer
-                                                        </button>
-                                                    </td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                 </div>
                             )}
-                        </div>
-
-                        {/* Ajouter un nouveau quartier */}
-                        <div className="mb-6">
-                            <h3 className="mb-2 text-md font-medium">Ajouter un quartier</h3>
-                            <div className="flex items-end space-x-2">
-                                <div className="flex-grow">
-                                    <label htmlFor="selectedQuartier" className="block text-sm font-medium text-gray-700">
-                                        Sélectionnez un quartier
-                                    </label>
-                                    <select
-                                        id="selectedQuartier"
-                                        name="selectedQuartier"
-                                        value={selectedQuartier}
-                                        onChange={handleChange}
-                                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                    >
-                                        <option value="">Sélectionnez un quartier</option>
-                                        {quartiers.map((quartier) => (
-                                            <option key={quartier.id} value={quartier.id}>
-                                                {quartier.nom_quartier} ({quartier.ville})
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={handleAddQuartier}
-                                    disabled={!selectedQuartier || isLoading}
-                                    className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-                                >
-                                    Ajouter
-                                </button>
-                            </div>
-                            <p className="mt-2 text-sm text-gray-500">
-                                Vous pouvez ajouter des quartiers secondaires pour accéder aux informations de plusieurs quartiers.
-                            </p>
                         </div>
                     </div>
 

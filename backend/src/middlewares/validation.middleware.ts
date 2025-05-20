@@ -27,6 +27,9 @@ export const registerValidationRules = [
         .matches(/[\W_]/)
         .withMessage('Le mot de passe doit contenir au moins un caractère spécial'),
     body('adresse').notEmpty().withMessage('L\'adresse est requise pour une application de quartier'),
+    body('adresse_complete').optional(),
+    body('latitude').optional().isFloat().withMessage('La latitude doit être un nombre décimal'),
+    body('longitude').optional().isFloat().withMessage('La longitude doit être un nombre décimal'),
     body('telephone')
         .optional()
         .matches(/^[0-9]{10}$/)

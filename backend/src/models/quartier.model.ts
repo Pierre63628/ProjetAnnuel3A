@@ -6,6 +6,7 @@ export interface Quartier {
     ville?: string;
     code_postal?: string;
     description?: string;
+    geom?: any; // GeoJSON, par exemple type { type: 'MultiPolygon', coordinates: [...] }
     created_at?: Date;
     updated_at?: Date;
 }
@@ -14,11 +15,13 @@ export class QuartierModel {
     // Récupérer tous les quartiers
     static async findAll(): Promise<Quartier[]> {
         try {
-            console.log('Model: Finding all quartiers');
-            const query = 'SELECT * FROM "Quartier" ORDER BY ville, nom_quartier';
-            console.log(`Model: Executing query: ${query}`);
+            const query = `
+        SELECT id, nom_quartier, ville, code_postal, description, 
+               ST_AsGeoJSON(geom)::json AS geom 
+        FROM "Quartier"
+        ORDER BY ville, nom_quartier
+      `;
             const result = await pool.query(query);
-            console.log(`Model: Found ${result.rows.length} quartiers:`, result.rows);
             return result.rows;
         } catch (error) {
             console.error('Error finding quartiers:', error);
@@ -29,10 +32,14 @@ export class QuartierModel {
     // Récupérer tous les quartiers par ville
     static async findByVille(ville: string): Promise<Quartier[]> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Quartier" WHERE ville = $1 ORDER BY nom_quartier',
-                [ville]
-            );
+            const query = `
+        SELECT id, nom_quartier, ville, code_postal, description,
+               ST_AsGeoJSON(geom)::json AS geom
+        FROM "Quartier"
+        WHERE ville = $1
+        ORDER BY nom_quartier
+      `;
+            const result = await pool.query(query, [ville]);
             return result.rows;
         } catch (error) {
             console.error('Error finding quartiers by ville:', error);
@@ -43,10 +50,13 @@ export class QuartierModel {
     // Récupérer un quartier par ID
     static async findById(id: number): Promise<Quartier | null> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Quartier" WHERE id = $1',
-                [id]
-            );
+            const query = `
+        SELECT id, nom_quartier, ville, code_postal, description,
+               ST_AsGeoJSON(geom)::json AS geom
+        FROM "Quartier"
+        WHERE id = $1
+      `;
+            const result = await pool.query(query, [id]);
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding quartier by id:', error);
@@ -54,21 +64,25 @@ export class QuartierModel {
         }
     }
 
-    // Créer un nouveau quartier
+    // Créer un nouveau quartier (avec géométrie GeoJSON)
     static async create(quartierData: Quartier): Promise<number> {
         try {
-            const result = await pool.query(
-                `INSERT INTO "Quartier"
-                (nom_quartier, ville, code_postal, description)
-                VALUES ($1, $2, $3, $4) RETURNING id`,
-                [
-                    quartierData.nom_quartier,
-                    quartierData.ville || null,
-                    quartierData.code_postal || null,
-                    quartierData.description || null
-                ]
-            );
-
+            const query = `
+        INSERT INTO "Quartier"
+          (nom_quartier, ville, code_postal, description, geom)
+        VALUES
+          ($1, $2, $3, $4, ST_SetSRID(ST_GeomFromGeoJSON($5), 4326))
+        RETURNING id
+      `;
+            const geomString = JSON.stringify(quartierData.geom || null);
+            const values = [
+                quartierData.nom_quartier,
+                quartierData.ville || null,
+                quartierData.code_postal || null,
+                quartierData.description || null,
+                geomString,
+            ];
+            const result = await pool.query(query, values);
             return result.rows[0].id;
         } catch (error) {
             console.error('Error creating quartier:', error);
@@ -76,15 +90,13 @@ export class QuartierModel {
         }
     }
 
-    // Mettre à jour un quartier
+    // Mettre à jour un quartier, y compris la géométrie
     static async update(id: number, quartierData: Partial<Quartier>): Promise<boolean> {
         try {
-            // Préparer les champs à mettre à jour
             const fields: string[] = [];
             const values: any[] = [];
             let paramIndex = 1;
 
-            // Ajouter chaque champ non-null à la requête
             if (quartierData.nom_quartier !== undefined) {
                 fields.push(`nom_quartier = $${paramIndex++}`);
                 values.push(quartierData.nom_quartier);
@@ -105,21 +117,22 @@ export class QuartierModel {
                 values.push(quartierData.description);
             }
 
-
-
-            // Si aucun champ à mettre à jour, retourner true
-            if (fields.length === 0) {
-                return true;
+            if (quartierData.geom !== undefined) {
+                fields.push(`geom = ST_SetSRID(ST_GeomFromGeoJSON($${paramIndex++}), 4326)`);
+                values.push(JSON.stringify(quartierData.geom));
             }
 
-            // Ajouter l'ID à la fin des paramètres
+            if (fields.length === 0) return true;
+
             values.push(id);
 
-            const result = await pool.query(
-                `UPDATE "Quartier" SET ${fields.join(', ')} WHERE id = $${paramIndex}`,
-                values
-            );
+            const query = `
+        UPDATE "Quartier"
+        SET ${fields.join(', ')}
+        WHERE id = $${paramIndex}
+      `;
 
+            const result = await pool.query(query, values);
             return result.rowCount !== null && result.rowCount > 0;
         } catch (error) {
             console.error('Error updating quartier:', error);
@@ -127,7 +140,9 @@ export class QuartierModel {
         }
     }
 
-    // Supprimer un quartier
+
+
+// Supprimer un quartier
     static async delete(id: number): Promise<boolean> {
         try {
             // Vérifier si des utilisateurs sont rattachés à ce quartier

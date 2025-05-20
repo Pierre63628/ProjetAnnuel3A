@@ -33,7 +33,7 @@ services:
       - nextdoorbuddy-network
 
   db:
-    image: postgres:15
+    image: postgis/postgis:15-3.3
     container_name: nextdoorbuddy-db
     restart: always
     environment:

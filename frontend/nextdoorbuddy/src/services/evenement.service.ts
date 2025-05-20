@@ -57,7 +57,7 @@ export const getPastEvenements = async (): Promise<Evenement[]> => {
 };
 
 // Récupérer un événement par ID
-export const getEvenementById = async (id: number): Promise<Evenement | null> => {
+export const getEvenementById = async (id: number | string): Promise<Evenement | null> => {
     try {
         const data = await api.get(`/evenements/${id}`);
         return data;
