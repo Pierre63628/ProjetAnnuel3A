@@ -3,6 +3,8 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
+import AdminLogin from "./pages/AdminLogin"
+import AdminDashboard from "./pages/AdminDashboard"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import Events from "./pages/Events"
@@ -71,6 +73,12 @@ function AppRoutes() {
         <ProtectedRoute>
           <EventForm />
         </ProtectedRoute>
+      } />
+      <Route path="/system/admin" element={<AdminLogin />} />
+      <Route path="/admin/dashboard" element={
+        <AdminRoute>
+          <AdminDashboard />
+        </AdminRoute>
       } />
       <Route path="/admin/users" element={
         <AdminRoute>

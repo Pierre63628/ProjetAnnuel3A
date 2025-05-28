@@ -79,8 +79,15 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
 
     // Gérer les erreurs
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Erreur ${response.status}`);
+        let errorMessage = `Erreur ${response.status}`;
+        try {
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+        } catch (jsonError) {
+            // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
+            console.error('Erreur de parsing JSON:', jsonError);
+        }
+        throw new Error(errorMessage);
     }
 
     // Retourner les données

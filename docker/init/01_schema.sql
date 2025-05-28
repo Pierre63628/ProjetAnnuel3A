@@ -1,3 +1,6 @@
+-- Enable PostGIS extension
+CREATE EXTENSION IF NOT EXISTS postgis;
+
 -- Quartier
 CREATE TABLE "Quartier" (
   id SERIAL PRIMARY KEY,
@@ -5,6 +8,7 @@ CREATE TABLE "Quartier" (
   ville VARCHAR(100),
   code_postal VARCHAR(10),
   description TEXT,
+  geom GEOMETRY(MultiPolygon, 4326),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

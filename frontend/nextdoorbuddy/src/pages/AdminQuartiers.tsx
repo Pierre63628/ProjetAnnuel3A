@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Header from '../components/Header';
 
 interface Quartier {
@@ -243,7 +243,15 @@ const AdminQuartiers = () => {
         <div className="min-h-screen bg-gray-100">
             <Header />
             <div className="container mx-auto p-6">
-                <h1 className="mb-6 text-2xl font-bold">Gestion des Quartiers</h1>
+                <div className="mb-6 flex items-center justify-between">
+                    <h1 className="text-2xl font-bold">Gestion des Quartiers</h1>
+                    <Link
+                        to="/admin/dashboard"
+                        className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                    >
+                        ← Retour au tableau de bord
+                    </Link>
+                </div>
 
                 {error && (
                     <div className="mb-4 rounded-md bg-red-100 p-4 text-red-700">

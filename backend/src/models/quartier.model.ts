@@ -16,8 +16,8 @@ export class QuartierModel {
     static async findAll(): Promise<Quartier[]> {
         try {
             const query = `
-        SELECT id, nom_quartier, ville, code_postal, description, 
-               ST_AsGeoJSON(geom)::json AS geom 
+        SELECT id, nom_quartier, ville, code_postal, description,
+               ST_AsGeoJSON(geom)::json AS geom
         FROM "Quartier"
         ORDER BY ville, nom_quartier
       `;
@@ -116,13 +116,16 @@ export class QuartierModel {
                 fields.push(`description = $${paramIndex++}`);
                 values.push(quartierData.description);
             }
-
             if (quartierData.geom !== undefined) {
                 fields.push(`geom = ST_SetSRID(ST_GeomFromGeoJSON($${paramIndex++}), 4326)`);
                 values.push(JSON.stringify(quartierData.geom));
             }
 
-            if (fields.length === 0) return true;
+            if (fields.length === 0) {
+                return false; // Aucune mise à jour nécessaire
+            }
+
+            fields.push(`updated_at = CURRENT_TIMESTAMP`);
 
             values.push(id);
 
@@ -142,7 +145,7 @@ export class QuartierModel {
 
 
 
-// Supprimer un quartier
+    // Supprimer un quartier
     static async delete(id: number): Promise<boolean> {
         try {
             // Vérifier si des utilisateurs sont rattachés à ce quartier

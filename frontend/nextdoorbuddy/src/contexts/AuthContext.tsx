@@ -90,8 +90,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Échec de la connexion');
+                let errorMessage = 'Échec de la connexion';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.message || errorMessage;
+                } catch (jsonError) {
+                    // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
+                    console.error('Erreur de parsing JSON:', jsonError);
+                }
+                throw new Error(errorMessage);
             }
 
             const data = await response.json();
@@ -120,8 +127,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Échec de l\'inscription');
+                let errorMessage = 'Échec de l\'inscription';
+                try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.message || errorMessage;
+                } catch (jsonError) {
+                    // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
+                    console.error('Erreur de parsing JSON:', jsonError);
+                }
+                throw new Error(errorMessage);
             }
 
             const data = await response.json();
