@@ -1,4 +1,6 @@
 import pool from '../config/db.js';
+import QuartierRoutes from "../routes/quartier.routes.js";
+import {ApiErrors} from "../errors/ApiErrors.js";
 
 export interface Quartier {
     id?: number;
@@ -64,14 +66,29 @@ export class QuartierModel {
         }
     }
 
+    static async verifyQuartierNotInDb(quartierData: Quartier){
+       let quartiers : Quartier[] = await this.findAll();
+
+       quartiers.forEach(quartier => {
+           if(quartier.geom == quartierData.geom){
+                throw new ApiErrors("Erreur le quartier existe deja", 403)
+           }
+       })
+    }
+
     // Créer un nouveau quartier (avec géométrie GeoJSON)
     static async create(quartierData: Quartier): Promise<number> {
+
+
+        //PAs sur que ça soit utiles : il faut croiser les données avec celle en bdd.
+         this.verifyQuartierNotInDb(quartierData);
+
         try {
             const query = `
         INSERT INTO "Quartier"
           (nom_quartier, ville, code_postal, description, geom)
         VALUES
-          ($1, $2, $3, $4, ST_SetSRID(ST_GeomFromGeoJSON($5), 4326))
+          ($1, $2, $3, $4, ST_Multi(ST_GeomFromGeoJSON($5)))
         RETURNING id
       `;
             const geomString = JSON.stringify(quartierData.geom || null);

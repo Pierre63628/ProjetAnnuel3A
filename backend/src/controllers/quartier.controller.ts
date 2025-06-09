@@ -62,7 +62,11 @@ export const createQuartier = async (req: Request, res: Response) => {
             return res.status(403).json({ message: 'Accès refusé. Seuls les administrateurs peuvent créer des quartiers.' });
         }
 
-        const { nom_quartier, ville, code_postal, description } = req.body;
+        const { nom_quartier, ville, code_postal, description, geom} = req.body;
+
+        if (!geom || !geom.type || !geom.coordinates) {
+            return res.status(400).json({ message: 'La géométrie (geom) est requise et doit être valide.' });
+        }
 
         // Validation des données
         if (!nom_quartier) {
@@ -73,7 +77,8 @@ export const createQuartier = async (req: Request, res: Response) => {
             nom_quartier,
             ville,
             code_postal,
-            description
+            description,
+            geom
         };
 
         const id = await QuartierModel.create(quartierData);
