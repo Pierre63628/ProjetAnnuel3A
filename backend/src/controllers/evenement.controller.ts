@@ -63,6 +63,18 @@ export const getEvenementsByOrganisateur = async (req: Request, res: Response) =
     }
 };
 
+// Récupérer les événements d'un quartier
+export const getEvenementsByQuartier = async (req: Request, res: Response) => {
+    try {
+        const quartierId = parseInt(req.params.quartierId);
+        const evenements = await EvenementModel.findByQuartierId(quartierId);
+        res.status(200).json(evenements);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements du quartier:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des événements du quartier.' });
+    }
+};
+
 // Créer un nouvel événement
 export const createEvenement = async (req: Request, res: Response) => {
     try {
@@ -73,7 +85,8 @@ export const createEvenement = async (req: Request, res: Response) => {
             date_evenement: new Date(req.body.date_evenement),
             lieu: req.body.lieu,
             type_evenement: req.body.type_evenement,
-            photo_url: req.body.photo_url
+            photo_url: req.body.photo_url,
+            quartier_id: req.body.quartier_id
         };
 
         const id = await EvenementModel.create(evenementData);
@@ -111,6 +124,7 @@ export const updateEvenement = async (req: Request, res: Response) => {
         if (req.body.lieu !== undefined) evenementData.lieu = req.body.lieu;
         if (req.body.type_evenement !== undefined) evenementData.type_evenement = req.body.type_evenement;
         if (req.body.photo_url !== undefined) evenementData.photo_url = req.body.photo_url;
+        if (req.body.quartier_id !== undefined) evenementData.quartier_id = req.body.quartier_id;
 
         // Mettre à jour l'événement
         await EvenementModel.update(id, evenementData);
@@ -270,6 +284,7 @@ export default {
     getPastEvenements,
     getEvenementById,
     getEvenementsByOrganisateur,
+    getEvenementsByQuartier,
     createEvenement,
     updateEvenement,
     deleteEvenement,

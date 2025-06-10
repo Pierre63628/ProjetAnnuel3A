@@ -11,6 +11,8 @@ router.get('/upcoming', evenementController.getUpcomingEvenements);
 
 router.get('/past', evenementController.getPastEvenements);
 
+router.get('/quartier/:quartierId', evenementController.getEvenementsByQuartier);
+
 router.get('/:id', evenementController.getEvenementById);
 
 router.get('/search', evenementController.searchEvenements);

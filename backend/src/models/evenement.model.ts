@@ -9,6 +9,7 @@ export interface Evenement {
     lieu: string;
     type_evenement?: string;
     photo_url?: string;
+    quartier_id?: number;
     created_at?: Date;
     updated_at?: Date;
 }
@@ -52,7 +53,7 @@ export class EvenementModel {
     static async findByOrganisateurId(organisateurId: number): Promise<Evenement[]> {
         try {
             const query = `
-                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
                 LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
                 WHERE e.organisateur_id = $1
@@ -66,13 +67,31 @@ export class EvenementModel {
         }
     }
 
+    // Récupérer les événements d'un quartier
+    static async findByQuartierId(quartierId: number): Promise<Evenement[]> {
+        try {
+            const query = `
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
+                FROM "Evenement" e
+                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.quartier_id = $1
+                ORDER BY e.date_evenement DESC
+            `;
+            const result = await pool.query(query, [quartierId]);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding events by quartier id:', error);
+            throw error;
+        }
+    }
+
     // Créer un nouvel événement
     static async create(evenementData: Evenement): Promise<number> {
         try {
             const result = await pool.query(
                 `INSERT INTO "Evenement"
-                (organisateur_id, nom, description, date_evenement, lieu, type_evenement, photo_url)
-                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+                (organisateur_id, nom, description, date_evenement, lieu, type_evenement, photo_url, quartier_id)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
                 [
                     evenementData.organisateur_id,
                     evenementData.nom,
@@ -80,7 +99,8 @@ export class EvenementModel {
                     evenementData.date_evenement,
                     evenementData.lieu,
                     evenementData.type_evenement || null,
-                    evenementData.photo_url || null
+                    evenementData.photo_url || null,
+                    evenementData.quartier_id || null
                 ]
             );
 
@@ -128,6 +148,11 @@ export class EvenementModel {
             if (evenementData.photo_url !== undefined) {
                 fields.push(`photo_url = $${paramIndex++}`);
                 values.push(evenementData.photo_url);
+            }
+
+            if (evenementData.quartier_id !== undefined) {
+                fields.push(`quartier_id = $${paramIndex++}`);
+                values.push(evenementData.quartier_id);
             }
 
             // Si aucun champ à mettre à jour, retourner true

@@ -22,10 +22,10 @@ VALUES
 
 
 -- Événements
-INSERT INTO "Evenement" (organisateur_id, nom, description, date_evenement, lieu, type_evenement)
+INSERT INTO "Evenement" (organisateur_id, nom, description, date_evenement, lieu, type_evenement, quartier_id)
 VALUES
-  (1, 'Fête de voisins', 'Rencontre entre voisins du quartier', '2025-06-15 18:00:00', 'Place du marché', 'fête'),
-  (2, 'Atelier compost', 'Atelier découverte du compost', '2025-06-20 14:00:00', 'Jardin partagé', 'atelier');
+  (1, 'Fête de voisins', 'Rencontre entre voisins du quartier', '2025-06-15 18:00:00', 'Place du marché', 'fête', 1),
+  (2, 'Atelier compost', 'Atelier découverte du compost', '2025-06-20 14:00:00', 'Jardin partagé', 'atelier', 2);
 
 -- Participations
 INSERT INTO "Participation" (utilisateur_id, evenement_id, date_inscription)
