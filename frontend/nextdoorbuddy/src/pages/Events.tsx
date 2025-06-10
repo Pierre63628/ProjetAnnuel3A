@@ -31,7 +31,11 @@ const Events = () => {
                 let data: Evenement[] = [];
                 
                 if (filter === 'upcoming') {
-                    data = await getUpcomingEvenements();
+                    if (user?.quartier_id) {
+                        data = await getUpcomingEvenements(user.quartier_id);
+                    } else {
+                        setError('Quartier de l\'utilisateur inconnu');
+                    }
                 } else if (filter === 'past') {
                     data = await getPastEvenements();
                 } else {
