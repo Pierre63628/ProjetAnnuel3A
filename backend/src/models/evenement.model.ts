@@ -9,6 +9,7 @@ export interface Evenement {
     lieu: string;
     type_evenement?: string;
     photo_url?: string;
+    quartier_id?: number;
     created_at?: Date;
     updated_at?: Date;
 }
@@ -32,39 +33,38 @@ export class EvenementModel {
     }
 
     // Récupérer un événement par ID
-    static async findById(id: number): Promise<Evenement | null> {
+    static async findById(id: number, quartierId: number): Promise<Evenement | null> {
         try {
             const query = `
-                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
-                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.id = $1
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.id = $1 AND e.quartier_id = $2
             `;
-            const result = await pool.query(query, [id]);
+            const result = await pool.query(query, [id, quartierId]);
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
-            console.error('Error finding event by id:', error);
             throw error;
         }
     }
 
-    // Récupérer les événements d'un utilisateur
-    static async findByOrganisateurId(organisateurId: number): Promise<Evenement[]> {
+
+    static async findByOrganisateurId(organisateurId: number, quartierId: number): Promise<Evenement[]> {
         try {
             const query = `
-                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
-                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.organisateur_id = $1
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.organisateur_id = $1 AND e.quartier_id = $2
                 ORDER BY e.date_evenement DESC
             `;
-            const result = await pool.query(query, [organisateurId]);
+            const result = await pool.query(query, [organisateurId, quartierId]);
             return result.rows;
         } catch (error) {
-            console.error('Error finding events by organisateur id:', error);
             throw error;
         }
     }
+
 
     // Créer un nouvel événement
     static async create(evenementData: Evenement): Promise<number> {
@@ -172,57 +172,59 @@ export class EvenementModel {
         }
     }
 
-    // Rechercher des événements par nom, description ou lieu
-    static async search(query: string): Promise<Evenement[]> {
+    static async search(query: string, quartierId: number): Promise<Evenement[]> {
         try {
             const searchTerm = `%${query}%`;
             const result = await pool.query(
-                `SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
-                FROM "Evenement" e
-                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE (e.nom ILIKE $1 OR e.description ILIKE $1 OR e.lieu ILIKE $1 OR e.type_evenement ILIKE $1)
-                ORDER BY e.date_evenement DESC`,
-                [searchTerm]
+                `SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
+                 FROM "Evenement" e
+                          LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                 WHERE (e.nom ILIKE $1 OR e.description ILIKE $1 OR e.lieu ILIKE $1 OR e.type_evenement ILIKE $1)
+                   AND e.quartier_id = $2
+                 ORDER BY e.date_evenement DESC`,
+                [searchTerm, quartierId]
             );
             return result.rows;
         } catch (error) {
-            console.error('Error searching events:', error);
+            console.error('Error searching events by quartier:', error);
             throw error;
         }
     }
+
 
     // Récupérer les événements à venir
-    static async findUpcoming(): Promise<Evenement[]> {
+    static async findUpcoming(quartierId: number): Promise<Evenement[]> {
         try {
             const query = `
-                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
-                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.date_evenement >= NOW()
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.date_evenement >= NOW() AND e.quartier_id = $1
                 ORDER BY e.date_evenement ASC
             `;
-            const result = await pool.query(query);
+            const result = await pool.query(query, [quartierId]);
             return result.rows;
         } catch (error) {
-            console.error('Error finding upcoming events:', error);
+            console.error('Error finding upcoming events by quartier:', error);
             throw error;
         }
     }
 
+
     // Récupérer les événements passés
-    static async findPast(): Promise<Evenement[]> {
+    static async findPast(quartierId: number): Promise<Evenement[]> {
         try {
             const query = `
-                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
-                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.date_evenement < NOW()
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.date_evenement < NOW() AND e.quartier_id = $1
                 ORDER BY e.date_evenement DESC
             `;
-            const result = await pool.query(query);
+            const result = await pool.query(query, [quartierId]);
             return result.rows;
         } catch (error) {
-            console.error('Error finding past events:', error);
+            console.error('Error finding past events by quartier:', error);
             throw error;
         }
     }

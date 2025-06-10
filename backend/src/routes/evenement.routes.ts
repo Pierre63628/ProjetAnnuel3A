@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', evenementController.getAllEvenements);
 
-router.get('/upcoming', evenementController.getUpcomingEvenements);
+router.get('/upcoming/:id', evenementController.getUpcomingEvenements);
 
 router.get('/past', evenementController.getPastEvenements);
 

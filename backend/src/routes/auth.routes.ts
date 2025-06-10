@@ -20,4 +20,7 @@ router.post('/logout', authController.logout);
 // Route pour obtenir les informations de l'utilisateur connecté
 router.get('/me', authenticateJWT, authController.getMe);
 
+// Route de stats
+router.get('/stats',authController.getStats)
+
 export default router;

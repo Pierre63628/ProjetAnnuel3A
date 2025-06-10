@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { EvenementModel, Evenement } from '../models/evenement.model.js';
+import { ApiErrors } from '../errors/ApiErrors.js';
 
-// Récupérer tous les événements
+// Récupérer tous les événements (sans filtre quartier)
 export const getAllEvenements = async (req: Request, res: Response) => {
     try {
         const evenements = await EvenementModel.findAll();
@@ -15,7 +16,8 @@ export const getAllEvenements = async (req: Request, res: Response) => {
 // Récupérer les événements à venir
 export const getUpcomingEvenements = async (req: Request, res: Response) => {
     try {
-        const evenements = await EvenementModel.findUpcoming();
+        const quartierId = parseInt(req.params.id);
+        const evenements = await EvenementModel.findUpcoming(quartierId);
         res.status(200).json(evenements);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements à venir:', error);
@@ -26,7 +28,8 @@ export const getUpcomingEvenements = async (req: Request, res: Response) => {
 // Récupérer les événements passés
 export const getPastEvenements = async (req: Request, res: Response) => {
     try {
-        const evenements = await EvenementModel.findPast();
+        const quartierId = req.user.quartier_id;
+        const evenements = await EvenementModel.findPast(quartierId);
         res.status(200).json(evenements);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements passés:', error);
@@ -38,7 +41,8 @@ export const getPastEvenements = async (req: Request, res: Response) => {
 export const getEvenementById = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        const evenement = await EvenementModel.findById(id);
+        const quartierId = req.user.quartier_id;
+        const evenement = await EvenementModel.findById(id, quartierId);
 
         if (!evenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
@@ -55,7 +59,8 @@ export const getEvenementById = async (req: Request, res: Response) => {
 export const getEvenementsByOrganisateur = async (req: Request, res: Response) => {
     try {
         const organisateurId = parseInt(req.params.organisateurId);
-        const evenements = await EvenementModel.findByOrganisateurId(organisateurId);
+        const quartierId = req.user.quartier_id;
+        const evenements = await EvenementModel.findByOrganisateurId(organisateurId, quartierId);
         res.status(200).json(evenements);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements de l\'organisateur:', error);
@@ -73,16 +78,16 @@ export const createEvenement = async (req: Request, res: Response) => {
             date_evenement: new Date(req.body.date_evenement),
             lieu: req.body.lieu,
             type_evenement: req.body.type_evenement,
-            photo_url: req.body.photo_url
+            photo_url: req.body.photo_url,
+            quartier_id: req.user.quartier_id // forcer cohérence avec l'utilisateur
         };
 
         const id = await EvenementModel.create(evenementData);
-        const newEvenement = await EvenementModel.findById(id);
+        const newEvenement = await EvenementModel.findById(id, req.user.quartier_id);
 
         res.status(201).json(newEvenement);
     } catch (error) {
-        console.error('Erreur lors de la création de l\'événement:', error);
-        res.status(500).json({ message: 'Erreur serveur lors de la création de l\'événement.' });
+        throw new ApiErrors("Erreur lors de la création de l'événement", 500);
     }
 };
 
@@ -90,21 +95,18 @@ export const createEvenement = async (req: Request, res: Response) => {
 export const updateEvenement = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(id);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(id, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
 
-        // Vérifier si l'utilisateur est l'organisateur ou un admin
         if (existingEvenement.organisateur_id !== req.user.id && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Accès refusé. Vous n\'êtes pas l\'organisateur de cet événement.' });
         }
 
-        // Préparer les données à mettre à jour
         const evenementData: Partial<Evenement> = {};
-        
         if (req.body.nom !== undefined) evenementData.nom = req.body.nom;
         if (req.body.description !== undefined) evenementData.description = req.body.description;
         if (req.body.date_evenement !== undefined) evenementData.date_evenement = new Date(req.body.date_evenement);
@@ -112,12 +114,9 @@ export const updateEvenement = async (req: Request, res: Response) => {
         if (req.body.type_evenement !== undefined) evenementData.type_evenement = req.body.type_evenement;
         if (req.body.photo_url !== undefined) evenementData.photo_url = req.body.photo_url;
 
-        // Mettre à jour l'événement
         await EvenementModel.update(id, evenementData);
-        
-        // Récupérer l'événement mis à jour
-        const updatedEvenement = await EvenementModel.findById(id);
-        
+        const updatedEvenement = await EvenementModel.findById(id, quartierId);
+
         res.status(200).json(updatedEvenement);
     } catch (error) {
         console.error('Erreur lors de la mise à jour de l\'événement:', error);
@@ -129,21 +128,18 @@ export const updateEvenement = async (req: Request, res: Response) => {
 export const deleteEvenement = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(id);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(id, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
 
-        // Vérifier si l'utilisateur est l'organisateur ou un admin
         if (existingEvenement.organisateur_id !== req.user.id && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Accès refusé. Vous n\'êtes pas l\'organisateur de cet événement.' });
         }
 
-        // Supprimer l'événement
         await EvenementModel.delete(id);
-        
         res.status(200).json({ message: 'Événement supprimé avec succès.' });
     } catch (error) {
         console.error('Erreur lors de la suppression de l\'événement:', error);
@@ -160,7 +156,8 @@ export const searchEvenements = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Le paramètre de recherche est obligatoire.' });
         }
 
-        const evenements = await EvenementModel.search(query);
+        const quartierId = req.user.quartier_id;
+        const evenements = await EvenementModel.search(query, quartierId);
         res.status(200).json(evenements);
     } catch (error) {
         console.error('Erreur lors de la recherche d\'événements:', error);
@@ -172,9 +169,9 @@ export const searchEvenements = async (req: Request, res: Response) => {
 export const getEvenementParticipants = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(id);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(id, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
@@ -192,21 +189,18 @@ export const participateToEvenement = async (req: Request, res: Response) => {
     try {
         const evenementId = parseInt(req.params.id);
         const utilisateurId = req.user.id;
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(evenementId);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(evenementId, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
 
-        // Vérifier si l'événement est déjà passé
         if (new Date(existingEvenement.date_evenement) < new Date()) {
             return res.status(400).json({ message: 'Impossible de participer à un événement passé.' });
         }
 
-        // Ajouter la participation
         await EvenementModel.addParticipant(evenementId, utilisateurId);
-        
         res.status(200).json({ message: 'Participation enregistrée avec succès.' });
     } catch (error) {
         console.error('Erreur lors de l\'ajout de la participation:', error);
@@ -214,27 +208,24 @@ export const participateToEvenement = async (req: Request, res: Response) => {
     }
 };
 
-// Annuler sa participation à un événement
+// Annuler sa participation
 export const cancelParticipation = async (req: Request, res: Response) => {
     try {
         const evenementId = parseInt(req.params.id);
         const utilisateurId = req.user.id;
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(evenementId);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(evenementId, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
 
-        // Vérifier si l'utilisateur participe à l'événement
         const isParticipant = await EvenementModel.isParticipant(evenementId, utilisateurId);
         if (!isParticipant) {
             return res.status(400).json({ message: 'Vous ne participez pas à cet événement.' });
         }
 
-        // Supprimer la participation
         await EvenementModel.removeParticipant(evenementId, utilisateurId);
-        
         res.status(200).json({ message: 'Participation annulée avec succès.' });
     } catch (error) {
         console.error('Erreur lors de l\'annulation de la participation:', error);
@@ -242,21 +233,19 @@ export const cancelParticipation = async (req: Request, res: Response) => {
     }
 };
 
-// Vérifier si un utilisateur participe à un événement
+// Vérifier la participation
 export const checkParticipation = async (req: Request, res: Response) => {
     try {
         const evenementId = parseInt(req.params.id);
         const utilisateurId = req.user.id;
-        
-        // Vérifier si l'événement existe
-        const existingEvenement = await EvenementModel.findById(evenementId);
+        const quartierId = req.user.quartier_id;
+
+        const existingEvenement = await EvenementModel.findById(evenementId, quartierId);
         if (!existingEvenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
         }
 
-        // Vérifier si l'utilisateur participe à l'événement
         const isParticipant = await EvenementModel.isParticipant(evenementId, utilisateurId);
-        
         res.status(200).json({ isParticipant });
     } catch (error) {
         console.error('Erreur lors de la vérification de la participation:', error);

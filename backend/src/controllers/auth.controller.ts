@@ -6,6 +6,7 @@ import jwtConfig from '../config/jwt.js';
 import { promisify } from 'util';
 import { ApiErrors } from "../errors/ApiErrors.js";
 import { GeoService } from '../services/geo.service.js';
+import pool from "../config/db.js";
 
 const verifyJwt = promisify(jwt.verify.bind(jwt));
 
@@ -170,7 +171,8 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
             nom: user.nom,
             prenom: user.prenom,
             email: user.email,
-            role: user.role
+            role: user.role,
+            quartier_id: user.quartier_id
         }
     });
 });
@@ -236,10 +238,30 @@ export const getMe = asyncHandler(async (req: Request, res: Response) => {
     res.status(200).json(userWithoutPassword);
 });
 
+export const getStats = asyncHandler(async (req: Request, res: Response) => {
+    try {
+        const [users, quartiers, events] = await Promise.all([
+            pool.query('SELECT COUNT(*) FROM "Utilisateur"'),
+            pool.query('SELECT COUNT(*) FROM "Quartier"'),
+            pool.query('SELECT COUNT(*) FROM "Evenement"')
+        ]);
+
+        res.json({
+            totalUsers: parseInt(users.rows[0].count),
+            totalQuartiers: parseInt(quartiers.rows[0].count),
+            totalEvents: parseInt(events.rows[0].count)
+        });
+    } catch (error) {
+        console.error('Erreur API /stats:', error);
+        res.status(500).json({ message: 'Erreur lors de la récupération des statistiques' });
+    }
+});
+
 export default {
     register,
     login,
     refreshToken,
     logout,
-    getMe
+    getMe,
+    getStats
 };
