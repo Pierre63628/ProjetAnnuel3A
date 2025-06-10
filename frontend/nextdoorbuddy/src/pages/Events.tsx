@@ -31,7 +31,8 @@ const Events = () => {
                 let data: Evenement[] = [];
                 
                 if (filter === 'upcoming') {
-                    data = await getUpcomingEvenements();
+                    const qId = user?.quartier_id ?? 0;
+                    data = await getUpcomingEvenements(qId);
                 } else if (filter === 'past') {
                     data = await getPastEvenements();
                 } else {

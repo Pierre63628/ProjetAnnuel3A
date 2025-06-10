@@ -35,9 +35,11 @@ export const getAllEvenements = async (): Promise<Evenement[]> => {
 };
 
 // Récupérer les événements à venir
-export const getUpcomingEvenements = async (): Promise<Evenement[]> => {
+export const getUpcomingEvenements = async (
+    quartierId: number | string
+): Promise<Evenement[]> => {
     try {
-        const data = await api.get('/evenements/upcoming');
+        const data = await api.get(`/evenements/upcoming/${quartierId}`);
         return data;
     } catch (error) {
         console.error('Erreur lors de la récupération des événements à venir');
