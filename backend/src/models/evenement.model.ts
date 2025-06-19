@@ -32,16 +32,33 @@ export class EvenementModel {
         }
     }
 
+
+    static async findAllByQuartier(quartierId: number): Promise<Evenement[]> {
+        try {
+            const query = `
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom 
+                FROM "Evenement" e
+                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id WHERE e.quartier_id = $1
+                ORDER BY e.date_evenement DESC
+            `;
+            const result = await pool.query(query, [quartierId]);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding all events:', error);
+            throw error;
+        }
+    }
+
     // Récupérer un événement par ID
-    static async findById(id: number, quartierId: number): Promise<Evenement | null> {
+    static async findById(id: number): Promise<Evenement | null> {
         try {
             const query = `
                 SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
                          LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.id = $1 AND e.quartier_id = $2
+                WHERE e.id = $1
             `;
-            const result = await pool.query(query, [id, quartierId]);
+            const result = await pool.query(query, [id]);
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             throw error;
@@ -193,7 +210,7 @@ export class EvenementModel {
 
 
     // Récupérer les événements à venir
-    static async findUpcoming(quartierId: number): Promise<Evenement[]> {
+    static async findUpcomingByQuartier(quartierId: number): Promise<Evenement[]> {
         try {
             const query = `
                 SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
@@ -203,6 +220,24 @@ export class EvenementModel {
                 ORDER BY e.date_evenement ASC
             `;
             const result = await pool.query(query, [quartierId]);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding upcoming events by quartier:', error);
+            throw error;
+        }
+    }
+
+    // Récupérer les événements à venir
+    static async findUpcoming(): Promise<Evenement[]> {
+        try {
+            const query = `
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
+                FROM "Evenement" e
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.date_evenement >= NOW()
+                ORDER BY e.date_evenement ASC
+            `;
+            const result = await pool.query(query);
             return result.rows;
         } catch (error) {
             console.error('Error finding upcoming events by quartier:', error);

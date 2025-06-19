@@ -1,5 +1,8 @@
 import express from 'express';
-import evenementController from '../controllers/evenement.controller.js';
+import evenementController, {
+    getAllEvenementsByQuartier, getUpcomingEvenement,
+    getUpcomingEvenementsByquartier
+} from '../controllers/evenement.controller.js';
 import { authenticateJWT } from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
@@ -7,7 +10,11 @@ const router = express.Router();
 
 router.get('/', evenementController.getAllEvenements);
 
-router.get('/upcoming/:id', evenementController.getUpcomingEvenements);
+router.get('/all/:idQuartier', evenementController.getAllEvenementsByQuartier);
+
+router.get('/upcoming/:idQuartier', evenementController.getUpcomingEvenementsByquartier);
+
+router.get('/upcoming/', evenementController.getUpcomingEvenement);
 
 router.get('/past', evenementController.getPastEvenements);
 

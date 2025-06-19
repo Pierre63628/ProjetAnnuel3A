@@ -13,11 +13,33 @@ export const getAllEvenements = async (req: Request, res: Response) => {
     }
 };
 
-// Récupérer les événements à venir
-export const getUpcomingEvenements = async (req: Request, res: Response) => {
+export const getAllEvenementsByQuartier = async (req: Request, res: Response) => {
     try {
-        const quartierId = parseInt(req.params.id);
-        const evenements = await EvenementModel.findUpcoming(quartierId);
+        const quartierId = parseInt(req.params.idQuartier);
+        const evenements = await EvenementModel.findAllByQuartier(quartierId);
+        res.status(200).json(evenements);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des événements.' });
+    }
+};
+
+
+// Récupérer les événements à venir
+export const getUpcomingEvenementsByquartier = async (req: Request, res: Response) => {
+    try {
+        const quartierId = parseInt(req.params.idQuartier);
+        const evenements = await EvenementModel.findUpcomingByQuartier(quartierId);
+        res.status(200).json(evenements);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements à venir:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des événements à venir.' });
+    }
+};
+
+export const getUpcomingEvenement = async (req: Request, res: Response) => {
+    try {
+        const evenements = await EvenementModel.findUpcoming();
         res.status(200).json(evenements);
     } catch (error) {
         console.error('Erreur lors de la récupération des événements à venir:', error);
@@ -41,8 +63,7 @@ export const getPastEvenements = async (req: Request, res: Response) => {
 export const getEvenementById = async (req: Request, res: Response) => {
     try {
         const id = parseInt(req.params.id);
-        const quartierId = req.user.quartier_id;
-        const evenement = await EvenementModel.findById(id, quartierId);
+        const evenement = await EvenementModel.findById(id);
 
         if (!evenement) {
             return res.status(404).json({ message: 'Événement non trouvé.' });
@@ -255,7 +276,9 @@ export const checkParticipation = async (req: Request, res: Response) => {
 
 export default {
     getAllEvenements,
-    getUpcomingEvenements,
+    getAllEvenementsByQuartier,
+    getUpcomingEvenementsByquartier,
+    getUpcomingEvenement,
     getPastEvenements,
     getEvenementById,
     getEvenementsByOrganisateur,

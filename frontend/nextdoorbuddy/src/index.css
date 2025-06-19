@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @theme {
     /* Définir explicitement les couleurs de base */
@@ -6,4 +7,12 @@
     --color-red: #EF4444;
     --color-blue: #3B82F6;
     --color-purple: #8B5CF6;
+}
+
+/* Custom styles for better visual hierarchy */
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
