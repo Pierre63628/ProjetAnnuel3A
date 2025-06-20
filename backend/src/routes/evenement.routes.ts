@@ -14,6 +14,8 @@ router.get('/all/:idQuartier', evenementController.getAllEvenementsByQuartier);
 
 router.get('/upcoming/:idQuartier', evenementController.getUpcomingEvenementsByquartier);
 
+router.get('/past/:idQuartier', evenementController.getPastEvenementsByQuartier);
+
 router.get('/upcoming/', evenementController.getUpcomingEvenement);
 
 router.get('/past', evenementController.getPastEvenements);
@@ -35,6 +37,10 @@ router.get('/:id/participants', authenticateJWT, evenementController.getEvenemen
 router.post('/:id/participate', authenticateJWT, evenementController.participateToEvenement);
 
 router.delete('/:id/participate', authenticateJWT, evenementController.cancelParticipation);
+
+router.get('/:id/check-participation', authenticateJWT, evenementController.checkParticipation);
+
+router.get('/user/my-events', authenticateJWT, evenementController.getUserParticipations);
 
 router.get('/:id/check-participation', authenticateJWT, evenementController.checkParticipation);
 

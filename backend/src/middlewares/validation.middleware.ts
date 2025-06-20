@@ -46,8 +46,17 @@ export const loginValidationRules = [
     body('password').notEmpty().withMessage('Le mot de passe est requis')
 ];
 
+// Règles de validation pour les événements
+export const eventValidationRules = [
+    body('nom').notEmpty().withMessage('Le nom de l\'événement est requis'),
+    body('date_evenement').isISO8601().withMessage('Date invalide'),
+    body('detailed_address').notEmpty().withMessage('L\'adresse est requise'),
+    body('url').optional().isURL().withMessage('URL invalide')
+];
+
 export default {
     validateRequest,
     registerValidationRules,
-    loginValidationRules
+    loginValidationRules,
+    eventValidationRules
 };

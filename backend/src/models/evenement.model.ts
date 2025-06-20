@@ -7,8 +7,10 @@ export interface Evenement {
     description?: string;
     date_evenement: Date;
     lieu: string;
+    detailed_address: string;
     type_evenement?: string;
     photo_url?: string;
+    url?: string;
     quartier_id?: number;
     created_at?: Date;
     updated_at?: Date;
@@ -66,16 +68,16 @@ export class EvenementModel {
     }
 
 
-    static async findByOrganisateurId(organisateurId: number, quartierId: number): Promise<Evenement[]> {
+    static async findByOrganisateurId(organisateurId: number): Promise<Evenement[]> {
         try {
             const query = `
                 SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                 FROM "Evenement" e
                          LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                WHERE e.organisateur_id = $1 AND e.quartier_id = $2
+                WHERE e.organisateur_id = $1
                 ORDER BY e.date_evenement DESC
             `;
-            const result = await pool.query(query, [organisateurId, quartierId]);
+            const result = await pool.query(query, [organisateurId]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -88,16 +90,19 @@ export class EvenementModel {
         try {
             const result = await pool.query(
                 `INSERT INTO "Evenement"
-                (organisateur_id, nom, description, date_evenement, lieu, type_evenement, photo_url)
-                VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+                (organisateur_id, nom, description, date_evenement, lieu, detailed_address, type_evenement, photo_url, url, quartier_id)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
                 [
                     evenementData.organisateur_id,
                     evenementData.nom,
                     evenementData.description || null,
                     evenementData.date_evenement,
-                    evenementData.lieu,
+                    evenementData.lieu || evenementData.detailed_address, // Fallback for backward compatibility
+                    evenementData.detailed_address,
                     evenementData.type_evenement || null,
-                    evenementData.photo_url || null
+                    evenementData.photo_url || null,
+                    evenementData.url || null,
+                    evenementData.quartier_id || null
                 ]
             );
 
@@ -137,6 +142,11 @@ export class EvenementModel {
                 values.push(evenementData.lieu);
             }
 
+            if (evenementData.detailed_address !== undefined) {
+                fields.push(`detailed_address = $${paramIndex++}`);
+                values.push(evenementData.detailed_address);
+            }
+
             if (evenementData.type_evenement !== undefined) {
                 fields.push(`type_evenement = $${paramIndex++}`);
                 values.push(evenementData.type_evenement);
@@ -145,6 +155,11 @@ export class EvenementModel {
             if (evenementData.photo_url !== undefined) {
                 fields.push(`photo_url = $${paramIndex++}`);
                 values.push(evenementData.photo_url);
+            }
+
+            if (evenementData.url !== undefined) {
+                fields.push(`url = $${paramIndex++}`);
+                values.push(evenementData.url);
             }
 
             // Si aucun champ à mettre à jour, retourner true
@@ -196,7 +211,8 @@ export class EvenementModel {
                 `SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
                  FROM "Evenement" e
                           LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
-                 WHERE (e.nom ILIKE $1 OR e.description ILIKE $1 OR e.lieu ILIKE $1 OR e.type_evenement ILIKE $1)
+                 WHERE (e.nom ILIKE $1 OR e.description ILIKE $1 OR
+                        COALESCE(e.detailed_address, e.lieu) ILIKE $1 OR e.type_evenement ILIKE $1)
                    AND e.quartier_id = $2
                  ORDER BY e.date_evenement DESC`,
                 [searchTerm, quartierId]
@@ -247,7 +263,25 @@ export class EvenementModel {
 
 
     // Récupérer les événements passés
-    static async findPast(quartierId: number): Promise<Evenement[]> {
+    static async findPast(): Promise<Evenement[]> {
+        try {
+            const query = `
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
+                FROM "Evenement" e
+                         LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                WHERE e.date_evenement < NOW()
+                ORDER BY e.date_evenement DESC
+            `;
+            const result = await pool.query(query);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding past events by quartier:', error);
+            throw error;
+        }
+    }
+
+
+    static async findPastByQuartier(quartierId: number): Promise<Evenement[]> {
         try {
             const query = `
                 SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom
@@ -339,6 +373,42 @@ export class EvenementModel {
             return result.rows.length > 0;
         } catch (error) {
             console.error('Error checking if user is participant:', error);
+            throw error;
+        }
+    }
+
+    // Compter le nombre de participants à un événement
+    static async getParticipantCount(evenementId: number): Promise<number> {
+        try {
+            const result = await pool.query(
+                `SELECT COUNT(*) as count FROM "Participation"
+                WHERE evenement_id = $1`,
+                [evenementId]
+            );
+
+            return parseInt(result.rows[0].count);
+        } catch (error) {
+            console.error('Error getting participant count:', error);
+            throw error;
+        }
+    }
+
+    // Récupérer les événements auxquels un utilisateur participe
+    static async findUserParticipations(utilisateurId: number): Promise<Evenement[]> {
+        try {
+            const query = `
+                SELECT e.*, u.nom as organisateur_nom, u.prenom as organisateur_prenom,
+                       p.date_inscription
+                FROM "Evenement" e
+                LEFT JOIN "Utilisateur" u ON e.organisateur_id = u.id
+                JOIN "Participation" p ON e.id = p.evenement_id
+                WHERE p.utilisateur_id = $1
+                ORDER BY e.date_evenement ASC
+            `;
+            const result = await pool.query(query, [utilisateurId]);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding user participations:', error);
             throw error;
         }
     }
