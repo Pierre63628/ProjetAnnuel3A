@@ -1,8 +1,13 @@
+import { createServer } from 'http';
 import app from './app.js';
 import pool from './config/db.js';
 import { TokenModel } from './models/token.model.js';
+import { WebSocketService } from './services/websocket.service.js';
 
 const PORT = process.env.PORT || 3000;
+
+// Create HTTP server
+const server = createServer(app);
 
 // Test de connexion DB
 pool.query('SELECT NOW()', (err) => {
@@ -23,7 +28,12 @@ setInterval(async () => {
     }
 }, 24 * 60 * 60 * 1000);
 
+// Initialize WebSocket service
+const webSocketService = new WebSocketService(server);
+
+
 // Lancer le serveur
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`🚀 Serveur démarré sur le port ${PORT}`);
+    console.log(`💬 WebSocket service initialized` ,webSocketService);
 });

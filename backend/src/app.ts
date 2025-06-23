@@ -7,6 +7,7 @@ import userRoutes from './routes/user.routes.js';
 import quartierRoutes from './routes/quartier.routes.js';
 import utilisateurQuartierRoutes from './routes/utilisateur-quartier.routes.js';
 import evenementRoutes from './routes/evenement.routes.js';
+import messagingRoutes from './routes/messaging.routes.js';
 
 import { errorHandler } from './controllers/errors.controller.js';
 import {ApiErrors} from "./errors/ApiErrors.js";
@@ -27,6 +28,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/quartiers', quartierRoutes);
 app.use('/api/users-quartiers', utilisateurQuartierRoutes);
 app.use('/api/evenements', evenementRoutes);
+app.use('/api/messaging', messagingRoutes);
 
 app.use((req, res, next) => {
     res.status(404).json({
