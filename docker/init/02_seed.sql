@@ -54,3 +54,5 @@ VALUES
   (1, 3, FALSE, 'actif'), -- Jean Dupont est aussi rattaché au Marais
   (2, 2, TRUE, 'actif'),  -- Claire Yuri a pour quartier principal Montmartre
   (3, 1, TRUE, 'actif');  -- Lucas Verrecchia a pour quartier principal le Centre de Paris
+
+

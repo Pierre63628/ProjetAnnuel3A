@@ -13,6 +13,7 @@ export interface Evenement {
     updated_at?: string;
     organisateur_nom?: string;
     organisateur_prenom?: string;
+    detailed_address?: string;
 }
 
 export interface Participant {
@@ -24,9 +25,10 @@ export interface Participant {
 }
 
 // Récupérer tous les événements
-export const getAllEvenements = async (): Promise<Evenement[]> => {
+export const getAllEvenements = async (
+): Promise<Evenement[]> => {
     try {
-        const data = await api.get('/evenements');
+        const data = await api.get(`/evenements/`);
         return data;
     } catch (error) {
         console.error('Erreur lors de la récupération des événements');
@@ -34,9 +36,32 @@ export const getAllEvenements = async (): Promise<Evenement[]> => {
     }
 };
 
+export const getAllEvenementsByQuartier = async (
+    quartierId: number
+): Promise<Evenement[]> => {
+    try {
+        const data = await api.get(`/evenements/all/${quartierId}`);
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements');
+        return [];
+    }
+};
+
+
 // Récupérer les événements à venir
-export const getUpcomingEvenements = async (
-    quartierId: number | string
+export const getAllUpcomingEvenements = async (): Promise<Evenement[]> => {
+    try {
+        const data = await api.get(`/evenements/upcoming/`);
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements à venir');
+        return [];
+    }
+};
+
+export const getUpcomingEvenementsByQuartier = async (
+    quartierId: number
 ): Promise<Evenement[]> => {
     try {
         const data = await api.get(`/evenements/upcoming/${quartierId}`);
@@ -58,10 +83,35 @@ export const getPastEvenements = async (): Promise<Evenement[]> => {
     }
 };
 
+// Récupérer les événements passés
+export const getPastEvenementsByQuartier = async (
+    quartierId: number
+): Promise<Evenement[]> => {
+    try {
+        const data = await api.get(`/evenements/past/${quartierId}`);
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements passés');
+        return [];
+    }
+};
+
+
+export const getAllPastEvenements = async (): Promise<Evenement[]> => {
+    try {
+        const data = await api.get('/evenements/past');
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des événements passés');
+        return [];
+    }
+};
+
+
 // Récupérer un événement par ID
 export const getEvenementById = async (id: number | string): Promise<Evenement | null> => {
     try {
-        const data = await api.get(`/evenements/${id}`);
+        const data = await api.get(`/evenements/${id}/`);
         return data;
     } catch (error) {
         console.error(`Erreur lors de la récupération de l'événement ${id}`);
@@ -170,12 +220,12 @@ export const checkParticipation = async (id: number): Promise<boolean> => {
 
 export default {
     getAllEvenements,
-    getUpcomingEvenements,
     getPastEvenements,
     getEvenementById,
     getEvenementsByOrganisateur,
     createEvenement,
     updateEvenement,
+    getPastEvenementsByQuartier,
     deleteEvenement,
     searchEvenements,
     getEvenementParticipants,

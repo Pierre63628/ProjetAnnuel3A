@@ -3,241 +3,187 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import {
+    getPastEvenementsByQuartier,
+    getAllEvenementsByQuartier,
+    getAllUpcomingEvenements,
+    getAllPastEvenements,
     getAllEvenements,
-    getUpcomingEvenements,
-    getPastEvenements,
-    Evenement,
-    deleteEvenement
+    deleteEvenement,
 } from '../services/evenement.service';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
+import { canDeleteEvent } from '../utils/permissions';
 
 const Events = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    const [evenements, setEvenements] = useState<Evenement[]>([]);
-    const [filteredEvenements, setFilteredEvenements] = useState<Evenement[]>([]);
+    const [evenements, setEvenements] = useState([]);
+    const [filteredEvenements, setFilteredEvenements] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [filter, setFilter] = useState('all'); // 'all', 'upcoming', 'past'
+    const [filter, setFilter] = useState('all');
 
-    // Charger les événements
     useEffect(() => {
         const fetchEvenements = async () => {
             try {
                 setLoading(true);
                 setError('');
 
-                let data: Evenement[] = [];
-                
-                if (filter === 'upcoming') {
-                    const qId = user?.quartier_id ?? 0;
-                    data = await getUpcomingEvenements(qId);
-                } else if (filter === 'past') {
-                    data = await getPastEvenements();
+                let data = [];
+                const isAdmin = user?.role === 'admin';
+                const qId = user?.quartier_id || 0;
+
+                if (isAdmin) {
+                    if (filter === 'upcoming') data = await getAllUpcomingEvenements();
+                    else if (filter === 'past') data = await getAllPastEvenements();
+                    else data = await getAllEvenements();
                 } else {
-                    data = await getAllEvenements();
+                    if (filter === 'upcoming') data = await getPastEvenementsByQuartier(qId);
+                    else if (filter === 'past') data = await getPastEvenementsByQuartier(qId);
+                    else data = await getAllEvenementsByQuartier(qId);
                 }
 
                 setEvenements(data);
                 setFilteredEvenements(data);
-            } catch (error) {
+            } catch (err) {
+                console.error(err);
                 setError('Erreur lors du chargement des événements');
-                console.error(error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchEvenements();
-    }, [filter]);
+    }, [filter, user]);
 
-    // Filtrer les événements en fonction du terme de recherche
     useEffect(() => {
-        if (searchTerm.trim() === '') {
-            setFilteredEvenements(evenements);
-        } else {
-            const filtered = evenements.filter(evenement =>
-                evenement.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                (evenement.description && evenement.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                (evenement.lieu && evenement.lieu.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                (evenement.type_evenement && evenement.type_evenement.toLowerCase().includes(searchTerm.toLowerCase()))
-            );
-            setFilteredEvenements(filtered);
-        }
+        if (!searchTerm.trim()) return setFilteredEvenements(evenements);
+        setFilteredEvenements(
+            evenements.filter((e) =>
+                [e.nom, e.description, e.lieu, e.type_evenement]
+                    .filter(Boolean)
+                    .some((field) => field.toLowerCase().includes(searchTerm.toLowerCase()))
+            )
+        );
     }, [searchTerm, evenements]);
 
-    const handleDeleteEvenement = async (id: number) => {
+    const handleDeleteEvenement = async (id) => {
         try {
             await deleteEvenement(id);
             setEvenements((prev) => prev.filter((e) => e.id !== id));
             setFilteredEvenements((prev) => prev.filter((e) => e.id !== id));
-        } catch (error) {
-            console.error("Erreur lors de la suppression de l'événement :", error);
-            alert("Une erreur est survenue lors de la suppression.");
+        } catch (err) {
+            console.error(err);
+            alert("Impossible de supprimer l'événement.");
         }
     };
 
-
-    // Formater la date
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('fr-FR', {
+    const formatDate = (dateString) =>
+        new Date(dateString).toLocaleDateString('fr-FR', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         });
-    };
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gradient-to-br from-white to-blue-50">
             <Header />
             <div className="container mx-auto p-6">
                 <div className="mb-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Événements</h1>
-                    <Link
-                        to="/events/create"
-                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                    >
-                        Créer un événement
-                    </Link>
+                    <h1 className="text-3xl font-extrabold text-blue-700">Événements</h1>
+                    <Button asChild variant="solid">
+                        <Link to="/events/create">Créer un événement</Link>
+                    </Button>
                 </div>
 
                 {/* Filtres et recherche */}
-                <div className="mb-6 flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-                    <div className="flex space-x-4">
-                        <button
-                            onClick={() => setFilter('all')}
-                            className={`rounded-md px-4 py-2 ${
-                                filter === 'all'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                            }`}
-                        >
-                            Tous
-                        </button>
-                        <button
-                            onClick={() => setFilter('upcoming')}
-                            className={`rounded-md px-4 py-2 ${
-                                filter === 'upcoming'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                            }`}
-                        >
-                            À venir
-                        </button>
-                        <button
-                            onClick={() => setFilter('past')}
-                            className={`rounded-md px-4 py-2 ${
-                                filter === 'past'
-                                    ? 'bg-blue-500 text-white'
-                                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                            }`}
-                        >
-                            Passés
-                        </button>
+                <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex space-x-2">
+                        {['all', 'upcoming', 'past'].map((key) => (
+                            <Button
+                                key={key}
+                                variant={filter === key ? 'accent' : 'outline'}
+                                size="sm"
+                                onClick={() => setFilter(key)}
+                            >
+                                {key === 'all'
+                                    ? 'Tous'
+                                    : key === 'upcoming'
+                                        ? 'À venir'
+                                        : 'Passés'}
+                            </Button>
+                        ))}
                     </div>
-                    <div className="relative w-full md:w-64">
+                    <div className="relative w-full max-w-xs">
                         <input
                             type="text"
-                            placeholder="Rechercher un événement..."
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                            placeholder="Rechercher..."
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-400 focus:ring-2 focus:ring-blue-200"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        <svg
-                            className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            ></path>
-                        </svg>
                     </div>
                 </div>
 
-                {/* Messages d'erreur ou de chargement */}
-                {loading && (
-                    <div className="my-8 text-center">
-                        <p className="text-gray-600">Chargement des événements...</p>
-                    </div>
-                )}
+                {/* État chargement et erreurs */}
+                {loading && <p className="text-center text-gray-500">Chargement...</p>}
+                {error && <p className="text-center text-red-500">{error}</p>}
 
-                {error && (
-                    <div className="my-8 rounded-md bg-red-100 p-4 text-red-700">
-                        <p>{error}</p>
-                    </div>
-                )}
-
-                {/* Liste des événements */}
-                {!loading && !error && filteredEvenements.length === 0 && (
-                    <div className="my-8 text-center">
-                        <p className="text-gray-600">Aucun événement trouvé.</p>
-                    </div>
-                )}
-
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    {filteredEvenements.map((evenement) => (
-                        <div
-                            key={evenement.id}
-                            className="overflow-hidden rounded-lg bg-white shadow transition-all hover:shadow-md"
-                        >
-                            {evenement.photo_url && (
-                                <div className="h-48 w-full overflow-hidden">
-                                    <img
-                                        src={evenement.photo_url}
-                                        alt={evenement.nom}
-                                        className="h-full w-full object-cover"
-                                    />
-                                </div>
-                            )}
-                            <div className="p-4">
-                                <h3 className="mb-2 text-xl font-semibold">{evenement.nom}</h3>
-                                <p className="mb-2 text-sm text-gray-600">
-                                    {formatDate(evenement.date_evenement)}
-                                </p>
-                                <p className="mb-2 text-sm text-gray-600">
-                                    <span className="font-medium">Lieu:</span> {evenement.lieu}
-                                </p>
-                                {evenement.organisateur_nom && (
-                                    <p className="mb-2 text-sm text-gray-600">
-                                        <span className="font-medium">Organisé par:</span>{' '}
-                                        {evenement.organisateur_prenom} {evenement.organisateur_nom}
-                                    </p>
-                                )}
-                                {evenement.description && (
-                                    <p className="mb-4 text-gray-700">
-                                        {evenement.description.length > 100
-                                            ? `${evenement.description.substring(0, 100)}...`
-                                            : evenement.description}
-                                    </p>
-                                )}
-                                <div className="mt-4 flex gap-20">
-                                    <Link
-                                        to={`/events/${evenement.id}`}
-                                        className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-                                    >
-                                        Voir les détails
-                                    </Link>
-
-                                    <button
-                                        onClick={() =>handleDeleteEvenement(evenement.id)}
-                                        className="rounded-md bg-red-500 px-4 py-2 text-white hover:bg-red-900-600"
-                                    >
-                                        Supprimer
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {!loading &&
+                        filteredEvenements.map((evenement) => (
+                            <motion.div
+                                key={evenement.id}
+                                whileHover={{ scale: 1.03 }}
+                                transition={{ type: 'spring', stiffness: 300 }}
+                            >
+                                <Card className="overflow-hidden">
+                                    {evenement.photo_url && (
+                                        <div className="h-48 w-full overflow-hidden">
+                                            <img
+                                                src={evenement.photo_url}
+                                                alt={evenement.nom}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        </div>
+                                    )}
+                                    <CardContent className="p-4">
+                                        <h3 className="text-xl font-semibold text-blue-800 mb-2">
+                                            {evenement.nom}
+                                        </h3>
+                                        <p className="text-sm text-gray-600">
+                                            <strong>Date:</strong> {formatDate(evenement.date_evenement)}
+                                        </p>
+                                        <p className="text-sm text-gray-600">
+                                            <strong>Lieu:</strong> {evenement.detailed_address}
+                                        </p>
+                                        {evenement.description && (
+                                            <p className="mt-2 text-gray-700 line-clamp-3">
+                                                {evenement.description}
+                                            </p>
+                                        )}
+                                        <div className="mt-4 flex justify-between">
+                                            <Button asChild size="sm">
+                                                <Link to={`/events/${evenement.id}`}>Détails</Link>
+                                            </Button>
+                                            {canDeleteEvent(user, evenement) && (
+                                                <Button
+                                                    size="sm"
+                                                    variant="destructive"
+                                                    onClick={() => handleDeleteEvenement(evenement.id)}
+                                                >
+                                                    Supprimer
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            </motion.div>
+                        ))}
                 </div>
             </div>
         </div>
