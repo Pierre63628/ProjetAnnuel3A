@@ -126,125 +126,242 @@ create table if not exists "Quartier"
 alter table "Quartier"
     owner to "user";
 
-
-
--- Utilisateur
-CREATE TYPE user_role AS ENUM ('user', 'admin');
-
-CREATE TABLE "Utilisateur" (
-  id SERIAL PRIMARY KEY,
-  nom VARCHAR(100) NOT NULL,
-  prenom VARCHAR(100),
-  email VARCHAR(255) UNIQUE,
-  password VARCHAR(255) NOT NULL,
-  adresse TEXT,
-  date_naissance DATE,
-  telephone VARCHAR(15),
-  quartier_id INT,
-  role user_role DEFAULT 'user',
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (quartier_id) REFERENCES "Quartier"(id)
+create table if not exists "ChatRoom"
+(
+    id          serial
+        primary key,
+    name        varchar(255) not null,
+    description text,
+    quartier_id integer      not null,
+    room_type   varchar(50) default 'group'::character varying,
+    created_by  integer
+                             references "Utilisateur"
+                                 on delete set null,
+    created_at  timestamp   default CURRENT_TIMESTAMP,
+    updated_at  timestamp   default CURRENT_TIMESTAMP,
+    is_active   boolean     default true
 );
 
--- RefreshToken pour l'authentification
-CREATE TABLE "RefreshToken" (
-  id SERIAL PRIMARY KEY,
-  user_id INT NOT NULL,
-  token VARCHAR(255) NOT NULL,
-  expires_at TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  revoked BOOLEAN DEFAULT FALSE,
-  FOREIGN KEY (user_id) REFERENCES "Utilisateur"(id) ON DELETE CASCADE
+alter table "ChatRoom"
+    owner to "user";
+
+create index if not exists idx_chatroom_quartier
+    on "ChatRoom" (quartier_id);
+
+create trigger update_chatroom_updated_at
+    before update
+    on "ChatRoom"
+    for each row
+execute procedure update_updated_at_column();
+
+create table if not exists "ChatRoomMember"
+(
+    id           serial
+        primary key,
+    chat_room_id integer
+        references "ChatRoom"
+            on delete cascade,
+    user_id      integer
+        references "Utilisateur"
+            on delete cascade,
+    role         varchar(50) default 'member'::character varying,
+    joined_at    timestamp   default CURRENT_TIMESTAMP,
+    last_read_at timestamp   default CURRENT_TIMESTAMP,
+    is_muted     boolean     default false,
+    unique (chat_room_id, user_id)
 );
 
--- Evenement
-CREATE TABLE "Evenement" (
-  id SERIAL PRIMARY KEY,
-  organisateur_id INT,
-  nom VARCHAR(255),
-  description TEXT,
-  date_evenement TIMESTAMP,
-  lieu VARCHAR(255),
-  type_evenement VARCHAR(100),
-  FOREIGN KEY (organisateur_id) REFERENCES "Utilisateur"(id)
+alter table "ChatRoomMember"
+    owner to "user";
+
+create index if not exists idx_chatroom_member_room
+    on "ChatRoomMember" (chat_room_id);
+
+create index if not exists idx_chatroom_member_user
+    on "ChatRoomMember" (user_id);
+
+create table if not exists "Message"
+(
+    id           serial
+        primary key,
+    chat_room_id integer
+        references "ChatRoom"
+            on delete cascade,
+    sender_id    integer
+                      references "Utilisateur"
+                          on delete set null,
+    content      text not null,
+    message_type varchar(50) default 'text'::character varying,
+    reply_to_id  integer
+                      references "Message"
+                          on delete set null,
+    created_at   timestamp   default CURRENT_TIMESTAMP,
+    updated_at   timestamp   default CURRENT_TIMESTAMP,
+    is_edited    boolean     default false,
+    is_deleted   boolean     default false,
+    deleted_at   timestamp
 );
 
--- Participation
-CREATE TABLE "Participation" (
-  id SERIAL PRIMARY KEY,
-  utilisateur_id INT,
-  evenement_id INT,
-  date_inscription TIMESTAMP,
-  FOREIGN KEY (utilisateur_id) REFERENCES "Utilisateur"(id),
-  FOREIGN KEY (evenement_id) REFERENCES "Evenement"(id)
+alter table "Message"
+    owner to "user";
+
+create index if not exists idx_message_room
+    on "Message" (chat_room_id);
+
+create index if not exists idx_message_sender
+    on "Message" (sender_id);
+
+create index if not exists idx_message_created
+    on "Message" (created_at desc);
+
+create trigger update_message_updated_at
+    before update
+    on "Message"
+    for each row
+execute procedure update_updated_at_column();
+
+create table if not exists "MessageReaction"
+(
+    id         serial
+        primary key,
+    message_id integer
+        references "Message"
+            on delete cascade,
+    user_id    integer
+        references "Utilisateur"
+            on delete cascade,
+    reaction   varchar(50) not null,
+    created_at timestamp default CURRENT_TIMESTAMP,
+    unique (message_id, user_id, reaction)
 );
 
--- Relation (type: ami, voisin, etc.)
-CREATE TABLE "Relation" (
-  id SERIAL PRIMARY KEY,
-  utilisateur1_id INT,
-  utilisateur2_id INT,
-  type_relation VARCHAR(100),
-  date_debut DATE,
-  FOREIGN KEY (utilisateur1_id) REFERENCES "Utilisateur"(id),
-  FOREIGN KEY (utilisateur2_id) REFERENCES "Utilisateur"(id)
+alter table "MessageReaction"
+    owner to "user";
+
+create table if not exists "UserPresence"
+(
+    id         serial
+        primary key,
+    user_id    integer
+        unique
+        references "Utilisateur"
+            on delete cascade,
+    status     varchar(50) default 'offline'::character varying,
+    last_seen  timestamp   default CURRENT_TIMESTAMP,
+    socket_id  varchar(255),
+    updated_at timestamp   default CURRENT_TIMESTAMP
 );
 
--- Relation Utilisateur-Quartier (pour les quartiers secondaires)
-CREATE TABLE "UtilisateurQuartier" (
-  id SERIAL PRIMARY KEY,
-  utilisateur_id INT NOT NULL,
-  quartier_id INT NOT NULL,
-  est_principal BOOLEAN DEFAULT FALSE,
-  date_ajout TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  statut VARCHAR(20) DEFAULT 'actif',
-  FOREIGN KEY (utilisateur_id) REFERENCES "Utilisateur"(id) ON DELETE CASCADE,
-  FOREIGN KEY (quartier_id) REFERENCES "Quartier"(id) ON DELETE CASCADE,
-  UNIQUE(utilisateur_id, quartier_id)
+alter table "UserPresence"
+    owner to "user";
+
+create index if not exists idx_user_presence_user
+    on "UserPresence" (user_id);
+
+create trigger update_user_presence_updated_at
+    before update
+    on "UserPresence"
+    for each row
+execute procedure update_updated_at_column();
+
+create table if not exists "TypingIndicator"
+(
+    id           serial
+        primary key,
+    chat_room_id integer
+        references "ChatRoom"
+            on delete cascade,
+    user_id      integer
+        references "Utilisateur"
+            on delete cascade,
+    started_at   timestamp default CURRENT_TIMESTAMP,
+    unique (chat_room_id, user_id)
 );
 
--- Fonction pour mettre à jour le champ updated_at
-CREATE OR REPLACE FUNCTION update_updated_at_column()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.updated_at = NOW();
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
+alter table "TypingIndicator"
+    owner to "user";
 
--- Trigger pour mettre à jour le champ updated_at dans la table Utilisateur
-CREATE TRIGGER update_utilisateur_updated_at
-BEFORE UPDATE ON "Utilisateur"
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
+create index if not exists idx_typing_room
+    on "TypingIndicator" (chat_room_id);
 
--- Trigger pour mettre à jour le champ updated_at dans la table Quartier
-CREATE TRIGGER update_quartier_updated_at
-BEFORE UPDATE ON "Quartier"
-FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
-Table des annonces de troc
-CREATE TABLE "AnnonceTroc" (
-                               id SERIAL PRIMARY KEY,
-                               titre VARCHAR(255) NOT NULL,
-                               description TEXT,
-                               objet_propose VARCHAR(255) NOT NULL,
-                               objet_recherche VARCHAR(255) NOT NULL,
-                               image_url TEXT,
-                               date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                               quartier_id INTEGER REFERENCES "Quartier"(id),
-                               utilisateur_id INTEGER REFERENCES "Utilisateur"(id),
-                               statut VARCHAR(20) DEFAULT 'active' CHECK (statut IN ('active', 'inactive')),
-                               type_annonce VARCHAR(20) DEFAULT 'offre' CHECK (type_annonce IN ('offre', 'demande')),
-                               prix DECIMAL(10,2),
-                               budget_max DECIMAL(10,2),
-                               etat_produit VARCHAR(50),
-                               categorie VARCHAR(100),
-                               urgence VARCHAR(50),
-                               mode_echange VARCHAR(50) DEFAULT 'vente' CHECK (mode_echange IN ('vente', 'troc', 'don')),
-                               criteres_specifiques TEXT,
-                               disponibilite VARCHAR(100),
-                               created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                               updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+create table if not exists "MessageDelivery"
+(
+    id         serial
+        primary key,
+    message_id integer
+        references "Message"
+            on delete cascade,
+    user_id    integer
+        references "Utilisateur"
+            on delete cascade,
+    status     varchar(50) default 'sent'::character varying,
+    timestamp  timestamp   default CURRENT_TIMESTAMP,
+    unique (message_id, user_id)
 );
+
+alter table "MessageDelivery"
+    owner to "user";
+
+create index if not exists idx_message_delivery_message
+    on "MessageDelivery" (message_id);
+
+create table if not exists "BlockedUser"
+(
+    id         serial
+        primary key,
+    blocker_id integer
+        references "Utilisateur"
+            on delete cascade,
+    blocked_id integer
+        references "Utilisateur"
+            on delete cascade,
+    reason     text,
+    created_at timestamp default CURRENT_TIMESTAMP,
+    unique (blocker_id, blocked_id)
+);
+
+alter table "BlockedUser"
+    owner to "user";
+
+create index if not exists idx_blocked_user_blocker
+    on "BlockedUser" (blocker_id);
+
+create table if not exists "AnnonceTroc"
+(
+    id                   serial
+        primary key,
+    titre                varchar(255) not null,
+    description          text,
+    objet_propose        varchar(255) not null,
+    objet_recherche      varchar(255) not null,
+    image_url            text,
+    date_publication     timestamp   default CURRENT_TIMESTAMP,
+    quartier_id          integer
+        references "Quartier",
+    utilisateur_id       integer
+        references "Utilisateur",
+    statut               varchar(20) default 'active'::character varying
+        constraint "AnnonceTroc_statut_check"
+            check ((statut)::text = ANY ((ARRAY ['active'::character varying, 'inactive'::character varying])::text[])),
+    type_annonce         varchar(20) default 'offre'::character varying
+        constraint "AnnonceTroc_type_annonce_check"
+            check ((type_annonce)::text = ANY
+                   ((ARRAY ['offre'::character varying, 'demande'::character varying])::text[])),
+    prix                 numeric(10, 2),
+    budget_max           numeric(10, 2),
+    etat_produit         varchar(50),
+    categorie            varchar(100),
+    urgence              varchar(50),
+    mode_echange         varchar(50) default 'vente'::character varying
+        constraint "AnnonceTroc_mode_echange_check"
+            check ((mode_echange)::text = ANY
+                   ((ARRAY ['vente'::character varying, 'troc'::character varying, 'don'::character varying])::text[])),
+    criteres_specifiques text,
+    disponibilite        varchar(100),
+    created_at           timestamp   default CURRENT_TIMESTAMP,
+    updated_at           timestamp   default CURRENT_TIMESTAMP
+);
+
+alter table "AnnonceTroc"
+    owner to "user";
+

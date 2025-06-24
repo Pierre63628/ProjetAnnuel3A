@@ -19,7 +19,6 @@ import {
     Clock,
     Users,
     Sparkles,
-    TrendingUp,
     Heart,
     ExternalLink,
     ChevronRight,
