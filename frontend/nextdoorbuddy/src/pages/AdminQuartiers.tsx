@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-draw/dist/leaflet.draw.css';
-import 'leaflet-draw';
-import { useRef } from 'react';
 
 interface Quartier {
     id: number;
@@ -17,7 +12,6 @@ interface Quartier {
     status?: string;
     created_at?: string;
     updated_at?: string;
-    geom?: null;
 }
 
 const AdminQuartiers = () => {
@@ -33,8 +27,7 @@ const AdminQuartiers = () => {
         nom_quartier: '',
         ville: '',
         code_postal: '',
-        description: '',
-        geom: null
+        description: ''
     });
     const [showAddForm, setShowAddForm] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -46,7 +39,6 @@ const AdminQuartiers = () => {
             navigate('/');
         }
     }, [user, navigate]);
-
 
     // Charger les quartiers
     useEffect(() => {
@@ -102,55 +94,6 @@ const AdminQuartiers = () => {
         }
     }, [searchTerm, quartiers]);
 
-    //Use effect afin d'initialiser la carte:
-    const mapRef = useRef<L.Map | null>(null);
-
-    useEffect(() => {
-        if (!showAddForm || mapRef.current) return;
-
-        const map = L.map('map').setView([48.8566, 2.3522], 13);
-        mapRef.current = map;
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-        const drawnItems = new L.FeatureGroup();
-        map.addLayer(drawnItems);
-
-        const drawControl = new L.Control.Draw({
-            draw: {
-                polyline: false,
-                rectangle: false,
-                circle: false,
-                marker: false,
-                circlemarker: false,
-                polygon: {
-                    allowIntersection: false,
-                    showArea: true,
-                },
-            },
-            edit: {
-                featureGroup: drawnItems,
-            },
-        });
-        map.addControl(drawControl);
-
-        map.on(L.Draw.Event.CREATED, (event: any) => {
-            drawnItems.clearLayers(); // on ne garde qu’un seul polygone
-            const layer = event.layer;
-            drawnItems.addLayer(layer);
-
-            const geojson = layer.toGeoJSON();
-            console.log('GeoJSON:', geojson.geometry);
-
-            // Mise à jour du formData
-            setFormData((prevData) => ({
-                ...prevData,
-                geom: geojson.geometry,
-            }));
-        });
-    }, [showAddForm]);
-
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({
@@ -165,8 +108,7 @@ const AdminQuartiers = () => {
             nom_quartier: quartier.nom_quartier,
             ville: quartier.ville || '',
             code_postal: quartier.code_postal || '',
-            description: quartier.description || '',
-            geom: quartier.geom || ''
+            description: quartier.description || ''
         });
     };
 
@@ -176,9 +118,7 @@ const AdminQuartiers = () => {
             nom_quartier: '',
             ville: '',
             code_postal: '',
-            description: '',
-            geom: null,
-
+            description: ''
         });
     };
 
@@ -186,12 +126,6 @@ const AdminQuartiers = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
-
-        // 1. Vérifie que le polygone est bien défini
-        if (!formData.geom) {
-            setError('Veuillez dessiner le contour du quartier sur la carte.');
-            return;
-        }
 
         try {
             let url = '/api/quartiers';
@@ -211,13 +145,13 @@ const AdminQuartiers = () => {
                 body: JSON.stringify(formData)
             });
 
-            // 2. Gestion du token expiré
             if (response.status === 401) {
+                // Token expiré, essayer de le rafraîchir
                 const refreshed = await refreshAccessToken();
                 if (!refreshed) {
                     throw new Error('Session expirée. Veuillez vous reconnecter.');
                 }
-                return;
+                return; // On réessaiera avec le nouveau token
             }
 
             if (!response.ok) {
@@ -227,7 +161,7 @@ const AdminQuartiers = () => {
 
             const data = await response.json();
 
-            // 3. Mise à jour de l’état
+            // Mettre à jour la liste des quartiers
             if (editingQuartier) {
                 setQuartiers(quartiers.map(q => q.id === editingQuartier.id ? data : q));
                 setSuccess('Quartier mis à jour avec succès');
@@ -236,13 +170,12 @@ const AdminQuartiers = () => {
                 setSuccess('Quartier créé avec succès');
             }
 
-            // 4. Réinitialisation du formulaire
+            // Réinitialiser le formulaire
             setFormData({
                 nom_quartier: '',
                 ville: '',
                 code_postal: '',
-                description: '',
-                geom: null, // <-- correction ici
+                description: ''
             });
             setEditingQuartier(null);
             setShowAddForm(false);
@@ -251,7 +184,6 @@ const AdminQuartiers = () => {
             setError(error instanceof Error ? error.message : 'Une erreur est survenue');
         }
     };
-
 
     const handleDelete = async (id: number) => {
         if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce quartier ?')) {
@@ -311,15 +243,7 @@ const AdminQuartiers = () => {
         <div className="min-h-screen bg-gray-100">
             <Header />
             <div className="container mx-auto p-6">
-                <div className="mb-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">Gestion des Quartiers</h1>
-                    <Link
-                        to="/admin/dashboard"
-                        className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium"
-                    >
-                        ← Retour au tableau de bord
-                    </Link>
-                </div>
+                <h1 className="mb-6 text-2xl font-bold">Gestion des Quartiers</h1>
 
                 {error && (
                     <div className="mb-4 rounded-md bg-red-100 p-4 text-red-700">
@@ -411,16 +335,6 @@ const AdminQuartiers = () => {
                                     className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
                                 ></textarea>
                             </div>
-                            <div className="mb-4">
-                                <div className="mb-4">
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                                        Délimitation du quartier *
-                                    </label>
-                                    <div className="h-[400px] w-full rounded-md border" id="map"></div>
-                                </div>
-
-                            </div>
-
                             <div className="flex justify-end space-x-2">
                                 <button
                                     type="button"

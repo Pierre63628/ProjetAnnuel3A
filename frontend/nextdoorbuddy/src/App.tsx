@@ -1,14 +1,17 @@
 import { Routes, Route, Navigate } from "react-router-dom"
 import Home from "./pages/Home"
 import Login from "./pages/Login"
+import Troc from "./pages/Troc"
+import TrocForm from "./pages/TrocForm"
+import MyTrocs from "./pages/MyTrocs"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
-import AdminLogin from "./pages/AdminLogin"
-import AdminDashboard from "./pages/AdminDashboard"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
+import AdminTrocs from "./pages/AdminTrocs"
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
+import TestCarousel from "./pages/TestCarousel"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import EventDetails from "./pages/EventsDetail.tsx";
 
@@ -55,6 +58,26 @@ function AppRoutes() {
           <Profile />
         </ProtectedRoute>
       } />
+      <Route path="/trocs" element={
+        <ProtectedRoute>
+          <Troc />
+        </ProtectedRoute>
+      } />
+      <Route path="/trocs/create" element={
+        <ProtectedRoute>
+          <TrocForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/trocs/edit/:id" element={
+        <ProtectedRoute>
+          <TrocForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/trocs/my-trocs" element={
+        <ProtectedRoute>
+          <MyTrocs />
+        </ProtectedRoute>
+      } />
       <Route path="/events" element={
         <ProtectedRoute>
           <Events />
@@ -74,12 +97,6 @@ function AppRoutes() {
           <EventForm />
         </ProtectedRoute>
       } />
-      <Route path="/system/admin" element={<AdminLogin />} />
-      <Route path="/admin/dashboard" element={
-        <AdminRoute>
-          <AdminDashboard />
-        </AdminRoute>
-      } />
       <Route path="/admin/users" element={
         <AdminRoute>
           <AdminUsers />
@@ -90,8 +107,14 @@ function AppRoutes() {
           <AdminQuartiers />
         </AdminRoute>
       } />
+      <Route path="/admin/trocs" element={
+        <AdminRoute>
+          <AdminTrocs />
+        </AdminRoute>
+      } />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/test-carousel" element={<TestCarousel />} />
     </Routes>
   );
 }

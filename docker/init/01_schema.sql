@@ -1,23 +1,13 @@
--- Enable PostGIS extension
-CREATE EXTENSION IF NOT EXISTS postgis;
-
 -- Quartier
-create table "Quartier"
-(
-    id           integer default nextval('quartiers_id_seq'::regclass) not null
-        constraint quartiers_pkey
-            primary key,
-    nom_quartier varchar(255),
-    ville        varchar(255),
-    geom         geometry(MultiPolygon, 4326),
-    code_postal  varchar(255),
-    description  varchar(255)
+CREATE TABLE "Quartier" (
+  id SERIAL PRIMARY KEY,
+  nom_quartier VARCHAR(100) NOT NULL,
+  ville VARCHAR(100),
+  code_postal VARCHAR(10),
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-alter table "Quartier"
-    owner to "user";
-
-
 
 -- Utilisateur
 CREATE TYPE user_role AS ENUM ('user', 'admin');
@@ -93,6 +83,31 @@ CREATE TABLE "UtilisateurQuartier" (
   FOREIGN KEY (utilisateur_id) REFERENCES "Utilisateur"(id) ON DELETE CASCADE,
   FOREIGN KEY (quartier_id) REFERENCES "Quartier"(id) ON DELETE CASCADE,
   UNIQUE(utilisateur_id, quartier_id)
+);
+
+-- Table des annonces de troc
+CREATE TABLE "AnnonceTroc" (
+  id SERIAL PRIMARY KEY,
+  titre VARCHAR(255) NOT NULL,
+  description TEXT,
+  objet_propose VARCHAR(255) NOT NULL,
+  objet_recherche VARCHAR(255) NOT NULL,
+  image_url TEXT,
+  date_publication TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  quartier_id INTEGER REFERENCES "Quartier"(id),
+  utilisateur_id INTEGER REFERENCES "Utilisateur"(id),
+  statut VARCHAR(20) DEFAULT 'active' CHECK (statut IN ('active', 'inactive')),
+  type_annonce VARCHAR(20) DEFAULT 'offre' CHECK (type_annonce IN ('offre', 'demande')),
+  prix DECIMAL(10,2),
+  budget_max DECIMAL(10,2),
+  etat_produit VARCHAR(50),
+  categorie VARCHAR(100),
+  urgence VARCHAR(50),
+  mode_echange VARCHAR(50) DEFAULT 'vente' CHECK (mode_echange IN ('vente', 'troc', 'don')),
+  criteres_specifiques TEXT,
+  disponibilite VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Fonction pour mettre à jour le champ updated_at

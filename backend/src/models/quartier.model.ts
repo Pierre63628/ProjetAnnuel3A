@@ -1,6 +1,4 @@
 import pool from '../config/db.js';
-import QuartierRoutes from "../routes/quartier.routes.js";
-import {ApiErrors} from "../errors/ApiErrors.js";
 
 export interface Quartier {
     id?: number;
@@ -18,8 +16,7 @@ export class QuartierModel {
     static async findAll(): Promise<Quartier[]> {
         try {
             const query = `
-        SELECT id, nom_quartier, ville, code_postal, description,
-               ST_AsGeoJSON(geom)::json AS geom
+        SELECT id, nom_quartier, ville, code_postal, description
         FROM "Quartier"
         ORDER BY ville, nom_quartier
       `;
@@ -66,29 +63,14 @@ export class QuartierModel {
         }
     }
 
-    static async verifyQuartierNotInDb(quartierData: Quartier){
-       let quartiers : Quartier[] = await this.findAll();
-
-       quartiers.forEach(quartier => {
-           if(quartier.geom == quartierData.geom){
-                throw new ApiErrors("Erreur le quartier existe deja", 403)
-           }
-       })
-    }
-
     // Créer un nouveau quartier (avec géométrie GeoJSON)
     static async create(quartierData: Quartier): Promise<number> {
-
-
-        //PAs sur que ça soit utiles : il faut croiser les données avec celle en bdd.
-         this.verifyQuartierNotInDb(quartierData);
-
         try {
             const query = `
         INSERT INTO "Quartier"
           (nom_quartier, ville, code_postal, description, geom)
         VALUES
-          ($1, $2, $3, $4, ST_Multi(ST_GeomFromGeoJSON($5)))
+          ($1, $2, $3, $4, ST_SetSRID(ST_GeomFromGeoJSON($5), 4326))
         RETURNING id
       `;
             const geomString = JSON.stringify(quartierData.geom || null);
@@ -133,16 +115,13 @@ export class QuartierModel {
                 fields.push(`description = $${paramIndex++}`);
                 values.push(quartierData.description);
             }
+
             if (quartierData.geom !== undefined) {
                 fields.push(`geom = ST_SetSRID(ST_GeomFromGeoJSON($${paramIndex++}), 4326)`);
                 values.push(JSON.stringify(quartierData.geom));
             }
 
-            if (fields.length === 0) {
-                return false; // Aucune mise à jour nécessaire
-            }
-
-            fields.push(`updated_at = CURRENT_TIMESTAMP`);
+            if (fields.length === 0) return true;
 
             values.push(id);
 

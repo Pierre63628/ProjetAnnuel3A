@@ -34,7 +34,13 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
                 return res.status(403).json({ message: 'Token invalide - données manquantes.' });
             }
 
-            const user = await UserModel.findById(decoded.userId);
+            // Le token contient userId, pas decoded.userId
+            const userId = decoded.userId;
+            if (!userId) {
+                return res.status(403).json({ message: 'Token invalide - userId manquant.' });
+            }
+
+            const user = await UserModel.findById(userId);
             if (!user) {
                 return res.status(404).json({ message: 'Utilisateur non trouvé.' });
             }

@@ -127,15 +127,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             });
 
             if (!response.ok) {
-                let errorMessage = 'Échec de l\'inscription';
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorMessage;
-                } catch (jsonError) {
-                    // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
-                    console.error('Erreur de parsing JSON:', jsonError);
-                }
-                throw new Error(errorMessage);
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Échec de l\'inscription');
             }
 
             const data = await response.json();

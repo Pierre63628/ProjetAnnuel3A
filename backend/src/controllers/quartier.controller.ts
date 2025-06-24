@@ -6,9 +6,7 @@ import { UtilisateurQuartierModel } from '../models/utilisateur-quartier.model.j
 // Récupérer tous les quartiers
 export const getAllQuartiers = async (req: Request, res: Response) => {
     try {
-        console.log('Controller: Getting all quartiers');
         const quartiers = await QuartierModel.findAll();
-        console.log(`Controller: Found ${quartiers.length} quartiers`);
         res.status(200).json(quartiers);
     } catch (error) {
         console.error('Erreur lors de la récupération des quartiers:', error);
@@ -62,7 +60,7 @@ export const createQuartier = async (req: Request, res: Response) => {
             return res.status(403).json({ message: 'Accès refusé. Seuls les administrateurs peuvent créer des quartiers.' });
         }
 
-        const { nom_quartier, ville, code_postal, description, geom} = req.body;
+        const { nom_quartier, ville, code_postal, description, geom } = req.body;
 
         if (!geom || !geom.type || !geom.coordinates) {
             return res.status(400).json({ message: 'La géométrie (geom) est requise et doit être valide.' });

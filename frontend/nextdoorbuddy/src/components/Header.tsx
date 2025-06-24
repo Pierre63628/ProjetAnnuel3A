@@ -26,6 +26,9 @@ const Header = () => {
                             <Link to="/events" className="text-gray-600 hover:text-blue-600">
                                 Événements
                             </Link>
+                            <Link to="/trocs" className="text-gray-600 hover:text-blue-600">
+                                Trocs
+                            </Link>
                             <Link to="/profile" className="text-gray-600 hover:text-blue-600">
                                 Mon Profil
                             </Link>
@@ -36,6 +39,9 @@ const Header = () => {
                                     </Link>
                                     <Link to="/admin/quartiers" className="text-gray-600 hover:text-blue-600">
                                         Gestion Quartiers
+                                    </Link>
+                                    <Link to="/admin/trocs" className="text-gray-600 hover:text-blue-600">
+                                        Gestion Trocs
                                     </Link>
                                 </>
                             )}
