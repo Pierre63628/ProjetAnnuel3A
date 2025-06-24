@@ -12,7 +12,10 @@ import AdminTrocs from "./pages/AdminTrocs"
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
+import MyEvents from "./pages/MyEvents"
+import Chat from "./pages/Chat"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
+import { ChatProvider } from "./contexts/ChatContext"
 import EventDetails from "./pages/EventsDetail.tsx";
 
 // Composant pour les routes protégées
@@ -82,7 +85,18 @@ function AppRoutes() {
         <ProtectedRoute>
           <Events />
         </ProtectedRoute>
-      } />      <Route path="/events/:id" element={
+      } />
+      <Route path="/events/my-events" element={
+        <ProtectedRoute>
+          <MyEvents />
+        </ProtectedRoute>
+      } />
+      <Route path="/chat" element={
+        <ProtectedRoute>
+          <Chat />
+        </ProtectedRoute>
+      } />
+      <Route path="/events/:id" element={
         <ProtectedRoute>
           <EventDetails />
         </ProtectedRoute>
@@ -122,7 +136,9 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <ChatProvider>
+        <AppRoutes />
+      </ChatProvider>
     </AuthProvider>
   );
 }

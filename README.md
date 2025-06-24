@@ -1,179 +1,224 @@
 # NextDoorBuddy
 
-A neighborhood community platform that connects neighbors for local exchanges, events, and community building.
+Application de mise en relation entre voisins pour favoriser l'entraide et la convivialité dans les quartiers.
 
-## 🏘️ Features
 
-### Core Functionality
-- **Neighborhood-based System**: Users are assigned to specific neighborhoods and can only see content from their area
-- **Troc System**: Local exchange marketplace for goods and services
-- **User Management**: Registration, authentication, and profile management
-- **Admin Panel**: Administrative interface for managing users, neighborhoods, and content
-
-### User Features
-- **Secure Authentication**: JWT-based authentication with token refresh
-- **Profile Management**: Update personal information and change neighborhoods
-- **Troc Creation**: Create exchange announcements with images
-- **Neighborhood Filtering**: View only content from your assigned neighborhood
-- **Image Upload**: Support for multiple images per troc announcement
-
-### Admin Features
-- **User Management**: View, edit, and delete user accounts
-- **Neighborhood Management**: Create and manage neighborhood boundaries
-- **Content Moderation**: Approve/reject troc announcements
-- **Statistics Dashboard**: View platform usage statistics
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Node.js** with TypeScript
-- **Express.js** for REST API
-- **PostgreSQL** with PostGIS for geospatial data
-- **JWT** for authentication
-- **Multer** for file uploads
-- **bcrypt** for password hashing
-
-### Frontend
-- **React 19** with TypeScript
-- **Vite** for development and building
-- **Tailwind CSS** for styling
-- **React Router** for navigation
-- **Leaflet** for interactive maps
-
-### Infrastructure
-- **Docker** for containerization
-- **Docker Compose** for orchestration
-- **PostgreSQL** database with PostGIS extension
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Docker and Docker Compose
-- Git
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd ProjetAnnuel-NextDoorBuddy
-   ```
-
-2. **Start the application**
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Access the application**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:3000
-   - Database: localhost:5432
-
-### Default Admin Account
-- Email: `lucas.verrecchia@gmail.com`
-- Password: `Admin123!`
-
-## 📁 Project Structure
+##Script de creation des table spour la bdd (MAJ le 20/06/2025)
 
 ```
-ProjetAnnuel-NextDoorBuddy/
-├── backend/                 # Node.js/Express backend
-│   ├── src/
-│   │   ├── controllers/     # Route controllers
-│   │   ├── models/         # Database models
-│   │   ├── routes/         # API routes
-│   │   ├── middlewares/    # Custom middlewares
-│   │   ├── services/       # Business logic services
-│   │   └── config/         # Configuration files
-│   └── Dockerfile
-├── frontend/nextdoorbuddy/  # React frontend
-│   ├── src/
-│   │   ├── components/     # Reusable components
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API services
-│   │   └── utils/          # Utility functions
-│   └── Dockerfile
-├── docker/
-│   └── init/               # Database initialization scripts
-└── docker-compose.yaml     # Docker orchestration
+create table if not exists "Utilisateur"
+(
+    id             serial
+        primary key,
+    nom            varchar(100) not null,
+    prenom         varchar(100),
+    email          varchar(255)
+        unique,
+    password       varchar(255) not null,
+    adresse        text,
+    date_naissance date,
+    telephone      varchar(15),
+    quartier_id    integer,
+    role           user_role default 'user'::user_role,
+    created_at     timestamp default CURRENT_TIMESTAMP,
+    updated_at     timestamp default CURRENT_TIMESTAMP
+);
+
+alter table "Utilisateur"
+    owner to "user";
+
+create trigger update_utilisateur_updated_at
+    before update
+    on "Utilisateur"
+    for each row
+execute procedure update_updated_at_column();
+
+create table if not exists "RefreshToken"
+(
+    id         serial
+        primary key,
+    user_id    integer      not null
+        references "Utilisateur"
+            on delete cascade,
+    token      varchar(255) not null,
+    expires_at timestamp    not null,
+    created_at timestamp default CURRENT_TIMESTAMP,
+    revoked    boolean   default false
+);
+
+alter table "RefreshToken"
+    owner to "user";
+
+create table if not exists "Evenement"
+(
+    id               serial
+        primary key,
+    organisateur_id  integer
+        references "Utilisateur",
+    nom              varchar(255),
+    description      text,
+    date_evenement   timestamp,
+    lieu             varchar(255),
+    type_evenement   varchar(100),
+    photo_url        text,
+    created_at       timestamp default CURRENT_TIMESTAMP,
+    updated_at       timestamp default CURRENT_TIMESTAMP,
+    quartier_id      integer,
+    detailed_address text,
+    source           varchar(500),
+    url              text
+        unique
+);
+
+alter table "Evenement"
+    owner to "user";
+
+create table if not exists "Participation"
+(
+    id               serial
+        primary key,
+    utilisateur_id   integer
+        references "Utilisateur",
+    evenement_id     integer
+        references "Evenement",
+    date_inscription timestamp
+);
+
+alter table "Participation"
+    owner to "user";
+
+create table if not exists "Relation"
+(
+    id              serial
+        primary key,
+    utilisateur1_id integer
+        references "Utilisateur",
+    utilisateur2_id integer
+        references "Utilisateur",
+    type_relation   varchar(100),
+    date_debut      date
+);
+
+alter table "Relation"
+    owner to "user";
+
+create table if not exists spatial_ref_sys
+(
+    srid      integer not null
+        primary key
+        constraint spatial_ref_sys_srid_check
+            check ((srid > 0) AND (srid <= 998999)),
+    auth_name varchar(256),
+    auth_srid integer,
+    srtext    varchar(2048),
+    proj4text varchar(2048)
+);
+
+alter table spatial_ref_sys
+    owner to "user";
+
+grant select on spatial_ref_sys to public;
+
+create table if not exists "Quartier"
+(
+    id           integer default nextval('quartiers_id_seq'::regclass) not null
+        constraint quartiers_pkey
+            primary key,
+    nom_quartier varchar(255),
+    ville        varchar(255),
+    geom         geometry(MultiPolygon, 4326),
+    code_postal  varchar(255),
+    description  varchar(255)
+);
+
+alter table "Quartier"
+    owner to "user";
+
+create table if not exists events
+(
+    id               serial
+        primary key,
+    name             varchar(255) not null,
+    url              text         not null
+        constraint unique_event_url
+            unique,
+    image_url        text,
+    date             varchar(100),
+    source           varchar(50),
+    detailed_address text,
+    created_at       timestamp default CURRENT_TIMESTAMP,
+    updated_at       timestamp default CURRENT_TIMESTAMP
+);
+
+alter table events
+    owner to "user";
+
+create trigger update_events_updated_at
+    before update
+    on events
+    for each row
+execute procedure update_modified_column();
+
 ```
 
-## 🗄️ Database Schema
 
-### Key Tables
-- **Utilisateur**: User accounts and profiles
-- **Quartier**: Neighborhood definitions with geospatial data
-- **AnnonceTroc**: Exchange announcements
-- **UtilisateurQuartier**: Many-to-many relationship for user neighborhoods
 
-## 🔧 Development
+## Technologies utilisées
 
-### Backend Development
+- **Frontend** : React, TypeScript, Tailwind CSS
+- **Backend** : Node.js, Express
+- **Base de données** : PostgreSQL
+- **Authentification** : JWT (stateless)
+
+## Structure du projet
+
+```
+.
+├── backend/                # Code du serveur Node.js/Express
+│   ├── src/              # Code source du backend
+│   │   ├── config/       # Configuration (base de données, JWT, etc.)
+│   │   ├── controllers/  # Contrôleurs pour les routes
+│   │   ├── middlewares/  # Middlewares (authentification, validation, etc.)
+│   │   ├── models/       # Modèles de données
+│   │   └── routes/       # Définition des routes API
+│   └── Dockerfile       # Configuration Docker pour le backend
+├── docker/                # Fichiers de configuration Docker
+│   └── init/           # Scripts d'initialisation de la base de données
+├── frontend/              # Code de l'application React
+│   └── nextdoorbuddy/   # Application React
+│       ├── src/          # Code source du frontend
+│       │   ├── components/  # Composants React réutilisables
+│       │   ├── contexts/    # Contextes React (authentification, etc.)
+│       │   ├── pages/       # Pages de l'application
+│       │   └── styles/      # Styles CSS/Tailwind
+│       └── Dockerfile    # Configuration Docker pour le frontend
+└── docker-compose.yaml    # Configuration Docker Compose
+```
+
+## Fonctionnalités
+
+- Authentification sécurisée (JWT)
+- Gestion des utilisateurs
+- Gestion des événements de quartier
+- Mise en relation entre voisins
+
+## Installation et lancement
+
 ```bash
-cd backend
-npm install
-npm run dev
+# Cloner le dépôt
+git clone https://github.com/Pierre63628/ProjetAnnuel3A.git
+cd ProjetAnnuel-NextDoorBuddy
+
+# Lancer les conteneurs Docker
+docker-compose up --build -d
 ```
 
-### Frontend Development
-```bash
-cd frontend/nextdoorbuddy
-npm install
-npm run dev
-```
+## Accès
 
-### Database Reset
-```bash
-docker-compose down
-docker volume rm projetannuel-nextdoorbuddy_db_data
-docker-compose up -d
-```
+- **Frontend** : http://localhost:5173
+- **Backend API** : http://localhost:3000
 
-## 🌟 Key Features Implementation
+## Utilisateurs de test
 
-### Neighborhood Filtering
-- Users can only see trocs from their assigned neighborhood
-- Automatic neighborhood assignment during troc creation
-- Admin can manage neighborhood boundaries
-
-### Image Management
-- Multiple image upload support
-- Image compression and optimization
-- Carousel display for multiple images
-- Individual image deletion
-
-### Security
-- JWT-based authentication
-- Password hashing with bcrypt
-- Token refresh mechanism
-- Role-based access control
-
-## 📝 API Documentation
-
-### Authentication Endpoints
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/refresh` - Token refresh
-- `POST /api/auth/logout` - User logout
-
-### Troc Endpoints
-- `GET /api/troc` - Get trocs for user's neighborhood
-- `POST /api/troc` - Create new troc
-- `PUT /api/troc/:id` - Update troc
-- `DELETE /api/troc/:id` - Delete troc
-
-### Admin Endpoints
-- `GET /api/troc/admin` - Get all trocs (admin)
-- `PATCH /api/troc/admin/:id/status` - Update troc status
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License.
+- **Administrateur** : lucas.verrecchia@gmail.com / Admin123!
+- **Utilisateur** : jean.dupont@example.com / User123!

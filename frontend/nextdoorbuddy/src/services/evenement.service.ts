@@ -9,6 +9,7 @@ export interface Evenement {
     lieu: string;
     type_evenement?: string;
     photo_url?: string;
+    url?: string;
     created_at?: string;
     updated_at?: string;
     organisateur_nom?: string;
@@ -208,13 +209,27 @@ export const cancelParticipation = async (id: number): Promise<boolean> => {
 };
 
 // Vérifier si un utilisateur participe à un événement
-export const checkParticipation = async (id: number): Promise<boolean> => {
+export const checkParticipation = async (id: number): Promise<{isParticipant: boolean, participantCount: number}> => {
     try {
         const data = await api.get(`/evenements/${id}/check-participation`);
-        return data.isParticipant;
+        return {
+            isParticipant: data.isParticipant,
+            participantCount: data.participantCount
+        };
     } catch (error) {
         console.error(`Erreur lors de la vérification de la participation à l'événement ${id}`);
-        return false;
+        return { isParticipant: false, participantCount: 0 };
+    }
+};
+
+// Récupérer les événements auxquels l'utilisateur participe
+export const getUserParticipations = async (): Promise<Evenement[]> => {
+    try {
+        const data = await api.get('/evenements/user/my-events');
+        return data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des participations de l\'utilisateur');
+        return [];
     }
 };
 
@@ -231,5 +246,6 @@ export default {
     getEvenementParticipants,
     participateToEvenement,
     cancelParticipation,
-    checkParticipation
+    checkParticipation,
+    getUserParticipations
 };

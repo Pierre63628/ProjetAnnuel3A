@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { UserPresence, ChatRoom } from '../../types/messaging.types';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
-import { 
-    Users, 
-    Circle, 
-    MessageCircle, 
+import { useChat } from '../../contexts/ChatContext';
+import { useAuth } from '../../contexts/AuthContext';
+import messagingService from '../../services/messaging.service';
+import {
+    Users,
+    Circle,
+    MessageCircle,
     Crown,
     Shield,
     User,
@@ -19,6 +22,9 @@ interface OnlineUsersProps {
 }
 
 const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
+    const { selectRoom, chatRooms, refreshChatRooms } = useChat();
+    const { user: currentUser } = useAuth();
+
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'online':
@@ -64,6 +70,42 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
         } else {
             const days = Math.floor(diffInMinutes / 1440);
             return `Il y a ${days}j`;
+        }
+    };
+
+    const handleStartDirectMessage = async (targetUser: UserPresence) => {
+        if (!currentUser || !targetUser.user) return;
+
+        try {
+            // Check if a direct message room already exists between these users
+            const existingRoom = chatRooms.find(room =>
+                room.room_type === 'direct' &&
+                room.name.includes(targetUser.user!.prenom) &&
+                room.name.includes(currentUser.prenom)
+            );
+
+            if (existingRoom) {
+                // Select the existing room
+                selectRoom(existingRoom);
+            } else {
+                // Create a new direct message room
+                const roomName = `${currentUser.prenom} & ${targetUser.user.prenom}`;
+                const newRoom = await messagingService.createChatRoom({
+                    name: roomName,
+                    description: `Conversation privée entre ${currentUser.prenom} et ${targetUser.user.prenom}`,
+                    room_type: 'direct',
+                    member_ids: [targetUser.user_id]
+                });
+
+                // Refresh the chat rooms list to include the new room
+                await refreshChatRooms();
+
+                // Select the new room
+                selectRoom(newRoom);
+            }
+        } catch (error) {
+            console.error('Failed to start direct message:', error);
+            // You could add a toast notification here
         }
     };
 
@@ -160,6 +202,12 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
                                                 size="sm"
                                                 variant="outline"
                                                 className="ml-2 p-2"
+                                                onClick={() => handleStartDirectMessage(userPresence)}
+                                                disabled={!userPresence.user || userPresence.user_id === currentUser?.id}
+                                                title={userPresence.user_id === currentUser?.id ?
+                                                    "Vous ne pouvez pas vous envoyer un message" :
+                                                    `Envoyer un message à ${userPresence.user?.prenom}`
+                                                }
                                             >
                                                 <MessageCircle className="w-4 h-4" />
                                             </Button>

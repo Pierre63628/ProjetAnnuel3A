@@ -6,8 +6,7 @@ import {
     ChatRoom, 
     Message, 
     UserPresence, 
-    TypingIndicator,
-    MessageReaction 
+    TypingIndicator
 } from '../types/messaging.types';
 
 interface ChatContextType {
@@ -39,7 +38,8 @@ interface ChatContextType {
     markAsRead: (roomId: number) => void;
     addReaction: (messageId: number, reaction: string) => void;
     removeReaction: (messageId: number, reaction: string) => void;
-    
+    refreshChatRooms: () => Promise<void>;
+
     // Error handling
     error: string | null;
     clearError: () => void;
@@ -60,12 +60,11 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-    const { user, token } = useAuth();
-    
+    const { user, accessToken } = useAuth();
+    console.log(user, accessToken);
     // Connection state
     const [isConnected, setIsConnected] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
-    
     // Data state
     const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
     const [currentRoom, setCurrentRoom] = useState<ChatRoom | null>(null);
@@ -76,15 +75,16 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     // Error state
     const [error, setError] = useState<string | null>(null);
 
+
     // Connect to chat
     const connectToChat = useCallback(async () => {
-        if (!token || !user || isConnecting || isConnected) return;
-        
+        if (!accessToken || !user || isConnecting || isConnected) return;
+
         try {
             setIsConnecting(true);
             setError(null);
             
-            await webSocketService.connect(token);
+            await webSocketService.connect(accessToken);
             setIsConnected(true);
             
             // Load initial data
@@ -100,7 +100,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         } finally {
             setIsConnecting(false);
         }
-    }, [token, user, isConnecting, isConnected]);
+    }, [accessToken, user, isConnecting, isConnected]);
 
     // Disconnect from chat
     const disconnectFromChat = useCallback(() => {
@@ -148,7 +148,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         }
     }, []);
 
-    // Typing indicators
     const startTyping = useCallback((roomId: number) => {
         webSocketService.startTyping(roomId);
     }, []);
@@ -157,7 +156,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         webSocketService.stopTyping(roomId);
     }, []);
 
-    // Mark as read
     const markAsRead = useCallback((roomId: number) => {
         const roomMessages = messages[roomId] || [];
         const unreadMessageIds = roomMessages
@@ -169,7 +167,6 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         }
     }, [messages, user]);
 
-    // Reactions
     const addReaction = useCallback((messageId: number, reaction: string) => {
         webSocketService.addReaction(messageId, reaction);
     }, []);
@@ -178,9 +175,18 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         webSocketService.removeReaction(messageId, reaction);
     }, []);
 
-    // Clear error
     const clearError = useCallback(() => {
         setError(null);
+    }, []);
+
+    // Refresh chat rooms
+    const refreshChatRooms = useCallback(async () => {
+        try {
+            const rooms = await messagingService.getChatRooms();
+            setChatRooms(rooms);
+        } catch (err) {
+            console.error('Failed to refresh chat rooms:', err);
+        }
     }, []);
 
     // Set up WebSocket event listeners
@@ -258,17 +264,17 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
 
     // Auto-connect when user is authenticated
     useEffect(() => {
-        if (user && token && !isConnected && !isConnecting) {
-            connectToChat();
+        if (user && accessToken && !isConnected && !isConnecting) {
+            connectToChat().then(r => console.log(r));
         }
-    }, [user, token, isConnected, isConnecting, connectToChat]);
+    }, [user, accessToken, isConnected, isConnecting, connectToChat]);
 
     // Disconnect when user logs out
     useEffect(() => {
-        if (!user || !token) {
+        if (!user || !accessToken) {
             disconnectFromChat();
         }
-    }, [user, token, disconnectFromChat]);
+    }, [user, accessToken, disconnectFromChat]);
 
     const value: ChatContextType = {
         isConnected,
@@ -288,6 +294,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         markAsRead,
         addReaction,
         removeReaction,
+        refreshChatRooms,
         error,
         clearError
     };

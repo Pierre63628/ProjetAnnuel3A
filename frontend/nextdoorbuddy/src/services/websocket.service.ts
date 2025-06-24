@@ -1,4 +1,6 @@
-import { io, Socket } from 'socket.io-client';
+import { io } from "socket.io-client";
+import type { Socket } from "socket.io-client";
+
 import { 
     ServerToClientEvents, 
     ClientToServerEvents, 
@@ -29,7 +31,7 @@ class WebSocketService {
         return new Promise((resolve, reject) => {
             this.token = token;
             
-            this.socket = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+            this.socket = io('http://localhost:3000', {
                 auth: {
                     token: token
                 },

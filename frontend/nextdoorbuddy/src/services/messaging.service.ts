@@ -13,7 +13,10 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 class MessagingService {
     private getAuthHeaders() {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            throw new Error('No authentication token found. Please log in again.');
+        }
         return {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`

@@ -3,10 +3,11 @@ import { ChatRoomModel } from '../models/chatRoom.model.js';
 import { MessageModel } from '../models/message.model.js';
 import { UserPresenceModel } from '../models/userPresence.model.js';
 import { CreateChatRoomRequest, GetMessagesQuery } from '../types/messaging.types.js';
+import pool from '../config/db.js';
 
 interface AuthenticatedRequest extends Request {
     user?: {
-        userId: number;
+        id: number;
         quartier_id: number;
         nom: string;
         prenom: string;
@@ -18,7 +19,7 @@ export class MessagingController {
     // Get chat rooms for the authenticated user
     static async getChatRooms(req: AuthenticatedRequest, res: Response) {
         try {
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
             const rooms = await ChatRoomModel.getChatRoomsForUser(userId);
             
             res.json({
@@ -37,7 +38,7 @@ export class MessagingController {
     // Get available chat rooms in user's quartier
     static async getAvailableRooms(req: AuthenticatedRequest, res: Response) {
         try {
-            const quartierId = req.user!.quartier_id;
+            const quartierId = req.user!.quartier_id!;
             const rooms = await ChatRoomModel.getChatRoomsByQuartier(quartierId);
             
             res.json({
@@ -56,9 +57,9 @@ export class MessagingController {
     // Get chat room details
     static async getChatRoom(req: AuthenticatedRequest, res: Response) {
         try {
-            const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
-            
+            const roomId = parseInt(req.params.roomId)
+            const userId = req.user!.id!
+            console.log("USerId", userId)
             // Check if user is member of the room
             const isMember = await ChatRoomModel.isMember(roomId, userId);
             if (!isMember) {
@@ -92,8 +93,8 @@ export class MessagingController {
     // Create a new chat room
     static async createChatRoom(req: AuthenticatedRequest, res: Response) {
         try {
-            const userId = req.user!.userId;
-            const quartierId = req.user!.quartier_id;
+            const userId = req.user!.id!;
+            const quartierId = req.user!.quartier_id!;
             const data: CreateChatRoomRequest = req.body;
 
             // Validate input
@@ -105,7 +106,7 @@ export class MessagingController {
             }
 
             const room = await ChatRoomModel.createChatRoom(data, userId, quartierId);
-            
+
             res.status(201).json({
                 success: true,
                 data: room
@@ -123,8 +124,8 @@ export class MessagingController {
     static async joinChatRoom(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
-            const quartierId = req.user!.quartier_id;
+            const userId = req.user!.id!;
+            const quartierId = req.user!.quartier_id!;
 
             // Check if room exists and is in user's quartier
             const room = await ChatRoomModel.getChatRoomById(roomId);
@@ -161,7 +162,7 @@ export class MessagingController {
     static async leaveChatRoom(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
 
             const success = await ChatRoomModel.removeMember(roomId, userId);
             
@@ -189,7 +190,7 @@ export class MessagingController {
     static async getMessages(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
             
             // Check if user is member of the room
             const isMember = await ChatRoomModel.isMember(roomId, userId);
@@ -226,7 +227,7 @@ export class MessagingController {
     static async getRoomMembers(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
             
             // Check if user is member of the room
             const isMember = await ChatRoomModel.isMember(roomId, userId);
@@ -255,7 +256,7 @@ export class MessagingController {
     // Get online users in quartier
     static async getOnlineUsers(req: AuthenticatedRequest, res: Response) {
         try {
-            const quartierId = req.user!.quartier_id;
+            const quartierId = req.user!.quartier_id!;
             const onlineUsers = await UserPresenceModel.getOnlineUsersInQuartier(quartierId);
             
             res.json({
@@ -275,7 +276,7 @@ export class MessagingController {
     static async getUnreadCount(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
             
             // Check if user is member of the room
             const isMember = await ChatRoomModel.isMember(roomId, userId);
@@ -305,7 +306,7 @@ export class MessagingController {
     static async markAsRead(req: AuthenticatedRequest, res: Response) {
         try {
             const roomId = parseInt(req.params.roomId);
-            const userId = req.user!.userId;
+            const userId = req.user!.id!;
             
             // Check if user is member of the room
             const isMember = await ChatRoomModel.isMember(roomId, userId);
@@ -327,6 +328,66 @@ export class MessagingController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to mark as read'
+            });
+        }
+    }
+
+    // Create or get direct message room between two users
+    static async createOrGetDirectMessage(req: AuthenticatedRequest, res: Response) {
+        try {
+            const userId = req.user!.id!;
+            const targetUserId = parseInt(req.body.target_user_id);
+            const quartierId = req.user!.quartier_id!;
+
+            if (!targetUserId || targetUserId === userId) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Valid target user ID is required'
+                });
+            }
+
+            // Check if direct message room already exists
+            const existingRoom = await ChatRoomModel.findDirectMessageRoom(userId, targetUserId);
+
+            if (existingRoom) {
+                return res.json({
+                    success: true,
+                    data: existingRoom
+                });
+            }
+
+            // Get target user info for room name
+            const targetUserQuery = 'SELECT nom, prenom FROM "Utilisateur" WHERE id = $1 AND quartier_id = $2';
+            const targetUserResult = await pool.query(targetUserQuery, [targetUserId, quartierId]);
+
+            if (targetUserResult.rows.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Target user not found in your quartier'
+                });
+            }
+
+            const targetUser = targetUserResult.rows[0];
+            const currentUser = req.user!;
+
+            // Create new direct message room
+            const roomName = `${currentUser.prenom} & ${targetUser.prenom}`;
+            const room = await ChatRoomModel.createChatRoom({
+                name: roomName,
+                description: `Conversation privée entre ${currentUser.prenom} et ${targetUser.prenom}`,
+                room_type: 'direct',
+                member_ids: [targetUserId]
+            }, userId, quartierId);
+
+            res.status(201).json({
+                success: true,
+                data: room
+            });
+        } catch (error) {
+            console.error('Error creating direct message:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to create direct message'
             });
         }
     }

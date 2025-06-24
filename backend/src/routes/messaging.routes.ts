@@ -42,6 +42,12 @@ router.post('/rooms/:roomId/leave',
     MessagingController.leaveChatRoom
 );
 
+router.post('/direct-message',
+    body('target_user_id').isInt({ min: 1 }).withMessage('Target user ID must be a positive integer'),
+    validateRequest,
+    MessagingController.createOrGetDirectMessage
+);
+
 // Messages Routes
 router.get('/rooms/:roomId/messages',
     param('roomId').isInt({ min: 1 }).withMessage('Room ID must be a positive integer'),

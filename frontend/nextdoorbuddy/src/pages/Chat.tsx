@@ -5,6 +5,7 @@ import { useChat } from '../contexts/ChatContext';
 import ChatRoomList from '../components/chat/ChatRoomList';
 import ChatWindow from '../components/chat/ChatWindow';
 import OnlineUsers from '../components/chat/OnlineUsers';
+import CreateRoomModal from '../components/chat/CreateRoomModal';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { 
@@ -200,6 +201,12 @@ const Chat: React.FC = () => {
                         <Users className="w-6 h-6" />
                     </Button>
                 </div>
+
+                {/* Create Room Modal */}
+                <CreateRoomModal
+                    isOpen={showCreateRoom}
+                    onClose={() => setShowCreateRoom(false)}
+                />
             </div>
         </div>
     );

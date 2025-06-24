@@ -158,9 +158,9 @@ export class ChatRoomModel {
 
             const room = roomResult.rows[0];
 
-            // Add creator as admin
+            // Add creator as admin with initialized last_read_at
             await client.query(
-                'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role) VALUES ($1, $2, $3)',
+                'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role, last_read_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)',
                 [room.id, createdBy, 'admin']
             );
 
@@ -169,7 +169,7 @@ export class ChatRoomModel {
                 for (const memberId of data.member_ids) {
                     if (memberId !== createdBy) {
                         await client.query(
-                            'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role) VALUES ($1, $2, $3)',
+                            'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role, last_read_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)',
                             [room.id, memberId, 'member']
                         );
                     }
@@ -189,14 +189,15 @@ export class ChatRoomModel {
     // Add member to chat room
     static async addMember(roomId: number, userId: number, role: string = 'member'): Promise<ChatRoomMember | null> {
         const query = `
-            INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role)
-            VALUES ($1, $2, $3)
+            INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role, last_read_at)
+            VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
             ON CONFLICT (chat_room_id, user_id) DO UPDATE SET
                 role = EXCLUDED.role,
-                joined_at = CURRENT_TIMESTAMP
+                joined_at = CURRENT_TIMESTAMP,
+                last_read_at = COALESCE(EXCLUDED.last_read_at, CURRENT_TIMESTAMP)
             RETURNING *
         `;
-        
+
         const result = await pool.query(query, [roomId, userId, role]);
         return result.rows[0] || null;
     }
@@ -251,5 +252,31 @@ export class ChatRoomModel {
         const query = 'UPDATE "ChatRoom" SET is_active = false WHERE id = $1';
         const result = await pool.query(query, [roomId]);
         return result.rowCount > 0;
+    }
+
+    // Find existing direct message room between two users
+    static async findDirectMessageRoom(userId1: number, userId2: number): Promise<ChatRoom | null> {
+        const query = `
+            SELECT cr.*
+            FROM "ChatRoom" cr
+            WHERE cr.room_type = 'direct'
+            AND cr.is_active = true
+            AND EXISTS (
+                SELECT 1 FROM "ChatRoomMember" crm1
+                WHERE crm1.chat_room_id = cr.id AND crm1.user_id = $1
+            )
+            AND EXISTS (
+                SELECT 1 FROM "ChatRoomMember" crm2
+                WHERE crm2.chat_room_id = cr.id AND crm2.user_id = $2
+            )
+            AND (
+                SELECT COUNT(*) FROM "ChatRoomMember" crm
+                WHERE crm.chat_room_id = cr.id
+            ) = 2
+            LIMIT 1
+        `;
+
+        const result = await pool.query(query, [userId1, userId2]);
+        return result.rows[0] || null;
     }
 }

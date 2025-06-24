@@ -29,6 +29,12 @@ const Header = () => {
                             <Link to="/trocs" className="text-gray-600 hover:text-blue-600">
                                 Trocs
                             </Link>
+                            <Link to="/events/my-events" className="text-gray-600 hover:text-blue-600">
+                                Mes événements
+                            </Link>
+                            <Link to="/chat" className="text-gray-600 hover:text-blue-600">
+                                Chat
+                            </Link>
                             <Link to="/profile" className="text-gray-600 hover:text-blue-600">
                                 Mon Profil
                             </Link>

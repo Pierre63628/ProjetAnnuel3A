@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
+import AddressAutocomplete from '../components/AddressAutocomplete';
 import { createEvenement, getEvenementById, updateEvenement } from '../services/evenement.service';
 
 const EventForm = () => {
@@ -14,36 +15,37 @@ const EventForm = () => {
         nom: '',
         description: '',
         date_evenement: '',
-        lieu: '',
+        detailed_address: '',
         type_evenement: '',
-        photo_url: ''
+        photo_url: '',
+        url: '',
+        latitude: 0,
+        longitude: 0,
+        quartier_id: null as number | null
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [initialLoading, setInitialLoading] = useState(isEditMode);
 
-    // Charger les données de l'événement si on est en mode édition
     useEffect(() => {
         const fetchEvenement = async () => {
             if (isEditMode && id) {
                 try {
                     setInitialLoading(true);
                     const evenement = await getEvenementById(parseInt(id));
-                    
+
                     if (!evenement) {
                         setError('Événement non trouvé');
                         return;
                     }
 
-                    // Vérifier si l'utilisateur est l'organisateur
                     if (evenement.organisateur_id !== user?.id && user?.role !== 'admin') {
                         setError('Vous n\'êtes pas autorisé à modifier cet événement');
                         navigate('/events');
                         return;
                     }
 
-                    // Formater la date pour l'input datetime-local
                     const dateObj = new Date(evenement.date_evenement);
                     const formattedDate = dateObj.toISOString().slice(0, 16);
 
@@ -51,9 +53,13 @@ const EventForm = () => {
                         nom: evenement.nom,
                         description: evenement.description || '',
                         date_evenement: formattedDate,
-                        lieu: evenement.lieu,
+                        detailed_address: evenement.detailed_address || evenement.lieu || '',
                         type_evenement: evenement.type_evenement || '',
-                        photo_url: evenement.photo_url || ''
+                        photo_url: evenement.photo_url || '',
+                        url: evenement.url || '',
+                        latitude: evenement.latitude || 0,
+                        longitude: evenement.longitude || 0,
+                        quartier_id: evenement.quartier_id || null
                     });
                 } catch (error) {
                     setError('Erreur lors du chargement de l\'événement');
@@ -75,6 +81,25 @@ const EventForm = () => {
         });
     };
 
+    const handleAddressSelect = (address: {
+        adresse: string
+        latitude: number
+        longitude: number
+        postcode: string
+        city: string
+        quartier_id?: number
+        quartier_nom?: string
+        quartierFound?: boolean
+    }) => {
+        setFormData({
+            ...formData,
+            detailed_address: address.adresse,
+            latitude: address.latitude,
+            longitude: address.longitude,
+            quartier_id: address.quartier_id || null
+        });
+    };
+
     const validateForm = () => {
         if (!formData.nom.trim()) {
             setError('Le nom de l\'événement est obligatoire');
@@ -86,9 +111,18 @@ const EventForm = () => {
             return false;
         }
 
-        if (!formData.lieu.trim()) {
-            setError('Le lieu de l\'événement est obligatoire');
+        if (!formData.detailed_address.trim()) {
+            setError('L\'adresse de l\'événement est obligatoire');
             return false;
+        }
+
+        // Validate URL if provided
+        if (formData.url && formData.url.trim()) {
+            const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            if (!urlPattern.test(formData.url.trim())) {
+                setError('Veuillez entrer une URL valide (ex: https://example.com)');
+                return false;
+            }
         }
 
         return true;
@@ -96,7 +130,7 @@ const EventForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
@@ -107,9 +141,8 @@ const EventForm = () => {
             setSuccess('');
 
             if (isEditMode && id) {
-                // Mode édition
                 const result = await updateEvenement(parseInt(id), formData);
-                
+
                 if (result) {
                     setSuccess('Événement mis à jour avec succès');
                     setTimeout(() => {
@@ -119,9 +152,8 @@ const EventForm = () => {
                     setError('Erreur lors de la mise à jour de l\'événement');
                 }
             } else {
-                // Mode création
                 const result = await createEvenement(formData);
-                
+
                 if (result) {
                     setSuccess('Événement créé avec succès');
                     setTimeout(() => {
@@ -218,17 +250,14 @@ const EventForm = () => {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="lieu" className="mb-2 block font-medium text-gray-700">
-                            Lieu *
+                        <label htmlFor="detailed_address" className="mb-2 block font-medium text-gray-700">
+                            Adresse *
                         </label>
-                        <input
-                            type="text"
-                            id="lieu"
-                            name="lieu"
-                            value={formData.lieu}
-                            onChange={handleChange}
-                            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
-                            required
+                        <AddressAutocomplete
+                            onAddressSelect={handleAddressSelect}
+                            initialValue={formData.detailed_address}
+                            required={true}
+                            showQuartierInfo={true}
                         />
                     </div>
 
@@ -245,6 +274,24 @@ const EventForm = () => {
                             className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                             placeholder="Ex: fête, atelier, réunion..."
                         />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="url" className="mb-2 block font-medium text-gray-700">
+                            Site web de l'événement
+                        </label>
+                        <input
+                            type="url"
+                            id="url"
+                            name="url"
+                            value={formData.url}
+                            onChange={handleChange}
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                            placeholder="https://example.com"
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                            Lien vers la page web de l'événement (optionnel)
+                        </p>
                     </div>
 
                     <div className="flex justify-between">

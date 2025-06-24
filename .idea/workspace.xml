@@ -5,33 +5,36 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/EventMap.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/button.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/card.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/utils/permissions.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/test-direct-messaging.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/test-reverse-messaging.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/test-websocket-messaging.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/CreateRoomModal.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/information_schema.FNRwLQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/information_schema.FNRwLQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/pg_catalog.0S1ZNQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/evenement.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/evenement.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/models/evenement.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/evenement.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/evenement.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/evenement.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/init/02_seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/02_seed.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/init/04_add_coordinates.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/04_add_coordinates.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/controllers/messaging.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/messaging.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/models/chatRoom.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/chatRoom.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/models/user.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/models/user.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/routes/messaging.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/messaging.routes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/init/01_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/01_schema.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/OnlineUsers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/OnlineUsers.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventsDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventsDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/evenement.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/evenement.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/messaging.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/messaging.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-websocket.js" beforeDir="false" afterPath="$PROJECT_DIR$/test-websocket.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,6 +82,8 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;SQL Inserts&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;23.11.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.0.3&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/pes/WebstormProjects/ProjetAnnuel3A/backend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -171,6 +176,13 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SQLScriptSettings">
+    <option name="matrix">
+      <map>
+        <entry key="POSTGRES.CreateComplete" value="CreateIfNotExists=1" />
+      </map>
+    </option>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -193,7 +205,9 @@
       <workItem from="1749504226126" duration="1637000" />
       <workItem from="1749653271669" duration="1034000" />
       <workItem from="1749718750333" duration="14857000" />
-      <workItem from="1750257394578" duration="4497000" />
+      <workItem from="1750257394578" duration="8325000" />
+      <workItem from="1750387729452" duration="12582000" />
+      <workItem from="1750712294605" duration="5255000" />
     </task>
     <servers />
   </component>
