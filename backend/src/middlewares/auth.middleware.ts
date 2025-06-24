@@ -16,19 +16,25 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
         const authHeader = req.headers.authorization;
 
         if (!authHeader) {
-             res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
+            return res.status(401).json({ message: 'Accès non autorisé. Token manquant.' });
         }
 
         const token = authHeader.split(' ')[1];
 
         jwt.verify(token, jwtConfig.accessToken.secret, async (err: any, decoded: any) => {
             if (err) {
-                 res.status(403).json({ message: 'Token invalide ou expiré.' });
+                return res.status(403).json({ message: 'Token invalide ou expiré.' });
             }
 
-            const user = await UserModel.findById(decoded.userId);
+            // Le token contient userId, pas decoded.userId
+            const userId = decoded.userId;
+            if (!userId) {
+                return res.status(403).json({ message: 'Token invalide - userId manquant.' });
+            }
+
+            const user = await UserModel.findById(userId);
             if (!user) {
-                 res.status(404).json({ message: 'Utilisateur non trouvé.' });
+                return res.status(404).json({ message: 'Utilisateur non trouvé.' });
             }
 
             req.user = user;
@@ -36,7 +42,7 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
         });
     } catch (error) {
         console.error('Erreur d\'authentification:', error);
-         res.status(500).json({ message: 'Erreur serveur lors de l\'authentification.' });
+        return res.status(500).json({ message: 'Erreur serveur lors de l\'authentification.' });
     }
 };
 

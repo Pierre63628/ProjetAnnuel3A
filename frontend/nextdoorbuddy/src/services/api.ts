@@ -79,15 +79,8 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
 
     // Gérer les erreurs
     if (!response.ok) {
-        let errorMessage = `Erreur ${response.status}`;
-        try {
-            const errorData = await response.json();
-            errorMessage = errorData.message || errorMessage;
-        } catch (jsonError) {
-            // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
-            console.error('Erreur de parsing JSON:', jsonError);
-        }
-        throw new Error(errorMessage);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `Erreur ${response.status}`);
     }
 
     // Retourner les données
@@ -95,7 +88,7 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
 };
 
 export default {
-    // Méthodes GET, POST, PUT, DELETE
+    // Méthodes GET, POST, PUT, PATCH, DELETE
     get: (endpoint: string) => apiRequest(endpoint, { method: 'GET' }),
     post: (endpoint: string, data: any) => apiRequest(endpoint, {
         method: 'POST',
@@ -105,5 +98,12 @@ export default {
         method: 'PUT',
         body: JSON.stringify(data),
     }),
-    delete: (endpoint: string) => apiRequest(endpoint, { method: 'DELETE' }),
+    patch: (endpoint: string, data: any) => apiRequest(endpoint, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+    }),
+    delete: (endpoint: string, data?: any) => apiRequest(endpoint, {
+        method: 'DELETE',
+        ...(data ? { body: JSON.stringify(data) } : {})
+    }),
 };

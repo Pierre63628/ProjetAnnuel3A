@@ -1,15 +1,24 @@
-# React + TypeScript + Vite
+# NextDoorBuddy Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for NextDoorBuddy - A neighborhood community platform built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication**: Login, registration, and profile management
+- **Neighborhood System**: Users are assigned to specific neighborhoods
+- **Troc System**: Create, view, and manage local exchange announcements
+- **Admin Panel**: Administrative interface for managing users, neighborhoods, and trocs
+- **Responsive Design**: Built with Tailwind CSS for mobile-first design
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **React Router** for navigation
+- **Leaflet** for interactive maps
+
+## Getting Started
 
 ```js
 export default tseslint.config({

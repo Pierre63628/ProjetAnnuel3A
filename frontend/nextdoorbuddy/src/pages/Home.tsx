@@ -37,6 +37,22 @@ const Home = () => {
                     </div>
                 </div>
 
+                {/* Troc section */}
+                <div className="mb-8 rounded-lg bg-white p-6 shadow">
+                    <h3 className="mb-4 text-xl font-semibold text-gray-800">Trocs et échanges</h3>
+                    <p className="mb-4 text-gray-600">
+                        Échangez des objets avec vos voisins ! Proposez ce que vous n'utilisez plus ou trouvez ce dont vous avez besoin.
+                    </p>
+                    <div className="mt-4 flex space-x-4">
+                        <Link to="/trocs" className="rounded-md bg-purple-500 px-4 py-2 text-white hover:bg-purple-600">
+                            Voir les trocs
+                        </Link>
+                        <Link to="/trocs/create" className="rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600">
+                            Créer une annonce
+                        </Link>
+                    </div>
+                </div>
+
                 {/* User information */}
                 <div className="mb-8 rounded-lg bg-white p-6 shadow">
                     <h3 className="mb-4 text-xl font-semibold text-gray-800">Vos informations</h3>
