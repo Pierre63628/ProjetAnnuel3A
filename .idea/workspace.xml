@@ -5,11 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ErrorBoundary.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-troc-edit-form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/8dc5ec82-d1bb-44f2-8c95-4748a7a110e7/storage_v2/_src_/database/nextdoorbuddy.RcIzrw/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/init/01_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/01_schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/controllers/troc.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/troc.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ImageCarousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ImageCarousel.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,34 +58,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Docker.docker-compose.yaml.db: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;database.data.extractors.current.export.id&quot;: &quot;SQL Inserts&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;23.11.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;24.0.3&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/pes/WebstormProjects/ProjetAnnuel3A/backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.Front.executor&quot;: &quot;Run&quot;,
-    &quot;npm.build.executor&quot;: &quot;Run&quot;,
-    &quot;npm.dev (1).executor&quot;: &quot;Run&quot;,
-    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/pes/WebstormProjects/ProjetAnnuel3A/frontend/nextdoorbuddy/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.docker-compose.yaml.db: Compose Deployment.executor": "Run",
+    "Node.js.test-image-processing.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "database.data.extractors.current.export.id": "SQL Inserts",
+    "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "23.11.0",
+    "javascript.nodejs.core.library.typings.version": "24.0.3",
+    "last_opened_file_path": "/Users/pes/WebstormProjects/ProjetAnnuel3A/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.Front.executor": "Run",
+    "npm.build.executor": "Run",
+    "npm.dev (1).executor": "Run",
+    "npm.dev.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/Users/pes/WebstormProjects/ProjetAnnuel3A/frontend/nextdoorbuddy/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/backend" />
@@ -87,6 +96,9 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.dev">
+    <configuration name="test-image-processing.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/test-image-processing.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
         <settings />
@@ -138,6 +150,7 @@
     </configuration>
     <list>
       <item itemvalue="Docker.docker-compose.yaml.db: Compose Deployment" />
+      <item itemvalue="Node.js.test-image-processing.js" />
       <item itemvalue="npm.build" />
       <item itemvalue="npm.dev (1)" />
       <item itemvalue="npm.dev" />
@@ -145,6 +158,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.dev" />
+        <item itemvalue="Node.js.test-image-processing.js" />
         <item itemvalue="npm.dev (1)" />
         <item itemvalue="npm.build" />
         <item itemvalue="Docker.docker-compose.yaml.db: Compose Deployment" />

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Troc Edit Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .troc-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f9f9f9;
+        }
+        .image-test {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .image-test img {
+            max-width: 100px;
+            max-height: 100px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test du Formulaire d'Édition de Troc</h1>
+    <p>Ce test vérifie que les images s'affichent correctement dans le formulaire d'édition.</p>
+    
+    <div class="test-section">
+        <h2>1. Authentification</h2>
+        <button onclick="authenticate()">S'Authentifier</button>
+        <div id="auth-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Créer un Troc de Test</h2>
+        <button onclick="createTestTroc()" id="create-btn" disabled>Créer un Troc avec Image</button>
+        <div id="create-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Récupérer les Trocs pour Édition</h2>
+        <button onclick="getMyTrocs()" id="get-trocs-btn" disabled>Récupérer Mes Trocs</button>
+        <div id="my-trocs-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Simuler le Chargement d'Édition</h2>
+        <button onclick="simulateEditLoad()" id="simulate-btn" disabled>Simuler Chargement Édition</button>
+        <div id="simulate-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Test Navigation vers Édition</h2>
+        <button onclick="navigateToEdit()" id="navigate-btn" disabled>Aller au Formulaire d'Édition</button>
+        <div id="navigate-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5174/api';
+        let authToken = null;
+        let testTrocId = null;
+
+        // Replicate the processImageData function from TrocForm
+        function processImageData(images) {
+            try {
+                if (!images) return [];
+                
+                if (Array.isArray(images)) {
+                    return images.filter(img => img && typeof img === 'string' && img.trim() !== '');
+                }
+                
+                if (typeof images === 'string') {
+                    if (images.startsWith('{') && images.endsWith('}')) {
+                        const cleanString = images.slice(1, -1);
+                        if (cleanString.trim() === '') return [];
+                        return cleanString.split(',')
+                            .map(img => img.trim().replace(/^"(.*)"$/, '$1'))
+                            .filter(img => img !== '');
+                    }
+                    return images.trim() !== '' ? [images] : [];
+                }
+                
+                return [];
+            } catch (error) {
+                console.error('Error processing image data:', error);
+                return [];
+            }
+        }
+
+        function getImageUrl(imageUrl) {
+            if (!imageUrl) return null;
+            if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                return imageUrl;
+            }
+            return imageUrl;
+        }
+
+        async function authenticate() {
+            const resultDiv = document.getElementById('auth-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Authentification...</p>';
+                
+                const randomEmail = `test${Date.now()}@example.com`;
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nom: 'Test', prenom: 'User', email: randomEmail,
+                        password: 'TestPassword123!', adresse: '123 Test Street',
+                        date_naissance: '1990-01-01', telephone: '0123456789', quartier_id: 1
+                    })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                authToken = data.accessToken;
+                
+                document.getElementById('create-btn').disabled = false;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Authentification Réussie</h3>
+                        <p>Token: ${authToken.substring(0, 20)}...</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Authentification</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function createTestTroc() {
+            const resultDiv = document.getElementById('create-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Création du troc de test...</p>';
+                
+                // First create a troc without image
+                const trocData = {
+                    titre: `Test Troc pour Édition ${Date.now()}`,
+                    description: 'Ce troc est créé pour tester le formulaire d\'édition',
+                    objet_propose: 'Objet de Test',
+                    objet_recherche: '',
+                    type_annonce: 'offre',
+                    categorie: 'Électronique',
+                    prix: 25.50
+                };
+                
+                const response = await fetch(`${API_BASE}/troc`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(trocData)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const result = await response.json();
+                testTrocId = result.id;
+                
+                document.getElementById('get-trocs-btn').disabled = false;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Troc Créé</h3>
+                        <p>ID: ${testTrocId}</p>
+                        <p>Titre: ${trocData.titre}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Création</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function getMyTrocs() {
+            const resultDiv = document.getElementById('my-trocs-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Récupération des trocs...</p>';
+                
+                const response = await fetch(`${API_BASE}/troc/my`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const trocs = await response.json();
+                
+                let results = `
+                    <div class="success">
+                        <h3>✅ Mes Trocs (${trocs.length})</h3>
+                `;
+                
+                trocs.forEach((troc, index) => {
+                    const processedImages = processImageData(troc.images);
+                    results += `
+                        <div class="troc-card">
+                            <h4>${troc.titre}</h4>
+                            <p><strong>ID:</strong> ${troc.id}</p>
+                            <p><strong>Images brutes:</strong> <code>${JSON.stringify(troc.images)}</code></p>
+                            <p><strong>Images traitées:</strong> <code>${JSON.stringify(processedImages)}</code></p>
+                            ${processedImages.length > 0 ? `
+                                <div>
+                                    <strong>Test d'affichage:</strong><br>
+                                    ${processedImages.map(img => `
+                                        <img src="${getImageUrl(img)}" 
+                                             alt="Test image" 
+                                             onerror="this.style.border='2px solid red'"
+                                             onload="this.style.border='2px solid green'">
+                                    `).join('')}
+                                </div>
+                            ` : '<p>Aucune image</p>'}
+                        </div>
+                    `;
+                });
+                
+                results += '</div>';
+                resultDiv.innerHTML = results;
+                
+                document.getElementById('simulate-btn').disabled = false;
+                if (testTrocId) {
+                    document.getElementById('navigate-btn').disabled = false;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Récupération</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function simulateEditLoad() {
+            const resultDiv = document.getElementById('simulate-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Simulation du chargement d\'édition...</p>';
+                
+                // Simulate the loadTrocForEdit function
+                const myTrocs = await fetch(`${API_BASE}/troc/my`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                }).then(r => r.json());
+                
+                const trocToEdit = myTrocs.find(t => t.id === testTrocId);
+                
+                if (trocToEdit) {
+                    const processedImages = processImageData(trocToEdit.images);
+                    
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Simulation Réussie</h3>
+                            <div class="image-test">
+                                <h4>Données pour le Formulaire d'Édition</h4>
+                                <p><strong>Troc ID:</strong> ${trocToEdit.id}</p>
+                                <p><strong>Titre:</strong> ${trocToEdit.titre}</p>
+                                <p><strong>Images originales:</strong> <code>${JSON.stringify(trocToEdit.images)}</code></p>
+                                <p><strong>Images traitées:</strong> <code>${JSON.stringify(processedImages)}</code></p>
+                                
+                                ${processedImages.length > 0 ? `
+                                    <div>
+                                        <h5>Test d'Affichage dans le Formulaire:</h5>
+                                        ${processedImages.map((img, i) => `
+                                            <div style="display: inline-block; margin: 5px; position: relative;">
+                                                <img src="${getImageUrl(img)}" 
+                                                     alt="Edit form image ${i}" 
+                                                     style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;"
+                                                     onerror="this.style.border='2px solid red'; this.alt='❌ Erreur'"
+                                                     onload="this.style.border='2px solid green'">
+                                                <div style="position: absolute; top: 2px; right: 2px; background: red; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px;">×</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : '<p>Aucune image à afficher</p>'}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Troc non trouvé');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Simulation</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function navigateToEdit() {
+            const resultDiv = document.getElementById('navigate-result');
+            if (testTrocId) {
+                resultDiv.innerHTML = '<p>🔄 Redirection vers le formulaire d\'édition...</p>';
+                setTimeout(() => {
+                    window.location.href = `http://localhost:5174/trocs/edit/${testTrocId}`;
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = '<div class="error">❌ Aucun troc de test disponible</div>';
+            }
+        }
+
+        // Auto-run authentication
+        window.onload = () => {
+            authenticate();
+        };
+    </script>
+</body>
+</html>

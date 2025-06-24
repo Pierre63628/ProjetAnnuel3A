@@ -1,6 +1,36 @@
 import { Request, Response } from 'express';
 import { AnnonceTrocModel, AnnonceTroc } from '../models/annonceTroc.model.js';
 import { UserModel } from '../models/user.model.js';
+
+// Helper function to process PostgreSQL array format
+const processPostgreSQLArray = (pgArray: any): string[] => {
+    try {
+        if (!pgArray) return [];
+
+        // If it's already an array, return it
+        if (Array.isArray(pgArray)) {
+            return pgArray.filter(img => img && typeof img === 'string' && img.trim() !== '');
+        }
+
+        // If it's a string that looks like a PostgreSQL array (e.g., "{image1,image2}")
+        if (typeof pgArray === 'string') {
+            if (pgArray.startsWith('{') && pgArray.endsWith('}')) {
+                const cleanString = pgArray.slice(1, -1); // Remove { and }
+                if (cleanString.trim() === '') return [];
+                return cleanString.split(',')
+                    .map(img => img.trim().replace(/^"(.*)"$/, '$1')) // Remove surrounding quotes
+                    .filter(img => img !== '');
+            }
+            // Handle single image as string
+            return pgArray.trim() !== '' ? [pgArray] : [];
+        }
+
+        return [];
+    } catch (error) {
+        console.error('Error processing PostgreSQL array:', error, 'Original data:', pgArray);
+        return [];
+    }
+};
 import pool from '../config/db.js';
 
 export const createTroc = async (req: Request, res: Response) => {
@@ -250,8 +280,13 @@ export const removeTrocImage = async (req: Request, res: Response) => {
 
         // Si imageUrl est fourni, supprimer seulement cette image
         if (imageUrl) {
-            const currentImages = existingTroc.images || [];
+            // Process PostgreSQL array format properly
+            const currentImages = processPostgreSQLArray(existingTroc.images);
+            console.log('Current images before deletion:', currentImages);
+            console.log('Image to delete:', imageUrl);
+
             const updatedImages = currentImages.filter(img => img !== imageUrl);
+            console.log('Updated images after deletion:', updatedImages);
 
             const success = await AnnonceTrocModel.updateImages(trocId, updatedImages);
             if (success) {

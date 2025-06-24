@@ -140,22 +140,6 @@ const Home = () => {
                     </div>
                 </motion.div>
 
-                {/* Events section */}
-                <div className="mb-8 rounded-lg bg-white p-6 shadow">
-                    <h3 className="mb-4 text-xl font-semibold text-gray-800">Événements</h3>
-                    <p className="mb-4 text-gray-600">
-                        Découvrez les événements organisés dans votre quartier ou créez vos propres événements pour rencontrer vos voisins.
-                    </p>
-                    <div className="mt-4 flex space-x-4">
-                        <Link to="/events" className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
-                            Voir les événements
-                        </Link>
-                        <Link to="/events/create" className="rounded-md bg-green-500 px-4 py-2 text-white hover:bg-green-600">
-                            Créer un événement
-                        </Link>
-                    </div>
-                </div>
-
                 {/* Troc section */}
                 <div className="mb-8 rounded-lg bg-white p-6 shadow">
                     <h3 className="mb-4 text-xl font-semibold text-gray-800">Trocs et échanges</h3>

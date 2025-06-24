@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Multiple Images & Deletion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .warning { background-color: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background-color: #6c757d; cursor: not-allowed; }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .image-item {
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+        .delete-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ Test Images Multiples & Suppression</h1>
+    
+    <div class="test-section">
+        <h2>1. Authentification</h2>
+        <button onclick="authenticate()">S'Authentifier</button>
+        <div id="auth-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test Upload Multiple Images</h2>
+        <input type="file" id="test-files" multiple accept="image/*" style="margin: 10px 0;">
+        <button onclick="testMultipleUpload()" id="upload-btn" disabled>Upload Images</button>
+        <div id="upload-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Créer Troc avec Images</h2>
+        <button onclick="createTrocWithImages()" id="create-troc-btn" disabled>Créer Troc</button>
+        <div id="create-troc-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Test Suppression d'Images</h2>
+        <button onclick="testImageDeletion()" id="delete-btn" disabled>Tester Suppression</button>
+        <div id="delete-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Test Formulaire Complet</h2>
+        <button onclick="navigateToForm()" id="form-btn" disabled>Aller au Formulaire</button>
+        <div id="form-result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:5174/api';
+        let authToken = null;
+        let uploadedImageUrls = [];
+        let testTrocId = null;
+
+        async function authenticate() {
+            const resultDiv = document.getElementById('auth-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Authentification...</p>';
+                
+                const randomEmail = `test${Date.now()}@example.com`;
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nom: 'Test', prenom: 'User', email: randomEmail,
+                        password: 'TestPassword123!', adresse: '123 Test Street',
+                        date_naissance: '1990-01-01', telephone: '0123456789', quartier_id: 1
+                    })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                authToken = data.accessToken;
+                
+                document.getElementById('upload-btn').disabled = false;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Authentification Réussie</h3>
+                        <p>Token: ${authToken.substring(0, 20)}...</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Authentification</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testMultipleUpload() {
+            const resultDiv = document.getElementById('upload-result');
+            const fileInput = document.getElementById('test-files');
+            const files = fileInput.files;
+            
+            if (!files || files.length === 0) {
+                resultDiv.innerHTML = '<div class="warning">⚠️ Veuillez sélectionner des images</div>';
+                return;
+            }
+            
+            try {
+                resultDiv.innerHTML = '<p>🔄 Upload en cours...</p>';
+                
+                const formData = new FormData();
+                Array.from(files).forEach(file => {
+                    formData.append('images', file);
+                });
+                
+                const response = await fetch(`${API_BASE}/upload/images`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: formData
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                uploadedImageUrls = data.imageUrls || [];
+                
+                document.getElementById('create-troc-btn').disabled = false;
+                
+                let imagesHtml = '<div class="image-grid">';
+                uploadedImageUrls.forEach((url, index) => {
+                    imagesHtml += `
+                        <div class="image-item">
+                            <img src="${url}" alt="Uploaded ${index + 1}">
+                            <div style="text-align: center; font-size: 10px; padding: 2px;">${index + 1}</div>
+                        </div>
+                    `;
+                });
+                imagesHtml += '</div>';
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Upload Réussi</h3>
+                        <p>Images uploadées: ${uploadedImageUrls.length}</p>
+                        ${imagesHtml}
+                        <pre>${JSON.stringify(uploadedImageUrls, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Upload</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function createTrocWithImages() {
+            const resultDiv = document.getElementById('create-troc-result');
+            try {
+                resultDiv.innerHTML = '<p>🔄 Création du troc...</p>';
+                
+                const trocData = {
+                    titre: `Test Troc Multiple Images ${Date.now()}`,
+                    description: 'Ce troc teste les images multiples',
+                    objet_propose: 'Objets de Test',
+                    objet_recherche: '',
+                    type_annonce: 'offre',
+                    categorie: 'Électronique',
+                    prix: 25.50,
+                    images: uploadedImageUrls
+                };
+                
+                const response = await fetch(`${API_BASE}/troc`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(trocData)
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const result = await response.json();
+                testTrocId = result.id;
+                
+                document.getElementById('delete-btn').disabled = false;
+                document.getElementById('form-btn').disabled = false;
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Troc Créé</h3>
+                        <p>ID: ${testTrocId}</p>
+                        <p>Images: ${uploadedImageUrls.length}</p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Création</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testImageDeletion() {
+            const resultDiv = document.getElementById('delete-result');
+            
+            if (!testTrocId || uploadedImageUrls.length === 0) {
+                resultDiv.innerHTML = '<div class="warning">⚠️ Créez d\'abord un troc avec des images</div>';
+                return;
+            }
+            
+            try {
+                resultDiv.innerHTML = '<p>🔄 Test de suppression...</p>';
+                
+                // Test deleting the first image
+                const imageToDelete = uploadedImageUrls[0];
+                
+                const response = await fetch(`${API_BASE}/troc/${testTrocId}/image`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ imageUrl: imageToDelete })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const result = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Suppression Réussie</h3>
+                        <p>Image supprimée: ${imageToDelete}</p>
+                        <p>Images restantes: ${result.images ? result.images.length : 0}</p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Échec Suppression</h3>
+                        <p>${error.message}</p>
+                        <p>Vérifiez la console pour plus de détails</p>
+                    </div>
+                `;
+            }
+        }
+
+        function navigateToForm() {
+            const resultDiv = document.getElementById('form-result');
+            if (testTrocId) {
+                resultDiv.innerHTML = '<p>🔄 Redirection vers le formulaire...</p>';
+                setTimeout(() => {
+                    window.location.href = `http://localhost:5174/trocs/edit/${testTrocId}`;
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = '<div class="error">❌ Aucun troc de test disponible</div>';
+            }
+        }
+
+        // Auto-run authentication
+        window.onload = () => {
+            authenticate();
+        };
+    </script>
+</body>
+</html>

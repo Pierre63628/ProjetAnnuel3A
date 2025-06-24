@@ -8,31 +8,61 @@ interface ImageCarouselProps {
     showThumbnails?: boolean;
 }
 
-const ImageCarousel: React.FC<ImageCarouselProps> = ({ 
-    images, 
-    alt, 
+const ImageCarousel: React.FC<ImageCarouselProps> = ({
+    images,
+    alt,
     className = "w-full h-48 object-cover rounded-lg",
-    showThumbnails = true 
+    showThumbnails = true
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [imageErrors, setImageErrors] = useState<Set<number>>(new Set());
 
-    // Filtrer les images valides
-    const validImages = images.filter(img => img && img.trim() !== '');
-    
+    // Safely filter valid images
+    const validImages = React.useMemo(() => {
+        try {
+            if (!images || !Array.isArray(images)) {
+                console.warn('ImageCarousel: Invalid images prop:', images);
+                return [];
+            }
+            return images.filter(img => img && typeof img === 'string' && img.trim() !== '');
+        } catch (error) {
+            console.error('Error filtering images:', error);
+            return [];
+        }
+    }, [images]);
+
     if (validImages.length === 0) {
         return null;
     }
 
+    const handleImageError = (index: number) => {
+        const imageUrl = validImages[index];
+        const processedUrl = getImageUrl(imageUrl);
+        console.error(`Image failed to load at index ${index}:`, {
+            originalUrl: imageUrl,
+            processedUrl: processedUrl,
+            allImages: validImages
+        });
+        setImageErrors(prev => new Set(prev).add(index));
+    };
+
     // Si une seule image, afficher sans carousel
     if (validImages.length === 1) {
+        const imageUrl = getImageUrl(validImages[0]);
+        if (!imageUrl || imageErrors.has(0)) {
+            return (
+                <div className={`${className} bg-gray-200 flex items-center justify-center`}>
+                    <span className="text-gray-500 text-sm">Image non disponible</span>
+                </div>
+            );
+        }
+
         return (
             <img
-                src={getImageUrl(validImages[0]) || ''}
+                src={imageUrl}
                 alt={alt}
                 className={className}
-                onError={(e) => {
-                    (e.target as HTMLElement).style.display = 'none';
-                }}
+                onError={() => handleImageError(0)}
             />
         );
     }
@@ -49,18 +79,25 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
         setCurrentIndex(index);
     };
 
+    const currentImageUrl = getImageUrl(validImages[currentIndex]);
+    const hasCurrentImageError = imageErrors.has(currentIndex);
+
     return (
         <div className="relative">
             {/* Image principale */}
             <div className="relative overflow-hidden rounded-lg">
-                <img
-                    src={getImageUrl(validImages[currentIndex]) || ''}
-                    alt={`${alt} - Image ${currentIndex + 1}`}
-                    className={className}
-                    onError={(e) => {
-                        (e.target as HTMLElement).style.display = 'none';
-                    }}
-                />
+                {!currentImageUrl || hasCurrentImageError ? (
+                    <div className={`${className} bg-gray-200 flex items-center justify-center`}>
+                        <span className="text-gray-500 text-sm">Image non disponible</span>
+                    </div>
+                ) : (
+                    <img
+                        src={currentImageUrl}
+                        alt={`${alt} - Image ${currentIndex + 1}`}
+                        className={className}
+                        onError={() => handleImageError(currentIndex)}
+                    />
+                )}
                 
                 {/* Boutons de navigation */}
                 {validImages.length > 1 && (
@@ -93,26 +130,35 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             {/* Miniatures */}
             {showThumbnails && validImages.length > 1 && (
                 <div className="flex gap-2 mt-2 overflow-x-auto">
-                    {validImages.map((image, index) => (
-                        <button
-                            key={index}
-                            onClick={() => goToImage(index)}
-                            className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden ${
-                                index === currentIndex 
-                                    ? 'border-blue-500' 
-                                    : 'border-gray-300 hover:border-gray-400'
-                            }`}
-                        >
-                            <img
-                                src={getImageUrl(image) || ''}
-                                alt={`${alt} - Miniature ${index + 1}`}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                    (e.target as HTMLElement).style.display = 'none';
-                                }}
-                            />
-                        </button>
-                    ))}
+                    {validImages.map((image, index) => {
+                        const thumbnailUrl = getImageUrl(image);
+                        const hasThumbnailError = imageErrors.has(index);
+
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => goToImage(index)}
+                                className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden ${
+                                    index === currentIndex
+                                        ? 'border-blue-500'
+                                        : 'border-gray-300 hover:border-gray-400'
+                                }`}
+                            >
+                                {!thumbnailUrl || hasThumbnailError ? (
+                                    <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                                        <span className="text-gray-400 text-xs">N/A</span>
+                                    </div>
+                                ) : (
+                                    <img
+                                        src={thumbnailUrl}
+                                        alt={`${alt} - Miniature ${index + 1}`}
+                                        className="w-full h-full object-cover"
+                                        onError={() => handleImageError(index)}
+                                    />
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
         </div>

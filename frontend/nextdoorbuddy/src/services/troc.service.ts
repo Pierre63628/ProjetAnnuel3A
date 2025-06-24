@@ -50,7 +50,9 @@ export const trocService = {
     // Créer une nouvelle annonce
     async createTroc(trocData: Omit<AnnonceTroc, 'id' | 'date_publication' | 'quartier_id' | 'utilisateur_id' | 'statut'>): Promise<{ id: number }> {
         try {
+            console.log('Creating troc with data:', trocData);
             const data = await api.post('/troc', trocData);
+            console.log('Troc creation response:', data);
             return data;
         } catch (error) {
             console.error('Erreur lors de la création de l\'annonce:', error);
@@ -81,20 +83,9 @@ export const trocService = {
     },
 
     // Supprimer une image spécifique d'un troc
-    async removeTrocImage(id: number, imageUrl?: string): Promise<{ message: string; images: string[] }> {
+    async removeTrocImage(id: number, imageUrl?: string): Promise<{ message: string; images?: string[] }> {
         try {
-            const data = await api.delete(`/troc/${id}/image`, { imageUrl });
-            return data;
-        } catch (error) {
-            console.error('Erreur lors de la suppression de l\'image:', error);
-            throw error;
-        }
-    },
-
-    // Supprimer l'image d'une annonce
-    async removeTrocImage(id: number): Promise<{ message: string }> {
-        try {
-            const data = await api.delete(`/troc/${id}/image`);
+            const data = await api.delete(`/troc/${id}/image`, imageUrl ? { imageUrl } : undefined);
             return data;
         } catch (error) {
             console.error('Erreur lors de la suppression de l\'image:', error);

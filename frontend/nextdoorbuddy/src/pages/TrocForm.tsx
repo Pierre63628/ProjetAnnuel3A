@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { trocService } from '../services/troc.service';
 import { getImageUrl } from '../utils/imageUtils';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const CATEGORIES = [
     'Électronique', 'Mobilier', 'Vêtements', 'Livres', 'Jouets',
@@ -13,6 +14,37 @@ function TrocForm() {
     const navigate = useNavigate();
     const { id } = useParams();
     const isEditing = !!id;
+
+    // Function to safely process image data (same as in Troc.tsx)
+    const processImageData = (images: any): string[] => {
+        try {
+            if (!images) return [];
+
+            // If it's already an array, return it
+            if (Array.isArray(images)) {
+                return images.filter(img => img && typeof img === 'string' && img.trim() !== '');
+            }
+
+            // If it's a string that looks like an array (e.g., "{image1,image2}")
+            if (typeof images === 'string') {
+                // Handle PostgreSQL array format
+                if (images.startsWith('{') && images.endsWith('}')) {
+                    const cleanString = images.slice(1, -1); // Remove { and }
+                    if (cleanString.trim() === '') return [];
+                    return cleanString.split(',')
+                        .map(img => img.trim().replace(/^"(.*)"$/, '$1')) // Remove surrounding quotes
+                        .filter(img => img !== '');
+                }
+                // Handle single image as string
+                return images.trim() !== '' ? [images] : [];
+            }
+
+            return [];
+        } catch (error) {
+            console.error('Error processing image data in TrocForm:', error, 'Original data:', images);
+            return [];
+        }
+    };
 
     const [form, setForm] = useState({
         titre: '',
@@ -26,11 +58,13 @@ function TrocForm() {
     });
 
     const [trocType, setTrocType] = useState<'propose' | 'recherche'>('propose');
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
-    const [uploadingImage, setUploadingImage] = useState(false);
+    const [imageFiles, setImageFiles] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+    const [uploadingImages, setUploadingImages] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const MAX_IMAGES = 5;
 
     useEffect(() => {
         if (isEditing && id) {
@@ -45,6 +79,13 @@ function TrocForm() {
             const trocToEdit = myTrocs.find(t => t.id === trocId);
 
             if (trocToEdit) {
+                // Process images using the same logic as the listing page
+                const processedImages = processImageData(trocToEdit.images);
+                // Debug: Log image processing for edit form
+                if (processedImages.length > 0) {
+                    console.log(`Loading troc ${trocToEdit.id} for edit with ${processedImages.length} image(s)`);
+                }
+
                 setForm({
                     titre: trocToEdit.titre,
                     description: trocToEdit.description,
@@ -53,7 +94,7 @@ function TrocForm() {
                     categorie: trocToEdit.categorie || '',
                     prix: trocToEdit.prix?.toString() || '',
                     budget_max: trocToEdit.budget_max?.toString() || '',
-                    images: trocToEdit.images || []
+                    images: processedImages
                 });
 
                 if (trocToEdit.objet_propose && !trocToEdit.objet_recherche) {
@@ -88,48 +129,143 @@ function TrocForm() {
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImageFile(file);
+        const files = Array.from(e.target.files || []);
 
-            // Créer un aperçu
+        // Check total images limit
+        const totalImages = form.images.length + imageFiles.length + files.length;
+        if (totalImages > MAX_IMAGES) {
+            setError(`Vous ne pouvez pas ajouter plus de ${MAX_IMAGES} images au total.`);
+            return;
+        }
+
+        // Validate file types and sizes
+        const validFiles: File[] = [];
+        const validPreviews: string[] = [];
+
+        files.forEach(file => {
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                setError(`Le fichier "${file.name}" n'est pas une image valide.`);
+                return;
+            }
+
+            // Check file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                setError(`Le fichier "${file.name}" est trop volumineux (max 5MB).`);
+                return;
+            }
+
+            validFiles.push(file);
+
+            // Create preview
             const reader = new FileReader();
             reader.onload = (e) => {
-                setImagePreview(e.target?.result as string);
+                validPreviews.push(e.target?.result as string);
+                if (validPreviews.length === validFiles.length) {
+                    setImagePreviews(prev => [...prev, ...validPreviews]);
+                }
             };
             reader.readAsDataURL(file);
+        });
+
+        if (validFiles.length > 0) {
+            setImageFiles(prev => [...prev, ...validFiles]);
+            setError(null); // Clear any previous errors
         }
     };
 
-    const uploadImage = async (): Promise<string | null> => {
-        if (!imageFile) return null;
+    const removeNewImage = (index: number) => {
+        setImageFiles(prev => prev.filter((_, i) => i !== index));
+        setImagePreviews(prev => prev.filter((_, i) => i !== index));
+
+        // Reset file input
+        const fileInput = document.getElementById('image_files') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+    };
+
+    const uploadImages = async (): Promise<string[]> => {
+        if (imageFiles.length === 0) return [];
 
         try {
-            setUploadingImage(true);
+            setUploadingImages(true);
             const formData = new FormData();
-            formData.append('image', imageFile);
 
-            const response = await fetch('/api/upload/image', {
+            // Add all selected images to FormData
+            imageFiles.forEach(file => {
+                formData.append('images', file);
+            });
+
+            const response = await fetch('/api/upload/images', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 },
                 body: formData
             });
 
             if (response.ok) {
                 const data = await response.json();
-                return data.imageUrl;
+                return data.imageUrls || [];
             } else {
-                throw new Error('Erreur lors de l\'upload');
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Erreur ${response.status} lors de l'upload`);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Erreur upload:', error);
-            setError('Erreur lors de l\'upload de l\'image');
-            return null;
+            if (error.message.includes('401')) {
+                setError('Session expirée. Veuillez vous reconnecter pour uploader des images.');
+            } else {
+                setError(`Erreur lors de l'upload des images: ${error.message}`);
+            }
+            return [];
         } finally {
-            setUploadingImage(false);
+            setUploadingImages(false);
         }
+    };
+
+    // Safe image component for edit form
+    const SafeImageDisplay = ({ imageUrl, index, onRemove }: { imageUrl: string, index: number, onRemove: (url: string) => void }) => {
+        const [imageError, setImageError] = useState(false);
+        const finalUrl = getImageUrl(imageUrl);
+
+        if (!finalUrl || imageError) {
+            return (
+                <div className="h-20 w-20 bg-gray-200 rounded-lg border border-gray-300 flex items-center justify-center">
+                    <span className="text-gray-500 text-xs">N/A</span>
+                    <button
+                        type="button"
+                        onClick={() => onRemove(imageUrl)}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                        title="Supprimer cette image"
+                    >
+                        ×
+                    </button>
+                </div>
+            );
+        }
+
+        return (
+            <div className="relative">
+                <img
+                    src={finalUrl}
+                    alt={`Image ${index + 1}`}
+                    className="h-20 w-20 object-cover rounded-lg border border-gray-300"
+                    onError={() => {
+                        console.error('Failed to load image in edit form:', finalUrl);
+                        setImageError(true);
+                    }}
+
+                />
+                <button
+                    type="button"
+                    onClick={() => onRemove(imageUrl)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                    title="Supprimer cette image"
+                >
+                    ×
+                </button>
+            </div>
+        );
     };
 
     const handleRemoveExistingImage = async (imageUrl: string) => {
@@ -167,6 +303,11 @@ function TrocForm() {
             return;
         }
 
+        if (!form.categorie.trim()) {
+            setError('Veuillez sélectionner une catégorie');
+            return;
+        }
+
         if (trocType === 'propose' && !form.objet_propose.trim()) {
             setError('Veuillez spécifier l\'objet que vous proposez');
             return;
@@ -177,21 +318,41 @@ function TrocForm() {
             return;
         }
 
+        // Validation des prix/budget
+        if (trocType === 'propose' && form.prix && parseFloat(form.prix) < 0) {
+            setError('Le prix ne peut pas être négatif');
+            return;
+        }
+
+        if (trocType === 'recherche' && form.budget_max && parseFloat(form.budget_max) < 0) {
+            setError('Le budget maximum ne peut pas être négatif');
+            return;
+        }
+
+        // Validation du nombre d'images
+        const totalImages = form.images.length + imageFiles.length;
+        if (totalImages > MAX_IMAGES) {
+            setError(`Vous ne pouvez pas avoir plus de ${MAX_IMAGES} images au total`);
+            return;
+        }
+
         try {
             setLoading(true);
             setError(null);
 
-            // Upload de l'image si une nouvelle image est sélectionnée
-            let newImageUrl = null;
-            if (imageFile) {
-                newImageUrl = await uploadImage();
+            // Upload des nouvelles images si des images sont sélectionnées
+            let newImageUrls: string[] = [];
+            if (imageFiles.length > 0) {
+                newImageUrls = await uploadImages();
             }
 
-            // Préparer le tableau d'images
+            // Préparer le tableau d'images (existantes + nouvelles)
             const images = [...form.images];
-            if (newImageUrl && !images.includes(newImageUrl)) {
-                images.push(newImageUrl);
-            }
+            newImageUrls.forEach(url => {
+                if (url && !images.includes(url)) {
+                    images.push(url);
+                }
+            });
 
             const trocData = {
                 titre: form.titre.trim(),
@@ -205,16 +366,42 @@ function TrocForm() {
                 categorie: form.categorie || undefined,
             };
 
+            let result;
             if (isEditing && id) {
-                await trocService.updateTroc(parseInt(id), trocData);
+                result = await trocService.updateTroc(parseInt(id), trocData);
+                console.log('Troc updated successfully:', result);
             } else {
-                await trocService.createTroc(trocData);
+                result = await trocService.createTroc(trocData);
+                console.log('Troc created successfully:', result);
             }
 
-            navigate('/trocs');
-        } catch (err) {
-            setError(isEditing ? 'Erreur lors de la mise à jour' : 'Erreur lors de la création');
-            console.error('Erreur:', err);
+            // Vérifier que la création/modification a réussi
+            if (result && (result.id || result.message)) {
+                console.log('Navigating to /trocs...');
+
+                // Clear the form state
+                setImageFiles([]);
+                setImagePreviews([]);
+
+                // Navigation immédiate - pas besoin de setTimeout
+                navigate('/trocs', { replace: true });
+            } else {
+                console.error('Invalid response from server:', result);
+                throw new Error('Réponse invalide du serveur');
+            }
+        } catch (err: any) {
+            console.error('Erreur lors de la soumission:', err);
+
+            // Gestion d'erreurs plus spécifique
+            if (err?.message?.includes('401') || err?.message?.includes('authentifié')) {
+                setError('Session expirée. Veuillez vous reconnecter.');
+            } else if (err?.message?.includes('400')) {
+                setError('Données invalides. Vérifiez les champs obligatoires.');
+            } else if (err?.message?.includes('500')) {
+                setError('Erreur serveur. Veuillez réessayer plus tard.');
+            } else {
+                setError(isEditing ? 'Erreur lors de la mise à jour de l\'annonce' : 'Erreur lors de la création de l\'annonce');
+            }
         } finally {
             setLoading(false);
         }
@@ -234,7 +421,8 @@ function TrocForm() {
     return (
         <div className="min-h-screen bg-gray-100">
             <Header />
-            <div className="container mx-auto p-6">
+            <ErrorBoundary>
+                <div className="container mx-auto p-6">
                 <div className="mb-6">
                     <h1 className="text-2xl font-bold text-gray-800">
                         {isEditing ? 'Modifier l\'annonce' : 'Créer une annonce de troc'}
@@ -406,38 +594,60 @@ function TrocForm() {
                             </div>
                         )}
 
-                        {/* Upload d'image */}
+                        {/* Upload d'images multiples */}
                         <div>
-                            <label htmlFor="image_file" className="mb-2 block text-sm font-medium text-gray-700">
-                                Image
+                            <label htmlFor="image_files" className="mb-2 block text-sm font-medium text-gray-700">
+                                Images ({form.images.length + imageFiles.length}/{MAX_IMAGES})
                             </label>
                             <input
                                 type="file"
-                                id="image_file"
+                                id="image_files"
                                 accept="image/*"
+                                multiple
                                 onChange={handleImageChange}
-                                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                disabled={form.images.length + imageFiles.length >= MAX_IMAGES}
+                                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
                             />
+                            <p className="text-xs text-gray-500 mt-1">
+                                Vous pouvez sélectionner jusqu'à {MAX_IMAGES} images (max 5MB chacune)
+                            </p>
 
                             {/* Aperçu des images existantes */}
                             {form.images && form.images.length > 0 && (
                                 <div className="mt-3">
-                                    <p className="text-sm text-gray-600 mb-2">Images existantes :</p>
+                                    <p className="text-sm text-gray-600 mb-2">
+                                        Images existantes ({form.images.length}) :
+                                    </p>
                                     <div className="flex flex-wrap gap-2">
                                         {form.images.map((imageUrl: string, index: number) => (
+                                            <SafeImageDisplay
+                                                key={`${imageUrl}-${index}`}
+                                                imageUrl={imageUrl}
+                                                index={index}
+                                                onRemove={handleRemoveExistingImage}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Aperçu des nouvelles images */}
+                            {imagePreviews.length > 0 && (
+                                <div className="mt-3">
+                                    <p className="text-sm text-gray-600 mb-2">
+                                        Nouvelles images ({imagePreviews.length}) :
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {imagePreviews.map((preview, index) => (
                                             <div key={index} className="relative">
                                                 <img
-                                                    src={getImageUrl(imageUrl) || ''}
-                                                    alt={`Image ${index + 1}`}
+                                                    src={preview}
+                                                    alt={`Aperçu nouvelle image ${index + 1}`}
                                                     className="h-20 w-20 object-cover rounded-lg border border-gray-300"
-                                                    onError={(e: any) => {
-                                                        (e.target as HTMLElement).style.display = 'none';
-                                                    }}
                                                 />
-                                                {/* Bouton pour supprimer l'image existante */}
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleRemoveExistingImage(imageUrl)}
+                                                    onClick={() => removeNewImage(index)}
                                                     className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
                                                     title="Supprimer cette image"
                                                 >
@@ -449,39 +659,10 @@ function TrocForm() {
                                 </div>
                             )}
 
-                            {/* Aperçu de la nouvelle image */}
-                            {imagePreview && (
-                                <div className="mt-3">
-                                    <p className="text-sm text-gray-600 mb-2">Nouvelle image :</p>
-                                    <div className="relative inline-block">
-                                        <img
-                                            src={imagePreview}
-                                            alt="Aperçu nouvelle image"
-                                            className="h-32 w-32 object-cover rounded-lg border border-gray-300"
-                                        />
-
-                                        {/* Bouton pour supprimer l'aperçu */}
-                                        <div className="absolute top-1 right-1">
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setImageFile(null);
-                                                    setImagePreview(null);
-                                                    const fileInput = document.getElementById('image_file') as HTMLInputElement;
-                                                    if (fileInput) fileInput.value = '';
-                                                }}
-                                                className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
-                                                title="Annuler la sélection"
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {uploadingImage && (
-                                <p className="text-sm text-blue-600 mt-2">Upload en cours...</p>
+                            {uploadingImages && (
+                                <p className="text-sm text-blue-600 mt-2">
+                                    Upload de {imageFiles.length} image(s) en cours...
+                                </p>
                             )}
                         </div>
 
@@ -504,7 +685,8 @@ function TrocForm() {
                         </div>
                     </form>
                 </div>
-            </div>
+                </div>
+            </ErrorBoundary>
         </div>
     );
 }

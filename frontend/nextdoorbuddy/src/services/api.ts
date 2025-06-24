@@ -80,6 +80,7 @@ export const apiRequest = async (endpoint: string, options: RequestInit = {}) =>
     // Gérer les erreurs
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error(`API Error ${response.status}:`, errorData);
         throw new Error(errorData.message || `Erreur ${response.status}`);
     }
 
