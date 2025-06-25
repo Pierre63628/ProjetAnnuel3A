@@ -144,12 +144,6 @@ const ChatWindow: React.FC = () => {
                             <Phone className="w-4 h-4" />
                         </Button>
                         <Button variant="outline" size="sm">
-                            <Video className="w-4 h-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                            <Info className="w-4 h-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
                             <Settings className="w-4 h-4" />
                         </Button>
                     </div>

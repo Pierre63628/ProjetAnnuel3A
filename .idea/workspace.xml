@@ -5,25 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocDetail.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/controllers/troc.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/controllers/troc.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/routes/troc.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/routes/troc.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/services/websocket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/services/websocket.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/types/messaging.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/types/messaging.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatRoomList.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatRoomList.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/card.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/types/messaging.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/types/messaging.types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/utils/permissions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/utils/permissions.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,7 +187,7 @@
       <workItem from="1750257394578" duration="8325000" />
       <workItem from="1750387729452" duration="12582000" />
       <workItem from="1750712294605" duration="5255000" />
-      <workItem from="1750800330481" duration="3285000" />
+      <workItem from="1750800330481" duration="4995000" />
     </task>
     <servers />
   </component>
