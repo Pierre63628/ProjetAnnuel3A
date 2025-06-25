@@ -334,7 +334,7 @@ create table if not exists "AnnonceTroc"
     description          text,
     objet_propose        varchar(255) not null,
     objet_recherche      varchar(255) not null,
-    image_url            text,
+    images               text,
     date_publication     timestamp   default CURRENT_TIMESTAMP,
     quartier_id          integer
         references "Quartier",
