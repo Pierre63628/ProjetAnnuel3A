@@ -3,6 +3,7 @@ import Home from "./pages/Home"
 import Login from "./pages/Login"
 import Troc from "./pages/Troc"
 import TrocForm from "./pages/TrocForm"
+import TrocDetail from "./pages/TrocDetail"
 import MyTrocs from "./pages/MyTrocs"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
@@ -69,6 +70,11 @@ function AppRoutes() {
       <Route path="/trocs/create" element={
         <ProtectedRoute>
           <TrocForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/trocs/:id" element={
+        <ProtectedRoute>
+          <TrocDetail />
         </ProtectedRoute>
       } />
       <Route path="/trocs/edit/:id" element={

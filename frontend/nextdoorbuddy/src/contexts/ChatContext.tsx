@@ -112,32 +112,12 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         setOnlineUsers([]);
     }, []);
 
-    // Select room
-    const selectRoom = useCallback((room: ChatRoom | null) => {
-        if (currentRoom) {
-            webSocketService.leaveRoom(currentRoom.id);
-        }
-        
-        setCurrentRoom(room);
-        
-        if (room) {
-            webSocketService.joinRoom(room.id);
-            // Load messages if not already loaded
-            if (!messages[room.id]) {
-                loadMessages(room.id);
-            }
-        }
-    }, [currentRoom, messages]);
-
-    // Send message
-    const sendMessage = useCallback((roomId: number, content: string, replyToId?: number) => {
-        webSocketService.sendMessage(roomId, content, 'text', replyToId);
-    }, []);
-
     // Load messages
     const loadMessages = useCallback(async (roomId: number, page = 1) => {
         try {
+            console.log(`📨 Loading messages for room ${roomId}, page ${page}`);
             const roomMessages = await messagingService.getMessages(roomId, { page, limit: 50 });
+            console.log(`📨 Loaded ${roomMessages.length} messages for room ${roomId}`);
             setMessages(prev => ({
                 ...prev,
                 [roomId]: page === 1 ? roomMessages : [...(prev[roomId] || []), ...roomMessages]
@@ -146,6 +126,36 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
             console.error('Failed to load messages:', err);
             setError(err instanceof Error ? err.message : 'Failed to load messages');
         }
+    }, []);
+
+    const selectRoom = useCallback((room: ChatRoom | null) => {
+        setCurrentRoom(prevRoom => {
+            if (prevRoom && prevRoom.id !== room?.id) {
+                console.log(`🚪 Leaving room ${prevRoom.id}`);
+                webSocketService.leaveRoom(prevRoom.id);
+            }
+
+            if (room) {
+                console.log(`🎯 Setting current room to:`, room?.id || 'null');
+                console.log(`🚪 Joining room ${room.id}`);
+                webSocketService.joinRoom(room.id);
+
+                // Load messages if not already loaded
+                if (!messages[room.id] || messages[room.id].length === 0) {
+                    console.log(`📨 Loading messages for room ${room.id} via HTTP`);
+                    loadMessages(room.id);
+                } else {
+                    console.log(`📨 Messages already loaded for room ${room.id}: ${messages[room.id]?.length} messages`);
+                }
+            }
+            return room;
+        });
+    }, [messages, loadMessages]);
+
+
+    // Send message
+    const sendMessage = useCallback((roomId: number, content: string, replyToId?: number) => {
+        webSocketService.sendMessage(roomId, content, 'text', replyToId);
     }, []);
 
     const startTyping = useCallback((roomId: number) => {
@@ -200,13 +210,22 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                     ...prev,
                     [message.chat_room_id]: [...(prev[message.chat_room_id] || []), message]
                 }));
-                
+
                 // Update room's last message
-                setChatRooms(prev => prev.map(room => 
-                    room.id === message.chat_room_id 
+                setChatRooms(prev => prev.map(room =>
+                    room.id === message.chat_room_id
                         ? { ...room, last_message: message, updated_at: message.created_at }
                         : room
                 ));
+            }),
+
+            // Messages loaded event
+            webSocketService.onMessagesLoaded((data) => {
+                console.log(`📨 Received ${data.messages.length} messages for room ${data.chatRoomId}`);
+                setMessages(prev => ({
+                    ...prev,
+                    [data.chatRoomId]: data.page === 1 ? data.messages : [...(prev[data.chatRoomId] || []), ...data.messages]
+                }));
             }),
 
             webSocketService.onMessageUpdate((message) => {

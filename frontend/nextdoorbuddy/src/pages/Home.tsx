@@ -13,6 +13,8 @@ import {
     checkParticipation,
     Evenement
 } from '../services/evenement.service';
+import { trocService, AnnonceTroc } from '../services/troc.service';
+import { getImageUrl } from '../utils/imageUtils';
 import {
     Calendar,
     MapPin,
@@ -24,16 +26,50 @@ import {
     ChevronRight,
     CalendarDays,
     UserCheck,
-    Plus
+    Plus,
+    Package,
+    ArrowRightLeft,
+    Eye,
+    Image as ImageIcon
 } from 'lucide-react';
 
 const Home = () => {
     const { user } = useAuth();
     const [todaysEvents, setTodaysEvents] = useState<Evenement[]>([]);
     const [userEvents, setUserEvents] = useState<Evenement[]>([]);
+    const [trocs, setTrocs] = useState<AnnonceTroc[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [participationStatus, setParticipationStatus] = useState<{[key: number]: {isParticipant: boolean, participantCount: number}}>({});
+
+    // Image processing function for trocs
+    const processImageData = (images: any): string[] => {
+        try {
+            if (!images) return [];
+
+            if (Array.isArray(images)) {
+                return images.map(img => getImageUrl(img)).filter(img => img !== null) as string[];
+            }
+
+            if (typeof images === 'string') {
+                if (images.startsWith('{') && images.endsWith('}')) {
+                    const cleanString = images.slice(1, -1);
+                    if (cleanString.trim() === '') return [];
+                    return cleanString.split(',')
+                        .map(img => img.trim().replace(/^"(.*)"$/, '$1'))
+                        .filter(img => img !== '')
+                        .map(img => getImageUrl(img))
+                        .filter(img => img !== null) as string[];
+                }
+                return images.trim() !== '' ? [getImageUrl(images)].filter(img => img !== null) as string[] : [];
+            }
+
+            return [];
+        } catch (error) {
+            console.error('Error processing image data:', error);
+            return [];
+        }
+    };
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -65,6 +101,15 @@ const Home = () => {
 
                 setTodaysEvents(todayEvents);
                 setUserEvents(upcomingUserEvents.slice(0, 3)); // Show only first 3
+
+                // Fetch available trocs
+                const availableTrocs = await trocService.getAllTrocs();
+                // Process troc images
+                const processedTrocs = availableTrocs.map(troc => ({
+                    ...troc,
+                    images: processImageData(troc.images)
+                }));
+                setTrocs(processedTrocs.slice(0, 6)); // Show only first 6
 
                 // Fetch participation status for today's events
                 if (todayEvents.length > 0) {
@@ -140,21 +185,150 @@ const Home = () => {
                     </div>
                 </motion.div>
 
-                {/* Troc section */}
-                <div className="mb-8 rounded-lg bg-white p-6 shadow">
-                    <h3 className="mb-4 text-xl font-semibold text-gray-800">Trocs et échanges</h3>
-                    <p className="mb-4 text-gray-600">
-                        Échangez des objets avec vos voisins ! Proposez ce que vous n'utilisez plus ou trouvez ce dont vous avez besoin.
-                    </p>
-                    <div className="mt-4 flex space-x-4">
-                        <Link to="/trocs" className="rounded-md bg-purple-500 px-4 py-2 text-white hover:bg-purple-600">
-                            Voir les trocs
-                        </Link>
-                        <Link to="/trocs/create" className="rounded-md bg-orange-500 px-4 py-2 text-white hover:bg-orange-600">
-                            Créer une annonce
-                        </Link>
-                    </div>
-                </div>
+                {/* Available Trocs Section */}
+                <motion.div
+                    className="mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                >
+                    <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                                    <ArrowRightLeft className="w-6 h-6 text-purple-600 mr-3" />
+                                    Trocs disponibles
+                                </h2>
+                                <Button asChild variant="outline" size="sm">
+                                    <Link to="/trocs">
+                                        Voir tous les trocs
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </Link>
+                                </Button>
+                            </div>
+
+                            {loading ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                                    <p className="ml-3 text-gray-600">Chargement...</p>
+                                </div>
+                            ) : error ? (
+                                <div className="text-center py-12">
+                                    <p className="text-red-600 mb-4">{error}</p>
+                                    <Button onClick={() => window.location.reload()}>
+                                        Réessayer
+                                    </Button>
+                                </div>
+                            ) : trocs.length === 0 ? (
+                                <div className="text-center py-12">
+                                    <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                    <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun troc disponible</h3>
+                                    <p className="text-gray-500 mb-6">Soyez le premier à proposer un échange dans votre quartier !</p>
+                                    <Button asChild>
+                                        <Link to="/trocs/create">
+                                            <Plus className="w-4 h-4 mr-2" />
+                                            Créer une annonce
+                                        </Link>
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {trocs.map((troc, index) => (
+                                        <motion.div
+                                            key={troc.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                                            whileHover={{ y: -4 }}
+                                            className="group"
+                                        >
+                                            <Card className="h-full shadow-md hover:shadow-xl transition-all duration-300 border-0 bg-white">
+                                                <CardContent className="p-4">
+                                                    {/* Image section */}
+                                                    <div className="mb-3 relative">
+                                                        {troc.images && troc.images.length > 0 ? (
+                                                            <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+                                                                <img
+                                                                    src={troc.images[0]}
+                                                                    alt={troc.titre}
+                                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="w-full h-32 bg-gradient-to-br from-purple-100 to-purple-200 rounded-lg flex items-center justify-center">
+                                                                <ImageIcon className="w-8 h-8 text-purple-400" />
+                                                            </div>
+                                                        )}
+                                                        <div className="absolute top-2 right-2">
+                                                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                                                troc.type_annonce === 'offre'
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : 'bg-blue-100 text-blue-800'
+                                                            }`}>
+                                                                {troc.type_annonce === 'offre' ? 'Offre' : 'Demande'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-start justify-between mb-3">
+                                                        <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                                                            {troc.titre}
+                                                        </h3>
+                                                    </div>
+
+                                                    <div className="space-y-2 mb-4">
+                                                        <div className="flex items-center text-sm text-gray-600">
+                                                            <Package className="w-4 h-4 mr-2 text-purple-500" />
+                                                            <span className="line-clamp-1">{troc.objet_propose}</span>
+                                                        </div>
+                                                        <div className="flex items-center text-sm text-gray-600">
+                                                            <ArrowRightLeft className="w-4 h-4 mr-2 text-orange-500" />
+                                                            <span className="line-clamp-1">{troc.objet_recherche}</span>
+                                                        </div>
+                                                        {troc.prix && (
+                                                            <div className="flex items-center text-sm text-gray-600">
+                                                                <span className="font-medium text-green-600">{troc.prix}€</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex items-center justify-between">
+                                                        <Button asChild size="sm" className="flex-1 mr-2">
+                                                            <Link to={`/trocs/${troc.id}`}>
+                                                                <Eye className="w-4 h-4 mr-1" />
+                                                                Voir détails
+                                                            </Link>
+                                                        </Button>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Quick Actions for Trocs */}
+                            {trocs.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-200">
+                                    <div className="flex flex-col sm:flex-row gap-3">
+                                        <Button asChild variant="outline" className="flex-1">
+                                            <Link to="/trocs">
+                                                <ArrowRightLeft className="w-4 h-4 mr-2" />
+                                                Parcourir tous les trocs
+                                            </Link>
+                                        </Button>
+                                        <Button asChild className="flex-1">
+                                            <Link to="/trocs/create">
+                                                <Plus className="w-4 h-4 mr-2" />
+                                                Créer une annonce
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </motion.div>
 
                 {/* User information */}
                 <div className="mb-8 rounded-lg bg-white p-6 shadow">
@@ -432,6 +606,12 @@ const Home = () => {
                                     <Link to="/events/create">
                                         <Plus className="w-5 h-5 mr-3" />
                                         Créer un événement
+                                    </Link>
+                                </Button>
+                                <Button asChild variant="outline" className="w-full justify-start" size="lg">
+                                    <Link to="/trocs/create">
+                                        <ArrowRightLeft className="w-5 h-5 mr-3" />
+                                        Créer un troc
                                     </Link>
                                 </Button>
                                 <Button asChild variant="outline" className="w-full justify-start" size="lg">

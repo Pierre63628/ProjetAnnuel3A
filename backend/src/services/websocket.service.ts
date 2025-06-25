@@ -116,15 +116,27 @@ export class WebSocketService {
                     }
 
                     socket.join(`room_${chatRoomId}`);
-                    
+
+                    // Load and send existing messages to the user
+                    try {
+                        const MessageModel = (await import('../models/message.model.js')).MessageModel;
+                        const messages = await MessageModel.getMessages(chatRoomId, { page: 1, limit: 50 });
+                        socket.emit('messages_loaded', { chatRoomId, messages });
+                        console.log(`📨 Sent ${messages.length} messages to user ${userId} for room ${chatRoomId}`);
+                    } catch (messageError) {
+                        console.error('Failed to load messages for room:', messageError);
+                        socket.emit('error', { message: 'Failed to load room messages' });
+                    }
+
                     // Notify other room members
                     const member = await ChatRoomModel.getMembers(chatRoomId);
                     const userMember = member.find(m => m.user_id === userId);
-                    
+
                     if (userMember) {
                         socket.to(`room_${chatRoomId}`).emit('user_joined_room', userMember);
                     }
                 } catch (error) {
+                    console.error('Failed to join room:', error);
                     socket.emit('error', { message: 'Failed to join room' });
                 }
             });
@@ -133,6 +145,29 @@ export class WebSocketService {
             socket.on('leave_room', (chatRoomId) => {
                 socket.leave(`room_${chatRoomId}`);
                 socket.to(`room_${chatRoomId}`).emit('user_left_room', userId, chatRoomId);
+            });
+
+            // Handle getting messages for a room
+            socket.on('get_messages', async (data) => {
+                try {
+                    const { chatRoomId, page = 1, limit = 50 } = data;
+
+                    // Check if user is member of the room
+                    const isMember = await ChatRoomModel.isMember(chatRoomId, userId);
+                    if (!isMember) {
+                        socket.emit('error', { message: 'Not authorized to access messages in this room' });
+                        return;
+                    }
+
+                    const MessageModel = (await import('../models/message.model.js')).MessageModel;
+                    const messages = await MessageModel.getMessages(chatRoomId, { page, limit });
+
+                    socket.emit('messages_loaded', { chatRoomId, messages, page });
+                    console.log(`📨 Sent ${messages.length} messages (page ${page}) to user ${userId} for room ${chatRoomId}`);
+                } catch (error) {
+                    console.error('Failed to get messages:', error);
+                    socket.emit('error', { message: 'Failed to load messages' });
+                }
             });
 
             // Handle sending messages

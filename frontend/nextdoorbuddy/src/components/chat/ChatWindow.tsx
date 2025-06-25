@@ -6,10 +6,10 @@ import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
 import TypingIndicator from './TypingIndicator';
 import { Button } from '../ui/button';
-import { 
-    MessageCircle, 
-    Users, 
-    Hash, 
+import {
+    MessageCircle,
+    Users,
+    Hash,
     Settings,
     Phone,
     Video,
@@ -18,16 +18,16 @@ import {
 
 const ChatWindow: React.FC = () => {
     const { user } = useAuth();
-    const { 
-        currentRoom, 
-        messages, 
+    const {
+        currentRoom,
+        messages,
         typingUsers,
         sendMessage,
         markAsRead,
         startTyping,
         stopTyping
     } = useChat();
-    
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const messagesContainerRef = useRef<HTMLDivElement>(null);
     const [isAtBottom, setIsAtBottom] = useState(true);
@@ -35,21 +35,27 @@ const ChatWindow: React.FC = () => {
     const currentMessages = currentRoom ? messages[currentRoom.id] || [] : [];
     const currentTypingUsers = currentRoom ? typingUsers[currentRoom.id] || [] : [];
 
-    // Auto-scroll to bottom when new messages arrive
+    React.useEffect(() => {
+        if (currentRoom) {
+            console.log(`💬 ChatWindow: Room ${currentRoom.id} selected, ${currentMessages.length} messages available`);
+            console.log(`💬 ChatWindow: Room details:`, currentRoom);
+        } else {
+            console.log(`💬 ChatWindow: No room selected`);
+        }
+    }, [currentRoom, currentMessages.length]);
+
     useEffect(() => {
         if (isAtBottom && messagesEndRef.current) {
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     }, [currentMessages, isAtBottom]);
 
-    // Mark messages as read when room changes or new messages arrive
     useEffect(() => {
         if (currentRoom && currentMessages.length > 0) {
             markAsRead(currentRoom.id);
         }
     }, [currentRoom, currentMessages.length, markAsRead]);
 
-    // Handle scroll to detect if user is at bottom
     const handleScroll = () => {
         if (messagesContainerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
@@ -78,8 +84,11 @@ const ChatWindow: React.FC = () => {
 
     if (!currentRoom) {
         return (
-            <div className="h-full flex items-center justify-center">
-                <motion.div 
+            <div
+                className="flex items-center justify-center w-full"
+                style={{ height: '100%' }}
+            >
+                <motion.div
                     className="text-center"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -98,9 +107,16 @@ const ChatWindow: React.FC = () => {
     }
 
     return (
-        <div className="h-full flex flex-col">
+        <div
+            className="flex flex-col w-full relative"
+            style={{
+                height: '100%',
+                maxHeight: '100%',
+                overflow: 'hidden'
+            }}
+        >
             {/* Chat Header */}
-            <div className="p-4 border-b border-gray-200 bg-white">
+            <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-white">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         {currentRoom.room_type === 'group' ? (
@@ -123,7 +139,6 @@ const ChatWindow: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
                     <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm">
                             <Phone className="w-4 h-4" />
@@ -142,72 +157,80 @@ const ChatWindow: React.FC = () => {
             </div>
 
             {/* Messages Area */}
-            <div 
+            <div
                 ref={messagesContainerRef}
-                className="flex-1 overflow-y-auto p-4 space-y-4"
+                className="relative p-4"
+                style={{
+                    flex: '1 1 0%',
+                    overflow: 'auto',
+                    overflowX: 'hidden',
+                    minHeight: 0,
+                    maxHeight: '100%'
+                }}
                 onScroll={handleScroll}
             >
-                <AnimatePresence>
-                    {currentMessages.map((message, index) => {
-                        const isOwn = message.sender_id === user?.id;
-                        const showAvatar = !isOwn && (
-                            index === 0 || 
-                            currentMessages[index - 1].sender_id !== message.sender_id
-                        );
-                        const showTimestamp = index === 0 || 
-                            new Date(message.created_at).getTime() - 
-                            new Date(currentMessages[index - 1].created_at).getTime() > 300000; // 5 minutes
+                <div className="space-y-4">
+                    <AnimatePresence>
+                        {currentMessages.map((message, index) => {
+                            const isOwn = message.sender_id === user?.id;
+                            const showAvatar = !isOwn && (
+                                index === 0 ||
+                                currentMessages[index - 1].sender_id !== message.sender_id
+                            );
+                            const showTimestamp = index === 0 ||
+                                new Date(message.created_at).getTime() -
+                                new Date(currentMessages[index - 1].created_at).getTime() > 300000;
 
-                        return (
-                            <motion.div
-                                key={message.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3 }}
+                            return (
+                                <motion.div
+                                    key={message.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <MessageBubble
+                                        message={message}
+                                        isOwn={isOwn}
+                                        showAvatar={showAvatar}
+                                        showTimestamp={showTimestamp}
+                                    />
+                                </motion.div>
+                            );
+                        })}
+                    </AnimatePresence>
+
+                    {currentTypingUsers.length > 0 && (
+                        <TypingIndicator users={currentTypingUsers} />
+                    )}
+
+                    <div ref={messagesEndRef} />
+                </div>
+
+                {/* Scroll to Bottom Button */}
+                {!isAtBottom && (
+                    <div className="absolute bottom-4 right-4 z-10">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                        >
+                            <Button
+                                size="sm"
+                                className="rounded-full shadow-lg"
+                                onClick={() => {
+                                    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                    setIsAtBottom(true);
+                                }}
                             >
-                                <MessageBubble
-                                    message={message}
-                                    isOwn={isOwn}
-                                    showAvatar={showAvatar}
-                                    showTimestamp={showTimestamp}
-                                />
-                            </motion.div>
-                        );
-                    })}
-                </AnimatePresence>
-
-                {/* Typing Indicator */}
-                {currentTypingUsers.length > 0 && (
-                    <TypingIndicator users={currentTypingUsers} />
+                                ↓
+                            </Button>
+                        </motion.div>
+                    </div>
                 )}
-
-                <div ref={messagesEndRef} />
             </div>
-
-            {/* Scroll to Bottom Button */}
-            {!isAtBottom && (
-                <motion.div
-                    className="absolute bottom-20 right-6"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                >
-                    <Button
-                        size="sm"
-                        className="rounded-full shadow-lg"
-                        onClick={() => {
-                            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                            setIsAtBottom(true);
-                        }}
-                    >
-                        ↓
-                    </Button>
-                </motion.div>
-            )}
-
             {/* Message Input */}
-            <div className="border-t border-gray-200 bg-white">
+            <div className="flex-shrink-0 border-t border-gray-200 bg-white">
                 <MessageInput
                     onSendMessage={handleSendMessage}
                     onTypingStart={handleTypingStart}

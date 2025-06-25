@@ -21,6 +21,7 @@ class WebSocketService {
     private messageListeners: ((message: Message) => void)[] = [];
     private messageUpdateListeners: ((message: Message) => void)[] = [];
     private messageDeleteListeners: ((messageId: number, chatRoomId: number) => void)[] = [];
+    private messagesLoadedListeners: ((data: { chatRoomId: number; messages: Message[]; page?: number }) => void)[] = [];
     private typingListeners: ((data: TypingIndicator) => void)[] = [];
     private typingStopListeners: ((data: { userId: number; chatRoomId: number }) => void)[] = [];
     private presenceListeners: ((presence: UserPresence) => void)[] = [];
@@ -74,6 +75,10 @@ class WebSocketService {
 
         this.socket.on('message_deleted', (messageId, chatRoomId) => {
             this.messageDeleteListeners.forEach(listener => listener(messageId, chatRoomId));
+        });
+
+        this.socket.on('messages_loaded', (data) => {
+            this.messagesLoadedListeners.forEach(listener => listener(data));
         });
 
         this.socket.on('typing_start', (data) => {
@@ -147,6 +152,10 @@ class WebSocketService {
         this.socket?.emit('delete_message', messageId);
     }
 
+    getMessages(chatRoomId: number, page?: number, limit?: number) {
+        this.socket?.emit('get_messages', { chatRoomId, page, limit });
+    }
+
     // Typing indicators
     startTyping(chatRoomId: number) {
         this.socket?.emit('start_typing', chatRoomId);
@@ -202,6 +211,16 @@ class WebSocketService {
             const index = this.messageDeleteListeners.indexOf(listener);
             if (index > -1) {
                 this.messageDeleteListeners.splice(index, 1);
+            }
+        };
+    }
+
+    onMessagesLoaded(listener: (data: { chatRoomId: number; messages: Message[]; page?: number }) => void) {
+        this.messagesLoadedListeners.push(listener);
+        return () => {
+            const index = this.messagesLoadedListeners.indexOf(listener);
+            if (index > -1) {
+                this.messagesLoadedListeners.splice(index, 1);
             }
         };
     }

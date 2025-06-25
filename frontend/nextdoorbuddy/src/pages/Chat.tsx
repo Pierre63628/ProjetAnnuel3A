@@ -8,10 +8,10 @@ import OnlineUsers from '../components/chat/OnlineUsers';
 import CreateRoomModal from '../components/chat/CreateRoomModal';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { 
-    MessageCircle, 
-    Users, 
-    Settings, 
+import {
+    MessageCircle,
+    Users,
+    Settings,
     Plus,
     Wifi,
     WifiOff,
@@ -19,17 +19,17 @@ import {
 } from 'lucide-react';
 
 const Chat: React.FC = () => {
-    const { 
-        isConnected, 
-        isConnecting, 
-        currentRoom, 
-        chatRooms, 
+    const {
+        isConnected,
+        isConnecting,
+        currentRoom,
+        chatRooms,
         onlineUsers,
         error,
         clearError,
         connectToChat
     } = useChat();
-    
+
     const [showOnlineUsers, setShowOnlineUsers] = useState(false);
     const [showCreateRoom, setShowCreateRoom] = useState(false);
 
@@ -38,7 +38,7 @@ const Chat: React.FC = () => {
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
                 <Header />
                 <div className="container mx-auto px-4 py-8 max-w-4xl">
-                    <motion.div 
+                    <motion.div
                         className="text-center py-16"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ const Chat: React.FC = () => {
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
                 <Header />
                 <div className="container mx-auto px-4 py-8 max-w-4xl">
-                    <motion.div 
+                    <motion.div
                         className="text-center py-16"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -84,10 +84,8 @@ const Chat: React.FC = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
             <Header />
-            
-            <div className="container mx-auto px-4 py-6 max-w-7xl">
-                {/* Header */}
-                <motion.div 
+            <div className="container mx-auto px-4 py-6 max-w-7xl h-[calc(100vh-60px)] flex flex-col">
+                <motion.div
                     className="mb-6"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -117,7 +115,6 @@ const Chat: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        
                         <div className="flex items-center gap-3">
                             <Button
                                 variant="outline"
@@ -128,7 +125,6 @@ const Chat: React.FC = () => {
                                 <Users className="w-4 h-4 mr-2" />
                                 En ligne ({onlineUsers.length})
                             </Button>
-                            
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -137,61 +133,53 @@ const Chat: React.FC = () => {
                                 <Plus className="w-4 h-4 mr-2" />
                                 Nouveau salon
                             </Button>
-                            
                             <Button variant="outline" size="sm">
                                 <Settings className="w-4 h-4" />
                             </Button>
                         </div>
                     </div>
                 </motion.div>
-
-                {/* Main Chat Interface */}
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-200px)]">
-                    {/* Chat Rooms List */}
-                    <motion.div 
-                        className="lg:col-span-1"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        <Card className="h-full shadow-lg border-0 bg-white/90 backdrop-blur-sm">
-                            <ChatRoomList 
-                                rooms={chatRooms}
-                                currentRoom={currentRoom}
-                                onShowCreateRoom={() => setShowCreateRoom(true)}
-                            />
-                        </Card>
-                    </motion.div>
-
-                    {/* Chat Window */}
-                    <motion.div 
-                        className="lg:col-span-2"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <Card className="h-full shadow-lg border-0 bg-white/90 backdrop-blur-sm">
-                            <ChatWindow />
-                        </Card>
-                    </motion.div>
-
-                    {/* Online Users / Room Info */}
-                    <motion.div 
-                        className={`lg:col-span-1 ${showOnlineUsers || currentRoom ? 'block' : 'hidden lg:block'}`}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.5, delay: 0.3 }}
-                    >
-                        <Card className="h-full shadow-lg border-0 bg-white/90 backdrop-blur-sm">
-                            <OnlineUsers 
-                                users={onlineUsers}
-                                currentRoom={currentRoom}
-                            />
-                        </Card>
-                    </motion.div>
+                <div className="flex-1 min-h-0">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full min-h-0">
+                        <motion.div
+                            className="lg:col-span-1 h-full min-h-0"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, delay: 0.1 }}
+                        >
+                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                                <ChatRoomList
+                                    rooms={chatRooms}
+                                    currentRoom={currentRoom}
+                                    onShowCreateRoom={() => setShowCreateRoom(true)}
+                                />
+                            </Card>
+                        </motion.div>
+                        <motion.div
+                            className="lg:col-span-2 h-full min-h-0"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col overflow-hidden">
+                                <ChatWindow />
+                            </Card>
+                        </motion.div>
+                        <motion.div
+                            className={`lg:col-span-1 h-full min-h-0 ${showOnlineUsers || currentRoom ? 'block' : 'hidden lg:block'}`}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}
+                        >
+                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                                <OnlineUsers
+                                    users={onlineUsers}
+                                    currentRoom={currentRoom}
+                                />
+                            </Card>
+                        </motion.div>
+                    </div>
                 </div>
-
-                {/* Mobile Online Users Toggle */}
                 <div className="lg:hidden fixed bottom-4 right-4">
                     <Button
                         onClick={() => setShowOnlineUsers(!showOnlineUsers)}
@@ -201,8 +189,6 @@ const Chat: React.FC = () => {
                         <Users className="w-6 h-6" />
                     </Button>
                 </div>
-
-                {/* Create Room Modal */}
                 <CreateRoomModal
                     isOpen={showCreateRoom}
                     onClose={() => setShowCreateRoom(false)}

@@ -47,6 +47,17 @@ export const trocService = {
         }
     },
 
+    // Récupérer une annonce spécifique par ID
+    async getTrocById(id: number): Promise<AnnonceTroc> {
+        try {
+            const data = await api.get(`/troc/${id}`);
+            return data;
+        } catch (error) {
+            console.error('Erreur lors de la récupération de l\'annonce:', error);
+            throw error;
+        }
+    },
+
     // Créer une nouvelle annonce
     async createTroc(trocData: Omit<AnnonceTroc, 'id' | 'date_publication' | 'quartier_id' | 'utilisateur_id' | 'statut'>): Promise<{ id: number }> {
         try {

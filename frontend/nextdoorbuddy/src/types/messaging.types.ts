@@ -92,6 +92,7 @@ export interface ServerToClientEvents {
     message_received: (message: Message) => void;
     message_updated: (message: Message) => void;
     message_deleted: (messageId: number, chatRoomId: number) => void;
+    messages_loaded: (data: { chatRoomId: number; messages: Message[]; page?: number }) => void;
     user_joined_room: (user: ChatRoomMember) => void;
     user_left_room: (userId: number, chatRoomId: number) => void;
     typing_start: (data: TypingIndicator) => void;

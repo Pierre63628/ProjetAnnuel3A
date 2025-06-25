@@ -2,6 +2,7 @@ import express from 'express';
 import {
     createTroc,
     getTrocByUserQuartier,
+    getTrocById,
     getUserTrocs,
     updateTroc,
     deleteTroc,
@@ -23,6 +24,7 @@ router.get('/test', (req, res) => {
 router.post('/', authenticateJWT, createTroc);
 router.get('/', authenticateJWT, getTrocByUserQuartier); // Requires auth to know user's neighborhood
 router.get('/my-trocs', authenticateJWT, getUserTrocs);
+router.get('/:id', authenticateJWT, getTrocById); // Get single troc by ID
 router.put('/:id', authenticateJWT, updateTroc);
 router.delete('/:id', authenticateJWT, deleteTroc);
 router.delete('/:id/image', authenticateJWT, removeTrocImage);

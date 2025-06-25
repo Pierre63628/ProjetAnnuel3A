@@ -310,8 +310,14 @@ function Troc() {
                                     </div>
                                 </div>
 
-                                        <div className="flex justify-end">
-                                            <button className="rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600">
+                                        <div className="flex justify-between items-center gap-3">
+                                            <Link
+                                                to={`/trocs/${annonce.id}`}
+                                                className="flex-1 rounded-md bg-purple-500 px-4 py-2 text-sm text-white hover:bg-purple-600 text-center transition-colors"
+                                            >
+                                                Voir détails
+                                            </Link>
+                                            <button className="flex-1 rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 transition-colors">
                                                 Contacter
                                             </button>
                                         </div>

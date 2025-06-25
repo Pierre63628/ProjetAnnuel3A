@@ -114,7 +114,10 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                                             ? 'bg-blue-50 border-blue-200 shadow-md'
                                             : 'bg-white hover:bg-gray-50 border-gray-200'
                                     }`}
-                                    onClick={() => selectRoom(room)}
+                                    onClick={() => {
+                                        console.log(`🖱️ Room clicked:`, room.id, room.name);
+                                        selectRoom(room);
+                                    }}
                                 >
                                     <CardContent className="p-3">
                                         <div className="flex items-start justify-between">

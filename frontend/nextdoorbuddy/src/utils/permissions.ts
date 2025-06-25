@@ -1,4 +1,5 @@
 import { Evenement } from '../services/evenement.service';
+import { AnnonceTroc } from '../services/troc.service';
 
 interface User {
     id: number;
@@ -71,4 +72,62 @@ export const isAdmin = (user: User | null): boolean => {
  */
 export const isEventOrganizer = (user: User | null, evenement: Evenement): boolean => {
     return user?.id === evenement.organisateur_id;
+};
+
+/**
+ * Vérifie si un utilisateur peut supprimer une annonce de troc
+ * @param user - L'utilisateur connecté
+ * @param troc - L'annonce de troc à vérifier
+ * @returns true si l'utilisateur peut supprimer l'annonce, false sinon
+ */
+export const canDeleteTroc = (user: User | null, troc: AnnonceTroc): boolean => {
+    if (!user || !troc) {
+        return false;
+    }
+
+    // Les administrateurs peuvent supprimer toutes les annonces
+    if (user.role === 'admin') {
+        return true;
+    }
+
+    // Le propriétaire peut supprimer sa propre annonce
+    if (user.id === troc.utilisateur_id) {
+        return true;
+    }
+
+    return false;
+};
+
+/**
+ * Vérifie si un utilisateur peut modifier une annonce de troc
+ * @param user - L'utilisateur connecté
+ * @param troc - L'annonce de troc à vérifier
+ * @returns true si l'utilisateur peut modifier l'annonce, false sinon
+ */
+export const canEditTroc = (user: User | null, troc: AnnonceTroc): boolean => {
+    if (!user || !troc) {
+        return false;
+    }
+
+    // Les administrateurs peuvent modifier toutes les annonces
+    if (user.role === 'admin') {
+        return true;
+    }
+
+    // Le propriétaire peut modifier sa propre annonce
+    if (user.id === troc.utilisateur_id) {
+        return true;
+    }
+
+    return false;
+};
+
+/**
+ * Vérifie si un utilisateur est le propriétaire d'une annonce de troc
+ * @param user - L'utilisateur à vérifier
+ * @param troc - L'annonce de troc à vérifier
+ * @returns true si l'utilisateur est le propriétaire, false sinon
+ */
+export const isTrocOwner = (user: User | null, troc: AnnonceTroc): boolean => {
+    return user?.id === troc.utilisateur_id;
 };

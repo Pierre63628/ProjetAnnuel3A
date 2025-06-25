@@ -139,6 +139,39 @@ export const getUserTrocs = async (req: Request, res: Response) => {
     }
 };
 
+export const getTrocById = async (req: Request, res: Response) => {
+    try {
+        // Vérifier que l'utilisateur est authentifié
+        if (!(req as any).user || !(req as any).user.id) {
+            return res.status(401).json({ message: 'Utilisateur non authentifié.' });
+        }
+
+        const trocId = parseInt(req.params.id);
+
+        if (isNaN(trocId)) {
+            return res.status(400).json({ message: 'ID de troc invalide.' });
+        }
+
+        // Récupérer le troc avec les informations de l'utilisateur et du quartier
+        const result = await pool.query(`
+            SELECT a.*, u.nom, u.prenom, u.email, q.nom_quartier
+            FROM "AnnonceTroc" a
+            JOIN "Utilisateur" u ON a.utilisateur_id = u.id
+            JOIN "Quartier" q ON a.quartier_id = q.id
+            WHERE a.id = $1 AND a.statut = 'active'
+        `, [trocId]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Annonce de troc non trouvée.' });
+        }
+
+        return res.status(200).json(result.rows[0]);
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'annonce de troc :', error);
+        return res.status(500).json({ message: 'Erreur serveur' });
+    }
+};
+
 export const updateTroc = async (req: Request, res: Response) => {
     try {
         // Vérifier que l'utilisateur est authentifié
