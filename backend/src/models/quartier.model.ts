@@ -67,11 +67,11 @@ export class QuartierModel {
     static async create(quartierData: Quartier): Promise<number> {
         try {
             const query = `
-        INSERT INTO "Quartier"
-          (nom_quartier, ville, code_postal, description, geom)
-        VALUES
-          ($1, $2, $3, $4, ST_SetSRID(ST_GeomFromGeoJSON($5), 4326))
-        RETURNING id
+                INSERT INTO "Quartier"
+                    (nom_quartier, ville, code_postal, description, geom)
+                VALUES
+                    ($1, $2, $3, $4, ST_SetSRID(ST_Multi(ST_GeomFromGeoJSON($5)), 4326))
+                    RETURNING id
       `;
             const geomString = JSON.stringify(quartierData.geom || null);
             const values = [
@@ -152,16 +152,6 @@ export class QuartierModel {
 
             if (parseInt(usersCheck.rows[0].count) > 0) {
                 throw new Error('Ce quartier ne peut pas être supprimé car des utilisateurs y sont rattachés');
-            }
-
-            // Vérifier si des utilisateurs ont ce quartier comme quartier secondaire
-            const secondaryCheck = await pool.query(
-                'SELECT COUNT(*) FROM "UtilisateurQuartier" WHERE quartier_id = $1',
-                [id]
-            );
-
-            if (parseInt(secondaryCheck.rows[0].count) > 0) {
-                throw new Error('Ce quartier ne peut pas être supprimé car des utilisateurs y sont rattachés comme quartier secondaire');
             }
 
             const result = await pool.query(

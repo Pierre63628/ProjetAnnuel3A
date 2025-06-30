@@ -10,6 +10,7 @@ import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import AdminTrocs from "./pages/AdminTrocs"
+import AdminDashboard from "./pages/AdminDashboard"
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
@@ -116,6 +117,11 @@ function AppRoutes() {
         <ProtectedRoute>
           <EventForm />
         </ProtectedRoute>
+      } />
+      <Route path="/admin/dashboard" element={
+        <AdminRoute>
+          <AdminDashboard />
+        </AdminRoute>
       } />
       <Route path="/admin/users" element={
         <AdminRoute>

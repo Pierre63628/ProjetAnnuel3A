@@ -648,7 +648,13 @@ const Home = () => {
                                 <p className="text-blue-100 mb-6">
                                     Vous avez accès à des fonctionnalités d'administration supplémentaires.
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <Button asChild variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                                        <Link to="/admin/dashboard">
+                                            <Sparkles className="w-5 h-5 mr-3" />
+                                            Tableau de bord
+                                        </Link>
+                                    </Button>
                                     <Button asChild variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
                                         <Link to="/admin/users">
                                             <Users className="w-5 h-5 mr-3" />

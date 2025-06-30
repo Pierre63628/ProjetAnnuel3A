@@ -34,9 +34,7 @@ const Header = () => {
     ];
 
     const adminNavigationItems = [
-        { to: '/admin/users', label: 'Gestion Utilisateurs', icon: Users },
-        { to: '/admin/quartiers', label: 'Gestion Quartiers', icon: MapPin },
-        { to: '/admin/trocs', label: 'Gestion Trocs', icon: Settings },
+        { to: '/admin/dashboard', label: 'Tableau de bord', icon: Sparkles },
     ];
 
     return (
