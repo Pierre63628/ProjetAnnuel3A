@@ -25,7 +25,6 @@ public class EventDataLoader {
     private final EventRepository eventRepository;
 
     private List<Event> allEvents = new ArrayList<>();
-    private String currentSource = null;
     private String currentSearchText = null;
     private LocalDate currentDate = null;
 
@@ -38,7 +37,6 @@ public class EventDataLoader {
     }
 
     public void loadAllEvents() {
-        currentSource = null;
         currentSearchText = null;
         currentDate = null;
         eventListView.getItems().clear();
@@ -61,37 +59,11 @@ public class EventDataLoader {
         loadEventsFromJson("eventbrite");
     }
 
-    public void loadEventsBySource(String source) {
-        currentSource = source;
-        currentSearchText = null;
-        currentDate = null;
-        eventListView.getItems().clear();
-        allEvents.clear();
-
-        try {
-            List<Event> events = eventRepository.getEventsBySource(source);
-
-            if (!events.isEmpty()) {
-                allEvents.addAll(events);
-                eventListView.getItems().addAll(events);
-                updateEventCount();
-                statusLabel.setText("Événements " + source + " chargés");
-            } else {
-                statusLabel.setText("Aucun événement trouvé pour " + source);
-                loadEventsFromJson(source);
-            }
-        } catch (Exception e) {
-            System.err.println("Erreur lors du chargement des événements depuis la BDD: " + e.getMessage());
-            statusLabel.setText("Erreur de chargement");
-            loadEventsFromJson(source);
-        }
-    }
-
     private void loadEventsFromJson(String source) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Event> events = mapper.readValue(
-                new File("src/main/resources/events_storage/" + source + "_events.json"),
+                new File("/events_storage/" + source + "_events.json"),
                 new TypeReference<>() {}
             );
 

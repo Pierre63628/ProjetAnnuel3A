@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConfig {
-    private static final String URL = "jdbc:postgresql://localhost:5432/events_db";
-    private static final String USER = "admin";
-    private static final String PASSWORD = "admin123";
+    public static final String URL = "jdbc:postgresql://localhost:5432/nextdoorbuddy";
+    public static final String USER = "user";
+    public static final String PASSWORD = "rootpass";
+    public static final String DB_NAME = "nextdoorbuddy";
+
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

@@ -8,16 +8,10 @@ import java.util.stream.Collectors;
 
 public class FilterController {
     private final Button allSourcesButton;
-    private final Button eventbriteButton;
-    private final Button alleventButton;
-    private final Button meetupButton;
     private final EventDataLoader dataLoader;
 
-    public FilterController(Button allSourcesButton, Button eventbriteButton, Button alleventButton, Button meetupButton, EventDataLoader dataLoader) {
+    public FilterController(Button allSourcesButton, EventDataLoader dataLoader) {
         this.allSourcesButton = allSourcesButton;
-        this.eventbriteButton = eventbriteButton;
-        this.alleventButton = alleventButton;
-        this.meetupButton = meetupButton;
         this.dataLoader = dataLoader;
     }
 
@@ -30,26 +24,8 @@ public class FilterController {
         dataLoader.loadAllEvents();
     }
 
-    public void handleEventbriteFilter() {
-        setActiveFilterButton(eventbriteButton);
-        dataLoader.loadEventsBySource("eventbrite");
-    }
-
-    public void handleAlleventFilter() {
-        setActiveFilterButton(alleventButton);
-        dataLoader.loadEventsBySource("allevent");
-    }
-
-    public void handleMeetupFilter() {
-        setActiveFilterButton(meetupButton);
-        dataLoader.loadEventsBySource("meetup");
-    }
-
     private void setActiveFilterButton(Button activeButton) {
         allSourcesButton.getStyleClass().remove("active-filter");
-        eventbriteButton.getStyleClass().remove("active-filter");
-        alleventButton.getStyleClass().remove("active-filter");
-        meetupButton.getStyleClass().remove("active-filter");
 
         activeButton.getStyleClass().add("active-filter");
     }

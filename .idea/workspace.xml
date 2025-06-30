@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19657930-f5fd-4e64-a9b6-2f1bcda94716" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/utils/AddressUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/DialogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/DialogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDetailsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDetailsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/models/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/models/Event.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/events_storage/eventbrite_events.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/events_storage/eventbrite_events.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/application.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/application.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/blue-night-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/blue-night-theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/dark-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/dark-theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/modern-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/modern-theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/nature-green-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/nature-green-theme.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,16 +48,16 @@
     &quot;accountId&quot;: &quot;44316467-e9e2-41b7-a7ff-292131952ba1&quot;
   }
 }</component>
-  <component name="KubernetesApiProvider"><![CDATA[{
-  "configuredContexts": [
+  <component name="KubernetesApiProvider">{
+  &quot;configuredContexts&quot;: [
     {
-      "name": "minikube",
-      "kubeConfigUrl": "file:///Users/pes/.kube/config",
-      "originalNamespace": "default"
+      &quot;name&quot;: &quot;minikube&quot;,
+      &quot;kubeConfigUrl&quot;: &quot;file:///Users/pes/.kube/config&quot;,
+      &quot;originalNamespace&quot;: &quot;default&quot;
     }
   ],
-  "isMigrated": true
-}]]></component>
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -60,33 +72,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.EventViewerApplication.executor": "Run",
-    "Application.Launcher.executor": "Run",
-    "Maven.Scrapper [clean].executor": "Run",
-    "Maven.Scrapper [package].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Scrapper",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/pes/ProjetAnnuel3A",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.EventViewerApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Launcher.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestQuartierApi.executor&quot;: &quot;Run&quot;,
+    &quot;Application.TestWithHttpURLConnection.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Scrapper [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Scrapper [package].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Scrapper&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/pes/ProjetAnnuel3A&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources/icone" />
@@ -95,6 +113,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Launcher">
+    <configuration name="AddElementToDB" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.esgi.scraper.Main" />
+      <module name="Scrapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.esgi.scraper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EventViewerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.esgi.scraper.interfaces.EventViewerApplication" />
       <module name="Scrapper" />
@@ -121,6 +152,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestQuartierApi" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.esgi.scraper.TestQuartierApi" />
+      <module name="Scrapper" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.esgi.scraper.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestWithHttpURLConnection" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestWithHttpURLConnection" />
+      <module name="Scrapper" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="ProjetAnnuel3A" />
       <method v="2">
@@ -134,9 +185,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.TestQuartierApi" />
+      <item itemvalue="Application.TestWithHttpURLConnection" />
+      <item itemvalue="Application.EventViewerApplication" />
+      <item itemvalue="Application.Launcher" />
+      <item itemvalue="Application.AddElementToDB" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Launcher" />
+        <item itemvalue="Application.TestQuartierApi" />
+        <item itemvalue="Application.TestWithHttpURLConnection" />
+        <item itemvalue="Application.AddElementToDB" />
         <item itemvalue="Application.EventViewerApplication" />
       </list>
     </recent_temporary>
@@ -160,7 +221,13 @@
       <workItem from="1744051829648" duration="4559000" />
       <workItem from="1744359987587" duration="839000" />
       <workItem from="1744362879241" duration="111000" />
-      <workItem from="1744362997610" duration="23235000" />
+      <workItem from="1744362997610" duration="24424000" />
+      <workItem from="1744965356358" duration="9615000" />
+      <workItem from="1748328443752" duration="1815000" />
+      <workItem from="1749719258101" duration="18000" />
+      <workItem from="1749740056373" duration="14602000" />
+      <workItem from="1751276861013" duration="17000" />
+      <workItem from="1751276892642" duration="2986000" />
     </task>
     <servers />
   </component>
@@ -171,9 +238,49 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/launcher/Launcher.java</url>
-          <line>6</line>
-          <option name="timeStamp" value="1" />
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java</url>
+          <line>68</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/TestQuartierApi.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
+          <line>177</line>
+          <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
+          <line>125</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
+          <line>119</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
+          <line>115</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java</url>
+          <line>169</line>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java</url>
+          <line>168</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

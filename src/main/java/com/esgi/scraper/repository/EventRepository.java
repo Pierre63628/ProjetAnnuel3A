@@ -136,87 +136,44 @@ public class EventRepository {
 
     public List<Event> getAllEvents() {
         String sql = """
-            SELECT id, name, url, image_url, date, source, detailed_address,
-                   created_at, updated_at
-            FROM events
-            ORDER BY date DESC
-        """;
+        SELECT id, nom, description, url, photo_url, date_evenement, 
+               lieu, type_evenement, source, detailed_address,
+               created_at, updated_at
+        FROM "Evenement"
+        ORDER BY date_evenement DESC
+    """;
 
-        List<com.esgi.scraper.models.Event> events = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();
              var stmt = conn.createStatement();
              var rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                com.esgi.scraper.models.Event event = new com.esgi.scraper.models.Event();
-                event.setName(rs.getString("name"));
+                Event event = new Event();
+
+                event.setEventId(String.valueOf(rs.getInt("id")));
+                event.setName(rs.getString("nom"));
+                event.setDescription(rs.getString("description"));
                 event.setUrl(rs.getString("url"));
-                // Convertir l'URL de l'image si elle existe
-                String imageUrl = rs.getString("image_url");
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    // TODO: Charger l'image si nécessaire
-                }
-                event.setDate(rs.getString("date"));
+                event.setPhotoUrl(rs.getString("photo_url"));
+                event.setDate(rs.getTimestamp("date_evenement").toString());
+                event.setLocation(rs.getString("lieu"));
+                event.setCategory(rs.getString("type_evenement"));
+                event.setSource(rs.getString("source"));
                 event.setDetailedAddress(rs.getString("detailed_address"));
-                event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
 
                 events.add(event);
             }
 
             System.out.println("Loaded " + events.size() + " events from database.");
             return events;
+
         } catch (SQLException e) {
             System.err.println("Error loading events from database: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
-    /**
-     * Récupère les événements d'une source spécifique
-     * @param source La source des événements (eventbrite, allevent, meetup)
-     * @return Liste des événements de cette source
-     */
-    public List<com.esgi.scraper.models.Event> getEventsBySource(String source) {
-        String sql = """
-            SELECT id, name, url, image_url, date, source, detailed_address,
-                   created_at, updated_at
-            FROM events
-            WHERE source = ?
-            ORDER BY date DESC
-        """;
-
-        List<com.esgi.scraper.models.Event> events = new ArrayList<>();
-
-        try (Connection conn = DatabaseConfig.getConnection();
-             var pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, source);
-
-            try (var rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    com.esgi.scraper.models.Event event = new com.esgi.scraper.models.Event();
-                    event.setName(rs.getString("name"));
-                    event.setUrl(rs.getString("url"));
-                    // Convertir l'URL de l'image si elle existe
-                    String imageUrl = rs.getString("image_url");
-                    if (imageUrl != null && !imageUrl.isEmpty()) {
-                        // TODO: Charger l'image si nécessaire
-                    }
-                    event.setDate(rs.getString("date"));
-                    event.setDetailedAddress(rs.getString("detailed_address"));
-                    event.setCategory(rs.getString("source")); // Utiliser la source comme catégorie
-
-                    events.add(event);
-                }
-            }
-
-            System.out.println("Loaded " + events.size() + " events from database for source: " + source);
-            return events;
-        } catch (SQLException e) {
-            System.err.println("Error loading events from database: " + e.getMessage());
-            return new ArrayList<>();
-        }
-    }
 }
 

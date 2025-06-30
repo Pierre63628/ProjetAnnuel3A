@@ -31,9 +31,6 @@
                 <Separator orientation="VERTICAL" />
                 <Label text="Filtrer par source:" />
                 <Button fx:id="allSourcesButton" text="Tous" onAction="#handleAllSources" styleClass="filter-button" />
-                <Button fx:id="eventbriteButton" text="Eventbrite" onAction="#handleEventbriteFilter" styleClass="filter-button" />
-                <Button fx:id="alleventButton" text="AllEvent" onAction="#handleAlleventFilter" styleClass="filter-button" />
-                <Button fx:id="meetupButton" text="Meetup" onAction="#handleMeetupFilter" styleClass="filter-button" />
                 <Separator orientation="VERTICAL" />
                 <ProgressBar fx:id="progressBar" progress="0.0" visible="false" prefWidth="200"/>
                 <Label fx:id="statusLabel" text="Prêt" />
@@ -59,13 +56,48 @@
                 </Label>
                 <ListView fx:id="eventListView" VBox.vgrow="ALWAYS" styleClass="event-list"/>
             </VBox>
-            <VBox spacing="10" styleClass="details-panel">
+            <VBox spacing="15" styleClass="details-panel">
                 <padding>
-                    <Insets top="10" right="10" bottom="10" left="10"/>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
                 </padding>
-                <Label text="Détails de l'événement" styleClass="section-header"/>
-                <ImageView fx:id="eventImageView" fitWidth="300" fitHeight="200" preserveRatio="true" styleClass="event-image"/>
-                <TextArea fx:id="eventDetailsArea" VBox.vgrow="ALWAYS" wrapText="true" editable="false" styleClass="details-area"/>
+
+                <!-- Header Section -->
+                <VBox spacing="8" styleClass="details-header-section">
+                    <Label text="Détails de l'événement" styleClass="details-main-header"/>
+                    <Separator styleClass="header-separator"/>
+                </VBox>
+
+                <!-- Image Section -->
+                <VBox alignment="CENTER" styleClass="image-section">
+                    <ImageView fx:id="eventImageView" fitWidth="300" fitHeight="200" preserveRatio="true" styleClass="event-image"/>
+                </VBox>
+
+                <!-- Details Grid Section -->
+                <VBox spacing="12" styleClass="details-content-section">
+                    <GridPane fx:id="eventDetailsGrid" hgap="15" vgap="12" styleClass="details-grid">
+                        <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" minWidth="100" prefWidth="120"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+
+                        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="detail-label"/>
+                        <Label fx:id="eventNameLabel" GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="detail-value detail-name"/>
+
+                        <Label text="Date :" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="detail-label"/>
+                        <Label fx:id="eventDateLabel" GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="detail-value"/>
+
+                        <Label text="Lieu :" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="detail-label"/>
+                        <Label fx:id="eventLocationLabel" GridPane.rowIndex="2" GridPane.columnIndex="1" styleClass="detail-value"/>
+                    </GridPane>
+
+                    <!-- Action Button Section -->
+                    <HBox alignment="CENTER" spacing="10" styleClass="action-section">
+                        <padding>
+                            <Insets top="10" right="0" bottom="5" left="0"/>
+                        </padding>
+                        <Button fx:id="openUrlButton" text="Ouvrir l'événement" styleClass="action-button" onAction="#handleOpenEvent" disable="true"/>
+                    </HBox>
+                </VBox>
             </VBox>
         </SplitPane>
     </center>

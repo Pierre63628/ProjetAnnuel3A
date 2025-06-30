@@ -60,8 +60,15 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
 
     private void initializeControllers() {
         dataLoader = new EventDataLoader(eventListView, statusLabel, eventCountLabel, eventDetailsArea);
-        detailsController = new EventDetailsController(eventListView, eventDetailsArea, eventImageView);
-        filterController = new FilterController(allSourcesButton, eventbriteButton, alleventButton, meetupButton, dataLoader);
+        detailsController = new EventDetailsController(
+                eventListView,
+                eventNameLabel,
+                eventDateLabel,
+                eventLocationLabel,
+                openUrlButton,
+                eventImageView
+        );
+        filterController = new FilterController(allSourcesButton, dataLoader);
         scrapingController = new ScrapingController(refreshButton, progressBar, statusLabel, dataLoader);
         themeMenuController = new ThemeMenuController(eventListView);
         dialogController = new DialogController(eventListView);
@@ -71,6 +78,12 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
     public void setupThemeMenu(List<ThemePlugin> availableThemes) {
         themeMenuController.setupThemeMenu(availableThemes);
     }
+
+    @FXML private Label eventNameLabel;
+    @FXML private Label eventDateLabel;
+    @FXML private Label eventLocationLabel;
+    @FXML private Button openUrlButton;
+
 
     @FXML
     private void handleRefresh() {
@@ -92,20 +105,6 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
         filterController.handleAllSources();
     }
 
-    @FXML
-    private void handleEventbriteFilter() {
-        filterController.handleEventbriteFilter();
-    }
-
-    @FXML
-    private void handleAlleventFilter() {
-        filterController.handleAlleventFilter();
-    }
-
-    @FXML
-    private void handleMeetupFilter() {
-        filterController.handleMeetupFilter();
-    }
 
     @FXML
     private void handleSearch() {
@@ -123,5 +122,47 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
         filterController.handleClearDateFilter();
     }
 
+    @FXML
+    private void handleOpenEvent() {
+        Event selectedEvent = eventListView.getSelectionModel().getSelectedItem();
+        if (selectedEvent == null) {
+            dialogController.showErrorDialog("Aucun événement sélectionné",
+                "Veuillez sélectionner un événement dans la liste pour l'ouvrir.");
+            return;
+        }
+
+        String eventId = selectedEvent.getEventId();
+        if (eventId == null || eventId.trim().isEmpty()) {
+            dialogController.showErrorDialog("ID d'événement manquant",
+                "L'événement sélectionné n'a pas d'identifiant valide.");
+            return;
+        }
+
+        String url = "http://localhost:5173/events/" + eventId;
+
+        try {
+            if (java.awt.Desktop.isDesktopSupported()) {
+                java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
+                if (desktop.isSupported(java.awt.Desktop.Action.BROWSE)) {
+                    desktop.browse(new java.net.URI(url));
+                    statusLabel.setText("Ouverture de l'événement dans le navigateur...");
+                } else {
+                    dialogController.showErrorDialog("Navigation non supportée",
+                        "Votre système ne supporte pas l'ouverture automatique du navigateur.\n" +
+                        "Veuillez ouvrir manuellement l'URL: " + url);
+                }
+            } else {
+                dialogController.showErrorDialog("Desktop non supporté",
+                    "Votre système ne supporte pas l'ouverture automatique du navigateur.\n" +
+                    "Veuillez ouvrir manuellement l'URL: " + url);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'ouverture de l'URL: " + e.getMessage());
+            dialogController.showErrorDialog("Erreur d'ouverture",
+                "Impossible d'ouvrir l'événement dans le navigateur.\n" +
+                "URL: " + url + "\n" +
+                "Erreur: " + e.getMessage());
+        }
+    }
 
 }

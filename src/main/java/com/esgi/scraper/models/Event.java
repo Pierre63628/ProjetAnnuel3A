@@ -13,6 +13,16 @@ public class Event {
     private String category;
     private String url;
 
+    // ➕ Nouveaux champs
+    private String description;
+    private String photoUrl;
+    private String source;
+    private String quartierNom;
+    private String organisateurNom;
+
+    public Event() {
+    }
+
     public Event(String date, String detailedDate, String detailedAddress, String eventId, String name, String location, String category, String url) {
         this.date = date;
         this.detailedDate = detailedDate;
@@ -24,8 +34,7 @@ public class Event {
         this.url = url;
     }
 
-    public Event() {
-    }
+    // ✅ Getters & setters pour tous les champs
 
     public String getDate() {
         return date;
@@ -89,6 +98,46 @@ public class Event {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getQuartierNom() {
+        return quartierNom;
+    }
+
+    public void setQuartierNom(String quartierNom) {
+        this.quartierNom = quartierNom;
+    }
+
+    public String getOrganisateurNom() {
+        return organisateurNom;
+    }
+
+    public void setOrganisateurNom(String organisateurNom) {
+        this.organisateurNom = organisateurNom;
     }
 
     @Override
