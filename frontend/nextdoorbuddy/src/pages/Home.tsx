@@ -329,34 +329,6 @@ const Home = () => {
                         </CardContent>
                     </Card>
                 </motion.div>
-
-                {/* User information */}
-                <div className="mb-8 rounded-lg bg-white p-6 shadow">
-                    <h3 className="mb-4 text-xl font-semibold text-gray-800">Vos informations</h3>
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        <div>
-                            <p className="text-sm font-medium text-gray-500">Nom</p>
-                            <p className="text-gray-700">{user?.nom}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm font-medium text-gray-500">Prénom</p>
-                            <p className="text-gray-700">{user?.prenom}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm font-medium text-gray-500">Email</p>
-                            <p className="text-gray-700">{user?.email}</p>
-                        </div>
-                        <div>
-                            <p className="text-sm font-medium text-gray-500">Rôle</p>
-                            <p className="text-gray-700">{user?.role || 'Utilisateur'}</p>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        <Link to="/profile" className="text-blue-600 hover:text-blue-800 hover:underline">
-                            Gérer mon profil
-                        </Link>
-                    </div>
-                </div>
                 {/* Quick Stats */}
                 <DashboardStats
                     todaysEventsCount={todaysEvents.length}

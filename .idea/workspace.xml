@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminQuartiers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminQuartiers.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -191,7 +189,7 @@
       <workItem from="1750257394578" duration="8325000" />
       <workItem from="1750387729452" duration="12582000" />
       <workItem from="1750712294605" duration="5255000" />
-      <workItem from="1750800330481" duration="13783000" />
+      <workItem from="1750800330481" duration="14818000" />
     </task>
     <servers />
   </component>
