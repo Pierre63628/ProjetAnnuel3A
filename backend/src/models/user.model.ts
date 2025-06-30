@@ -1,6 +1,5 @@
 import pool from '../config/db.js';
 import crypto from 'crypto';
-import bcrypt from 'bcrypt';
 
 export interface User {
     id?: number;
@@ -82,15 +81,16 @@ export class UserModel {
         return `${salt}:${hash}`;
     }
 
-    // Vérifier le mot de passe avec crypto ou bcrypt
+    // Vérifier le mot de passe avec crypto
     static verifyPassword(plainPassword: string, hashedPassword: string): boolean {
         if (hashedPassword.startsWith('$2')) {
-            // Hash bcrypt - utiliser bcrypt pour la vérification
-            return bcrypt.compareSync(plainPassword, hashedPassword);
+            // Ancien hash bcrypt - ne peut plus être vérifié sans bcrypt
+            console.warn('Ancien hash bcrypt détecté. Veuillez mettre à jour le mot de passe.');
+            return false;
         }
 
         if (hashedPassword.includes(':')) {
-            // Hash crypto legacy - utiliser crypto pour la vérification
+            // Hash crypto - utiliser crypto pour la vérification
             const [salt, storedHash] = hashedPassword.split(':');
             const hash = crypto.pbkdf2Sync(plainPassword, salt, 10000, 64, 'sha512').toString('hex');
             return storedHash === hash;

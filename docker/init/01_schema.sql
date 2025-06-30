@@ -1,3 +1,15 @@
+-- Créer le type ENUM pour les rôles utilisateur
+CREATE TYPE user_role AS ENUM ('user', 'admin');
+
+-- Créer la fonction pour mettre à jour automatiquement updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
 create table if not exists "Utilisateur"
 (
     id             serial
@@ -113,7 +125,7 @@ grant select on spatial_ref_sys to public;
 
 create table if not exists "Quartier"
 (
-    id           integer default nextval('quartiers_id_seq'::regclass) not null
+    id           serial
         constraint quartiers_pkey
             primary key,
     nom_quartier varchar(255),
