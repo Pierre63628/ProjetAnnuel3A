@@ -549,7 +549,7 @@ const AdminQuartiers = () => {
                             <tbody className="divide-y divide-gray-200 bg-white">
                             {filteredQuartiers.length === 0 ? (
                                 <tr>
-                                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
+                                    <td colSpan={6} className="px-6 py-6 text-center text-sm text-gray-500">
                                         Aucun quartier trouvé
                                     </td>
                                 </tr>

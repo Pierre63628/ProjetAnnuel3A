@@ -44,7 +44,7 @@ const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            <div className="container mx-auto px-6 py-4 max-w-7xl">
+            <div className="container mx-auto px-6 py-4 max-w-10xl">
                 <div className="flex items-center justify-between">
                     {/* Logo and Brand */}
                     <motion.div
@@ -67,7 +67,7 @@ const Header = () => {
 
                         {/* Navigation */}
                         {user && (
-                            <nav className="hidden lg:flex items-center space-x-1">
+                            <nav className="hidden lg:flex items-center space-x-4">
                                 {navigationItems.map((item) => {
                                     const IconComponent = item.icon;
                                     return (
