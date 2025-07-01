@@ -1,0 +1,235 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "navigation": {
+    "home": "Home",
+    "events": "Events",
+    "trocs": "Exchanges",
+    "myEvents": "My Events",
+    "chat": "Chat",
+    "profile": "My Profile",
+    "adminDashboard": "Dashboard",
+    "manageUsers": "Manage Users",
+    "manageQuartiers": "Manage Neighborhoods",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back!",
+      "subtitle": "Sign in to connect with your neighbors",
+      "email": "Email address",
+      "password": "Password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "loginButton": "Sign in",
+      "loggingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "forgotPassword": "Forgot password?",
+      "errors": {
+        "invalidCredentials": "Login error",
+        "emailRequired": "Email address is required",
+        "passwordRequired": "Password is required"
+      }
+    },
+    "signup": {
+      "title": "Sign Up",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "phone": "Phone",
+      "address": "Address",
+      "birthDate": "Birth Date",
+      "quartier": "Neighborhood",
+      "signupButton": "Sign up",
+      "signingUp": "Signing up...",
+      "hasAccount": "Already have an account?",
+      "login": "Sign in",
+      "errors": {
+        "passwordMismatch": "Passwords do not match",
+        "emailExists": "This email address is already in use",
+        "registrationError": "Registration error"
+      }
+    }
+  },
+  "home": {
+    "welcome": "Welcome, {{name}}!",
+    "subtitle": "Discover what's happening in your neighborhood and stay connected with your neighbors",
+    "todaysEvents": "Today's Events",
+    "myEvents": "My Events",
+    "availableTrocs": "Available Exchanges",
+    "noEventsToday": "No events today",
+    "noUserEvents": "You're not participating in any events",
+    "noTrocs": "No exchanges available",
+    "viewAll": "View all",
+    "participate": "Participate",
+    "viewDetails": "View details",
+    "adminSection": "Administration",
+    "greeting": "Hello"
+  },
+  "events": {
+    "title": "Events",
+    "createEvent": "Create Event",
+    "editEvent": "Edit Event",
+    "createNewEvent": "Create a new event",
+    "eventName": "Event Name",
+    "description": "Description",
+    "eventDate": "Event Date",
+    "address": "Address",
+    "eventType": "Event Type",
+    "photo": "Photo",
+    "url": "URL",
+    "noEvents": "No events found",
+    "loadingEvents": "Loading events...",
+    "loadingEvent": "Loading event...",
+    "participants": "Participants",
+    "participate": "Participate",
+    "cancelParticipation": "Cancel participation",
+    "alreadyParticipating": "You're already participating",
+    "eventPassed": "Event has passed",
+    "organizer": "Organizer",
+    "location": "Location",
+    "date": "Date",
+    "time": "Time",
+    "website": "Website",
+    "errors": {
+      "nameRequired": "Event name is required",
+      "dateRequired": "Event date is required",
+      "addressRequired": "Event address is required",
+      "invalidUrl": "Please enter a valid URL (e.g., https://example.com)",
+      "createError": "Error creating event",
+      "updateError": "Error updating event",
+      "deleteError": "Error deleting event",
+      "participationError": "Error with participation",
+      "loadError": "Error loading"
+    },
+    "success": {
+      "created": "Event created successfully",
+      "updated": "Event updated successfully",
+      "deleted": "Event deleted successfully",
+      "participated": "Participation confirmed",
+      "participationCancelled": "Participation cancelled"
+    }
+  },
+  "trocs": {
+    "title": "Exchanges",
+    "createTroc": "Create Exchange",
+    "editTroc": "Edit Exchange",
+    "myTrocs": "My Exchanges",
+    "trocTitle": "Title",
+    "description": "Description",
+    "proposedItem": "Offered Item",
+    "searchedItem": "Wanted Item",
+    "category": "Category",
+    "price": "Price",
+    "maxBudget": "Maximum Budget",
+    "images": "Images",
+    "type": {
+      "offer": "I offer",
+      "request": "I'm looking for"
+    },
+    "noTrocs": "No exchanges found",
+    "loadingTrocs": "Loading exchanges...",
+    "errors": {
+      "titleRequired": "Title is required",
+      "descriptionRequired": "Description is required",
+      "itemRequired": "Item is required",
+      "maxImages": "You cannot add more than {{max}} images in total",
+      "createError": "Error creating exchange",
+      "updateError": "Error updating exchange",
+      "deleteError": "Error deleting exchange"
+    },
+    "success": {
+      "created": "Exchange created successfully",
+      "updated": "Exchange updated successfully",
+      "deleted": "Exchange deleted successfully"
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "noRoom": "Select a conversation",
+    "typeMessage": "Type your message...",
+    "send": "Send",
+    "typing": "{{user}} is typing...",
+    "multipleTyping": "Several people are typing...",
+    "online": "Online",
+    "offline": "Offline",
+    "lastSeen": "Last seen",
+    "noMessages": "No messages",
+    "loadingMessages": "Loading messages...",
+    "errors": {
+      "sendError": "Error sending message",
+      "loadError": "Error loading messages"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "editProfile": "Edit Profile",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone",
+    "address": "Address",
+    "birthDate": "Birth Date",
+    "quartiers": "Neighborhoods",
+    "addQuartier": "Add Neighborhood",
+    "principalQuartier": "Main Neighborhood",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "updateProfile": "Update Profile",
+    "errors": {
+      "updateError": "Error updating profile",
+      "passwordMismatch": "Passwords do not match",
+      "invalidEmail": "Invalid email address",
+      "phoneInvalid": "Invalid phone number"
+    },
+    "success": {
+      "updated": "Profile updated successfully",
+      "passwordChanged": "Password changed successfully"
+    }
+  },
+  "admin": {
+    "dashboard": "Admin Dashboard",
+    "users": "Users",
+    "quartiers": "Neighborhoods",
+    "trocs": "Exchanges",
+    "events": "Events",
+    "statistics": "Statistics",
+    "manageUsers": "Manage Users",
+    "manageQuartiers": "Manage Neighborhoods",
+    "manageTrocs": "Manage Exchanges",
+    "manageEvents": "Manage Events"
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Invalid email address",
+    "password": "Password is required",
+    "url": "Invalid URL",
+    "date": "Invalid date",
+    "phone": "Invalid phone number",
+    "minLength": "Minimum {{min}} characters",
+    "maxLength": "Maximum {{max}} characters"
+  }
+}

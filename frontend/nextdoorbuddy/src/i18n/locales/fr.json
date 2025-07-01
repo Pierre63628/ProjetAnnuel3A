@@ -1,0 +1,235 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "events": "Événements",
+    "trocs": "Trocs",
+    "myEvents": "Mes événements",
+    "chat": "Chat",
+    "profile": "Mon Profil",
+    "adminDashboard": "Tableau de bord",
+    "manageUsers": "Gérer les utilisateurs",
+    "manageQuartiers": "Gérer les quartiers",
+    "logout": "Déconnexion"
+  },
+  "auth": {
+    "login": {
+      "title": "Bon retour !",
+      "subtitle": "Connectez-vous pour retrouver vos voisins",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "loginButton": "Se connecter",
+      "loggingIn": "Connexion en cours...",
+      "noAccount": "Pas encore de compte ?",
+      "signUp": "Inscrivez-vous",
+      "forgotPassword": "Mot de passe oublié ?",
+      "errors": {
+        "invalidCredentials": "Erreur lors de la connexion",
+        "emailRequired": "L'adresse e-mail est requise",
+        "passwordRequired": "Le mot de passe est requis"
+      }
+    },
+    "signup": {
+      "title": "Inscription",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "phone": "Téléphone",
+      "address": "Adresse",
+      "birthDate": "Date de naissance",
+      "quartier": "Quartier",
+      "signupButton": "S'inscrire",
+      "signingUp": "Inscription en cours...",
+      "hasAccount": "Déjà un compte ?",
+      "login": "Connectez-vous",
+      "errors": {
+        "passwordMismatch": "Les mots de passe ne correspondent pas",
+        "emailExists": "Cette adresse e-mail est déjà utilisée",
+        "registrationError": "Erreur lors de l'inscription"
+      }
+    }
+  },
+  "home": {
+    "welcome": "Bienvenue, {{name}} !",
+    "subtitle": "Découvrez ce qui se passe dans votre quartier et restez connecté avec vos voisins",
+    "todaysEvents": "Événements d'aujourd'hui",
+    "myEvents": "Mes événements",
+    "availableTrocs": "Trocs disponibles",
+    "noEventsToday": "Aucun événement aujourd'hui",
+    "noUserEvents": "Vous ne participez à aucun événement",
+    "noTrocs": "Aucun troc disponible",
+    "viewAll": "Voir tout",
+    "participate": "Participer",
+    "viewDetails": "Voir les détails",
+    "adminSection": "Administration",
+    "greeting": "Bonjour"
+  },
+  "events": {
+    "title": "Événements",
+    "createEvent": "Créer un événement",
+    "editEvent": "Modifier l'événement",
+    "createNewEvent": "Créer un nouvel événement",
+    "eventName": "Nom de l'événement",
+    "description": "Description",
+    "eventDate": "Date de l'événement",
+    "address": "Adresse",
+    "eventType": "Type d'événement",
+    "photo": "Photo",
+    "url": "URL",
+    "noEvents": "Aucun événement trouvé",
+    "loadingEvents": "Chargement des événements...",
+    "loadingEvent": "Chargement de l'événement...",
+    "participants": "Participants",
+    "participate": "Participer",
+    "cancelParticipation": "Annuler la participation",
+    "alreadyParticipating": "Vous participez déjà",
+    "eventPassed": "Événement passé",
+    "organizer": "Organisateur",
+    "location": "Lieu",
+    "date": "Date",
+    "time": "Heure",
+    "website": "Site web",
+    "errors": {
+      "nameRequired": "Le nom de l'événement est obligatoire",
+      "dateRequired": "La date de l'événement est obligatoire",
+      "addressRequired": "L'adresse de l'événement est obligatoire",
+      "invalidUrl": "Veuillez entrer une URL valide (ex: https://example.com)",
+      "createError": "Erreur lors de la création de l'événement",
+      "updateError": "Erreur lors de la mise à jour de l'événement",
+      "deleteError": "Erreur lors de la suppression de l'événement",
+      "participationError": "Erreur lors de la participation",
+      "loadError": "Erreur lors du chargement"
+    },
+    "success": {
+      "created": "Événement créé avec succès",
+      "updated": "Événement mis à jour avec succès",
+      "deleted": "Événement supprimé avec succès",
+      "participated": "Participation confirmée",
+      "participationCancelled": "Participation annulée"
+    }
+  },
+  "trocs": {
+    "title": "Trocs",
+    "createTroc": "Créer un troc",
+    "editTroc": "Modifier le troc",
+    "myTrocs": "Mes trocs",
+    "trocTitle": "Titre",
+    "description": "Description",
+    "proposedItem": "Objet proposé",
+    "searchedItem": "Objet recherché",
+    "category": "Catégorie",
+    "price": "Prix",
+    "maxBudget": "Budget maximum",
+    "images": "Images",
+    "type": {
+      "offer": "Je propose",
+      "request": "Je recherche"
+    },
+    "noTrocs": "Aucun troc trouvé",
+    "loadingTrocs": "Chargement des trocs...",
+    "errors": {
+      "titleRequired": "Le titre est obligatoire",
+      "descriptionRequired": "La description est obligatoire",
+      "itemRequired": "L'objet est obligatoire",
+      "maxImages": "Vous ne pouvez pas ajouter plus de {{max}} images au total",
+      "createError": "Erreur lors de la création du troc",
+      "updateError": "Erreur lors de la mise à jour du troc",
+      "deleteError": "Erreur lors de la suppression du troc"
+    },
+    "success": {
+      "created": "Troc créé avec succès",
+      "updated": "Troc mis à jour avec succès",
+      "deleted": "Troc supprimé avec succès"
+    }
+  },
+  "chat": {
+    "title": "Chat",
+    "noRoom": "Sélectionnez une conversation",
+    "typeMessage": "Tapez votre message...",
+    "send": "Envoyer",
+    "typing": "{{user}} est en train d'écrire...",
+    "multipleTyping": "Plusieurs personnes écrivent...",
+    "online": "En ligne",
+    "offline": "Hors ligne",
+    "lastSeen": "Vu pour la dernière fois",
+    "noMessages": "Aucun message",
+    "loadingMessages": "Chargement des messages...",
+    "errors": {
+      "sendError": "Erreur lors de l'envoi du message",
+      "loadError": "Erreur lors du chargement des messages"
+    }
+  },
+  "profile": {
+    "title": "Mon Profil",
+    "editProfile": "Modifier le profil",
+    "personalInfo": "Informations personnelles",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Adresse e-mail",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "birthDate": "Date de naissance",
+    "quartiers": "Quartiers",
+    "addQuartier": "Ajouter un quartier",
+    "principalQuartier": "Quartier principal",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "updateProfile": "Mettre à jour le profil",
+    "errors": {
+      "updateError": "Erreur lors de la mise à jour du profil",
+      "passwordMismatch": "Les mots de passe ne correspondent pas",
+      "invalidEmail": "Adresse e-mail invalide",
+      "phoneInvalid": "Numéro de téléphone invalide"
+    },
+    "success": {
+      "updated": "Profil mis à jour avec succès",
+      "passwordChanged": "Mot de passe modifié avec succès"
+    }
+  },
+  "admin": {
+    "dashboard": "Tableau de bord administrateur",
+    "users": "Utilisateurs",
+    "quartiers": "Quartiers",
+    "trocs": "Trocs",
+    "events": "Événements",
+    "statistics": "Statistiques",
+    "manageUsers": "Gérer les utilisateurs",
+    "manageQuartiers": "Gérer les quartiers",
+    "manageTrocs": "Gérer les trocs",
+    "manageEvents": "Gérer les événements"
+  },
+  "validation": {
+    "required": "Ce champ est obligatoire",
+    "email": "Adresse e-mail invalide",
+    "password": "Le mot de passe est requis",
+    "url": "URL invalide",
+    "date": "Date invalide",
+    "phone": "Numéro de téléphone invalide",
+    "minLength": "Minimum {{min}} caractères",
+    "maxLength": "Maximum {{max}} caractères"
+  }
+}

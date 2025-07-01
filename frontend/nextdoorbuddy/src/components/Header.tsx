@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import LanguageSelector from './LanguageSelector';
 import {
     Home,
     Calendar,
@@ -17,6 +19,7 @@ import {
 
 const Header = () => {
     const { user, logout } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -25,16 +28,16 @@ const Header = () => {
     };
 
     const navigationItems = [
-        { to: '/', label: 'Accueil', icon: Home },
-        { to: '/events', label: 'Événements', icon: Calendar },
-        { to: '/trocs', label: 'Trocs', icon: ArrowRightLeft },
-        { to: '/events/my-events', label: 'Mes événements', icon: Heart },
-        { to: '/chat', label: 'Chat', icon: MessageCircle },
-        { to: '/profile', label: 'Mon Profil', icon: User },
+        { to: '/', label: t('navigation.home'), icon: Home },
+        { to: '/events', label: t('navigation.events'), icon: Calendar },
+        { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
+        { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
+        { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
+        { to: '/profile', label: t('navigation.profile'), icon: User },
     ];
 
     const adminNavigationItems = [
-        { to: '/admin/dashboard', label: 'Tableau de bord', icon: Sparkles },
+        { to: '/admin/dashboard', label: t('navigation.adminDashboard'), icon: Sparkles },
     ];
 
     return (
@@ -127,9 +130,11 @@ const Header = () => {
                                     <User className="w-4 h-4 text-white" />
                                 </div>
                                 <span className="text-gray-700 font-medium">
-                                    Bonjour, <span className="text-blue-600 font-semibold">{user.prenom}</span>
+                                    {t('home.greeting')}, <span className="text-blue-600 font-semibold">{user.prenom}</span>
                                 </span>
                             </div>
+
+                            <LanguageSelector />
 
                             <motion.button
                                 onClick={handleLogout}
@@ -138,7 +143,7 @@ const Header = () => {
                                 whileTap={{ scale: 0.95 }}
                             >
                                 <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                                <span className="hidden sm:inline">Déconnexion</span>
+                                <span className="hidden sm:inline">{t('navigation.logout')}</span>
                             </motion.button>
                         </motion.div>
                     )}

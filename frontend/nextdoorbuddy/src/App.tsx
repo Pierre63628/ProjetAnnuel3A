@@ -16,6 +16,7 @@ import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
 import MyEvents from "./pages/MyEvents"
 import Chat from "./pages/Chat"
+import I18nTest from "./pages/I18nTest"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ChatProvider } from "./contexts/ChatContext"
 import EventDetails from "./pages/EventsDetail.tsx";
@@ -25,7 +26,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
@@ -141,6 +149,7 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/test-carousel" element={<TestCarousel />} />
+      <Route path="/i18n-test" element={<I18nTest />} />
     </Routes>
   );
 }

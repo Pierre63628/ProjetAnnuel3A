@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
 import MessageBubble from './MessageBubble';
@@ -18,6 +19,7 @@ import {
 
 const ChatWindow: React.FC = () => {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const {
         currentRoom,
         messages,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 import { createEvenement, getEvenementById, updateEvenement } from '../services/evenement.service';
@@ -9,6 +10,7 @@ const EventForm = () => {
     const { id } = useParams<{ id: string }>();
     const isEditMode = !!id;
     const { user } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -102,17 +104,17 @@ const EventForm = () => {
 
     const validateForm = () => {
         if (!formData.nom.trim()) {
-            setError('Le nom de l\'événement est obligatoire');
+            setError(t('events.errors.nameRequired'));
             return false;
         }
 
         if (!formData.date_evenement) {
-            setError('La date de l\'événement est obligatoire');
+            setError(t('events.errors.dateRequired'));
             return false;
         }
 
         if (!formData.detailed_address.trim()) {
-            setError('L\'adresse de l\'événement est obligatoire');
+            setError(t('events.errors.addressRequired'));
             return false;
         }
 
@@ -120,7 +122,7 @@ const EventForm = () => {
         if (formData.url && formData.url.trim()) {
             const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
             if (!urlPattern.test(formData.url.trim())) {
-                setError('Veuillez entrer une URL valide (ex: https://example.com)');
+                setError(t('events.errors.invalidUrl'));
                 return false;
             }
         }

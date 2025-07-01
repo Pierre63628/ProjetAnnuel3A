@@ -5,7 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/LanguageSelector.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/locales/en.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/locales/fr.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/I18nTest.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/init/01_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/01_schema.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/AddressAutocomplete.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/AddressAutocomplete.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/AuthContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/AuthContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Profile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Profile.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -188,7 +211,7 @@
       <workItem from="1750257394578" duration="8325000" />
       <workItem from="1750387729452" duration="12582000" />
       <workItem from="1750712294605" duration="5255000" />
-      <workItem from="1750800330481" duration="16809000" />
+      <workItem from="1750800330481" duration="25561000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -35,6 +36,7 @@ import {
 
 const Home = () => {
     const { user } = useAuth();
+    const { t } = useTranslation();
     const [todaysEvents, setTodaysEvents] = useState<Evenement[]>([]);
     const [userEvents, setUserEvents] = useState<Evenement[]>([]);
     const [trocs, setTrocs] = useState<AnnonceTroc[]>([]);
@@ -177,10 +179,10 @@ const Home = () => {
                     <div className="text-center mb-8">
                         <h1 className="text-4xl font-bold text-gray-900 mb-2 flex items-center justify-center">
                             <Sparkles className="w-8 h-8 text-blue-600 mr-3" />
-                            Bienvenue, {user?.prenom} !
+                            {t('home.welcome', { name: user?.prenom })}
                         </h1>
                         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                            Découvrez ce qui se passe dans votre quartier et restez connecté avec vos voisins
+                            {t('home.subtitle')}
                         </p>
                     </div>
                 </motion.div>

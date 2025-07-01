@@ -1,7 +1,5 @@
--- Créer le type ENUM pour les rôles utilisateur
 CREATE TYPE user_role AS ENUM ('user', 'admin');
 
--- Créer la fonction pour mettre à jour automatiquement updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN

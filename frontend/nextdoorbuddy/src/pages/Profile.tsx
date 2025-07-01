@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, removeQuartierFromUser, Quartier, UserQuartier } from '../services/quartier.service';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 
 const Profile = () => {
     const { user, accessToken, refreshAccessToken, logout, updateUserInfo } = useAuth();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

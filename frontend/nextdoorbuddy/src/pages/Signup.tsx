@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTranslation } from 'react-i18next'
 import { getQuartiers, Quartier } from '../services/quartier.service'
 import AddressAutocomplete from '../components/AddressAutocomplete'
+import LanguageSelector from '../components/LanguageSelector'
 
 const Signup = () => {
+    const { t } = useTranslation()
     const [nom, setNom] = useState('')
     const [prenom, setPrenom] = useState('')
     const [email, setEmail] = useState('')
@@ -115,7 +118,7 @@ const Signup = () => {
             })
             navigate('/')
         } catch (err: any) {
-            setError(err.message || 'Erreur lors de l\'inscription')
+            setError(err.message || t('auth.signup.errors.registrationError'))
         } finally {
             setIsLoading(false)
         }
@@ -123,8 +126,13 @@ const Signup = () => {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+            {/* Language Selector */}
+            <div className="absolute top-4 right-4 z-20">
+                <LanguageSelector />
+            </div>
+
             <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
-                <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">Inscription</h2>
+                <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">{t('auth.signup.title')}</h2>
 
                 {error && (
                     <div className="mb-4 rounded-md bg-red-100 p-3 text-red-700">
