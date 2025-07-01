@@ -20,7 +20,8 @@ const Signup = () => {
     const [dateNaissance, setDateNaissance] = useState('')
     const [quartierId, setQuartierId] = useState('')
 
-    const [quartiers, setQuartiers] = useState<Quartier[]>()
+    // Correct: always initialized as an array!
+    const [quartiers, setQuartiers] = useState<Quartier[]>([])
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [isLoadingQuartiers, setIsLoadingQuartiers] = useState(false)
@@ -31,13 +32,14 @@ const Signup = () => {
     // Charger les quartiers au chargement du composant
     useEffect(() => {
         const fetchQuartiers = async () => {
+            setIsLoadingQuartiers(true);
             try {
                 console.log('Début de la récupération des quartiers...');
                 const data = await getQuartiers();
                 console.log('Quartiers récupérés dans Signup:', data);
                 setQuartiers(data);
             } catch (error) {
-                console.error('Erreur lors du chargement des quartiers:', error);
+                // Safe: error is unknown in TS!
                 setError('Impossible de charger les quartiers. Veuillez réessayer.');
             } finally {
                 setIsLoadingQuartiers(false);
@@ -48,19 +50,16 @@ const Signup = () => {
     }, [])
 
     const validateForm = () => {
-        // Vérifier que les mots de passe correspondent
         if (password !== confirmPassword) {
             setError('Les mots de passe ne correspondent pas')
             return false
         }
 
-        // Vérifier la complexité du mot de passe
         if (password.length < 8) {
             setError('Le mot de passe doit contenir au moins 8 caractères')
             return false
         }
 
-        // Vérifier les critères du mot de passe
         const hasUpperCase = /[A-Z]/.test(password)
         const hasLowerCase = /[a-z]/.test(password)
         const hasNumbers = /[0-9]/.test(password)
@@ -71,19 +70,16 @@ const Signup = () => {
             return false
         }
 
-        // Vérifier le téléphone
         if (telephone && !/^[0-9]{10}$/.test(telephone)) {
             setError('Le numéro de téléphone doit contenir 10 chiffres')
             return false
         }
 
-        // Vérifier l'adresse
         if (!adresse.trim()) {
             setError('L\'adresse est requise pour une application de quartier')
             return false
         }
 
-        // Vérifier le quartier
         if (!quartierId) {
             setError('Veuillez sélectionner un quartier')
             return false
@@ -95,7 +91,6 @@ const Signup = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setError('')
-
 
         if (!validateForm()) {
             return
@@ -117,8 +112,13 @@ const Signup = () => {
                 quartier_id: quartierId ? parseInt(quartierId) : undefined
             })
             navigate('/')
-        } catch (err: any) {
-            setError(err.message || t('auth.signup.errors.registrationError'))
+        } catch (err: unknown) {
+            // Safe error message extraction
+            setError(
+                err instanceof Error
+                    ? err.message
+                    : t('auth.signup.errors.registrationError')
+            )
         } finally {
             setIsLoading(false)
         }
@@ -138,6 +138,10 @@ const Signup = () => {
                     <div className="mb-4 rounded-md bg-red-100 p-3 text-red-700">
                         {error}
                     </div>
+                )}
+
+                {isLoadingQuartiers && (
+                    <div className="mb-4 text-center text-gray-500">Chargement des quartiers...</div>
                 )}
 
                 <form onSubmit={handleSubmit}>
@@ -248,22 +252,18 @@ const Signup = () => {
                                 setLongitude(selectedAddress.longitude);
                                 console.log(selectedAddress);
 
-                                // Si un quartier a été trouvé par l'API, l'utiliser
                                 if (selectedAddress.quartierFound && selectedAddress.quartier_id) {
-                                    setQuartierId(String(selectedAddress.quartier_id));                                }
-                                // Sinon, essayer de trouver un quartier par code postal
-                                else if (selectedAddress.postcode && quartiers.length > 0) {
+                                    setQuartierId(String(selectedAddress.quartier_id));
+                                } else if (selectedAddress.postcode && quartiers.length > 0) {
                                     const matchingQuartier = quartiers.find(
                                         q => q.code_postal === selectedAddress.postcode
                                     );
                                     if (matchingQuartier) {
                                         setQuartierId(String(matchingQuartier.id));
                                     } else {
-                                        // Réinitialiser le quartier si aucun n'est trouvé
                                         setQuartierId('');
                                     }
                                 } else {
-                                    // Réinitialiser le quartier si aucun n'est trouvé
                                     setQuartierId('');
                                 }
                             }}
@@ -273,6 +273,28 @@ const Signup = () => {
                         </p>
                     </div>
 
+                    {/* Example of quartier selection (if you want user to choose manually): */}
+                    {/*
+                    <div className="mb-4">
+                        <label htmlFor="quartier" className="mb-2 block text-sm font-medium text-gray-700">
+                            Quartier
+                        </label>
+                        <select
+                            id="quartier"
+                            value={quartierId}
+                            onChange={e => setQuartierId(e.target.value)}
+                            className="w-full rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:outline-none"
+                            required
+                        >
+                            <option value="">-- Sélectionner --</option>
+                            {quartiers.map(q => (
+                                <option key={q.id} value={q.id}>
+                                    {q.nom_quartier}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    */}
 
                     <div className="mb-6">
                         <label htmlFor="dateNaissance" className="mb-2 block text-sm font-medium text-gray-700">

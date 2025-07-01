@@ -91,13 +91,11 @@ const I18nTest: React.FC = () => {
               <div className="flex justify-center space-x-4">
                 <Button 
                   onClick={() => i18n.changeLanguage('fr')}
-                  variant={i18n.language === 'fr' ? 'default' : 'outline'}
                 >
                   🇫🇷 Français
                 </Button>
                 <Button 
                   onClick={() => i18n.changeLanguage('en')}
-                  variant={i18n.language === 'en' ? 'default' : 'outline'}
                 >
                   🇺🇸 English
                 </Button>

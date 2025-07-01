@@ -7,10 +7,7 @@ import {
     MoreVertical, 
     Reply, 
     Edit, 
-    Trash2, 
-    Copy,
-    Heart,
-    ThumbsUp,
+    Trash2,
     Smile,
     Check,
     CheckCheck
@@ -170,7 +167,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                             >
                                 <Button
                                     size="sm"
-                                    variant="ghost"
+                                    variant="outline"
                                     onClick={() => setShowReactions(!showReactions)}
                                     className="w-8 h-8 p-0"
                                 >
@@ -178,7 +175,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                 </Button>
                                 <Button
                                     size="sm"
-                                    variant="ghost"
+                                    variant="outline"
                                     className="w-8 h-8 p-0"
                                 >
                                     <Reply className="w-4 h-4" />
@@ -187,14 +184,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                     <>
                                         <Button
                                             size="sm"
-                                            variant="ghost"
+                                            variant="outline"
                                             className="w-8 h-8 p-0"
                                         >
                                             <Edit className="w-4 h-4" />
                                         </Button>
                                         <Button
                                             size="sm"
-                                            variant="ghost"
+                                            variant="outline"
                                             className="w-8 h-8 p-0 text-red-600 hover:text-red-700"
                                         >
                                             <Trash2 className="w-4 h-4" />
@@ -203,7 +200,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                 )}
                                 <Button
                                     size="sm"
-                                    variant="ghost"
+                                    variant="outline"
                                     className="w-8 h-8 p-0"
                                 >
                                     <MoreVertical className="w-4 h-4" />

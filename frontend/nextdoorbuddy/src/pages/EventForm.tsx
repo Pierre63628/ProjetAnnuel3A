@@ -20,10 +20,7 @@ const EventForm = () => {
         detailed_address: '',
         type_evenement: '',
         photo_url: '',
-        url: '',
-        latitude: 0,
-        longitude: 0,
-        quartier_id: null as number | null
+        url: ''
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -55,13 +52,10 @@ const EventForm = () => {
                         nom: evenement.nom,
                         description: evenement.description || '',
                         date_evenement: formattedDate,
-                        detailed_address: evenement.detailed_address || evenement.lieu || '',
+                        detailed_address: evenement.detailed_address || '',
                         type_evenement: evenement.type_evenement || '',
                         photo_url: evenement.photo_url || '',
-                        url: evenement.url || '',
-                        latitude: evenement.latitude || 0,
-                        longitude: evenement.longitude || 0,
-                        quartier_id: evenement.quartier_id || null
+                        url: evenement.url || ''
                     });
                 } catch (error) {
                     setError('Erreur lors du chargement de l\'événement');
@@ -95,10 +89,7 @@ const EventForm = () => {
     }) => {
         setFormData({
             ...formData,
-            detailed_address: address.adresse,
-            latitude: address.latitude,
-            longitude: address.longitude,
-            quartier_id: address.quartier_id || null
+            detailed_address: address.adresse
         });
     };
 
@@ -120,7 +111,7 @@ const EventForm = () => {
 
         // Validate URL if provided
         if (formData.url && formData.url.trim()) {
-            const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+            const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
             if (!urlPattern.test(formData.url.trim())) {
                 setError(t('events.errors.invalidUrl'));
                 return false;

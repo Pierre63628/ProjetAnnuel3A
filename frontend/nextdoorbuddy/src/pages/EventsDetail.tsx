@@ -3,15 +3,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
     getEvenementById,
     deleteEvenement,
-    participateToEvenement,
-    cancelParticipation,
     checkParticipation,
     Evenement
 } from '../services/evenement.service';
 import Header from '../components/Header';
 import EventMap from '../components/EventMap';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { Calendar, MapPin, User, Tag, ArrowLeft, Clock, Trash2, Edit, ExternalLink, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
@@ -55,17 +53,6 @@ const EventDetails = () => {
 
         fetchEvenement();
     }, [id, user]);
-
-    const formatDate = (dateString: string) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
 
     const formatDateLong = (dateString: string) => {
         const date = new Date(dateString);
@@ -115,15 +102,6 @@ const EventDetails = () => {
             setParticipationLoading(true);
             setError('');
 
-            if (isParticipant) {
-                const result = await cancelParticipation(evenement.id);
-                setIsParticipant(false);
-                setParticipantCount(result.participantCount);
-            } else {
-                const result = await participateToEvenement(evenement.id);
-                setIsParticipant(true);
-                setParticipantCount(result.participantCount);
-            }
         } catch (err: any) {
             console.error(err);
             setError(err.message || 'Erreur lors de la gestion de la participation.');
@@ -291,11 +269,11 @@ const EventDetails = () => {
                                         <h3 className="text-xl font-semibold text-gray-900">Localisation</h3>
                                     </div>
                                     <div className="mb-6 p-4 bg-gray-50 rounded-lg border">
-                                        <p className="text-gray-800 font-medium text-lg">{evenement.detailed_address || evenement.lieu}</p>
+                                        <p className="text-gray-800 font-medium text-lg">{evenement.detailed_address }</p>
                                     </div>
                                     <div className="rounded-xl overflow-hidden shadow-md">
                                         <EventMap
-                                            address={evenement.detailed_address || evenement.lieu}
+                                            address={evenement.detailed_address}
                                             eventName={evenement.nom}
                                             className="h-64"
                                         />
@@ -356,7 +334,7 @@ const EventDetails = () => {
                                             </div>
                                             <div className="flex-1">
                                                 <p className="text-sm text-red-600 font-medium">Lieu</p>
-                                                <p className="font-semibold text-red-900 text-base leading-relaxed">{evenement.detailed_address || evenement.lieu}</p>
+                                                <p className="font-semibold text-red-900 text-base leading-relaxed">{evenement.detailed_address }</p>
                                             </div>
                                         </div>
 

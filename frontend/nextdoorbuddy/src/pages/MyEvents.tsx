@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserParticipations, cancelParticipation, Evenement } from '../services/evenement.service';
 import Header from '../components/Header';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { Calendar, MapPin, Users, ExternalLink, UserMinus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
@@ -155,7 +155,7 @@ const MyEvents = () => {
                                                             </p>
                                                             <p className="text-sm text-gray-600 flex items-center">
                                                                 <MapPin className="w-4 h-4 mr-2" />
-                                                                {evenement.detailed_address || evenement.lieu}
+                                                                {evenement.detailed_address}
                                                             </p>
                                                         </div>
 
@@ -231,7 +231,7 @@ const MyEvents = () => {
                                                             </p>
                                                             <p className="text-sm text-gray-500 flex items-center">
                                                                 <MapPin className="w-4 h-4 mr-2" />
-                                                                {evenement.detailed_address || evenement.lieu}
+                                                                {evenement.detailed_address}
                                                             </p>
                                                         </div>
 

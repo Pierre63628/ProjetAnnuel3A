@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import trocService from '../services/troc.service';
-import { AnnonceTroc } from '../types/troc';
+import { AnnonceTroc } from '../services/troc.service';
 import ImageCarousel from '../components/ImageCarousel';
 
 const AdminTrocs: React.FC = () => {
@@ -29,7 +29,7 @@ const AdminTrocs: React.FC = () => {
         }
     };
 
-    const handleStatusChange = async (id: number, newStatus: 'active' | 'inactive') => {
+    const handleStatusChange = async (id: number | undefined, newStatus: "active" | "inactive") => {
         try {
             await trocService.updateTrocStatus(id, newStatus);
             setTrocs(trocs.map(troc =>
@@ -41,7 +41,7 @@ const AdminTrocs: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number | undefined) => {
         if (window.confirm('Êtes-vous sûr de vouloir supprimer cette annonce ?')) {
             try {
                 await trocService.deleteTroc(id);
@@ -200,7 +200,13 @@ const AdminTrocs: React.FC = () => {
                                                 </p>
 
                                                 <div className="text-sm text-gray-500">
-                                                    <p>Publié le: {new Date(troc.date_publication).toLocaleDateString()}</p>
+                                                    <p>
+                                                        Publié le: {
+                                                        troc.date_publication
+                                                            ? new Date(troc.date_publication).toLocaleDateString()
+                                                            : 'Date inconnue'
+                                                    }
+                                                    </p>
                                                     <p>ID: {troc.id} | Utilisateur: {troc.utilisateur_id}</p>
                                                 </div>
                                             </div>

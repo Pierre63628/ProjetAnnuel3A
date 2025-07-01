@@ -166,7 +166,7 @@ const AdminQuartiers = () => {
             ville: quartier.ville || '',
             code_postal: quartier.code_postal || '',
             description: quartier.description || '',
-            geom: quartier.geom || ''
+            geom: quartier.geom || null
         });
     };
 

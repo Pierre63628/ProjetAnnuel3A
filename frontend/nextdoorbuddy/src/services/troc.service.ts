@@ -83,7 +83,7 @@ export const trocService = {
     },
 
     // Supprimer une annonce
-    async deleteTroc(id: number): Promise<{ message: string }> {
+    async deleteTroc(id: number | undefined): Promise<{ message: string }> {
         try {
             const data = await api.delete(`/troc/${id}`);
             return data;
@@ -115,7 +115,7 @@ export const trocService = {
         }
     },
 
-    async updateTrocStatus(id: number, status: 'active' | 'inactive'): Promise<void> {
+    async updateTrocStatus(id: number | undefined, status: "active" | "inactive"): Promise<void> {
         try {
             await api.patch(`/troc/admin/${id}/status`, { statut: status });
         } catch (error) {

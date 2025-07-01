@@ -6,7 +6,6 @@ export interface Evenement {
     nom: string;
     description?: string;
     date_evenement: string;
-    lieu: string;
     type_evenement?: string;
     photo_url?: string;
     url?: string;

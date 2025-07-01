@@ -21,7 +21,6 @@ import {
     Edit,
     Trash2,
     Mail,
-    Phone,
     Clock,
     AlertCircle,
     CheckCircle,

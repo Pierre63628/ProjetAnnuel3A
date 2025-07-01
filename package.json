@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/node": "^24.0.8",
     "@types/socket.io-client": "^1.4.36",
     "jsonwebtoken": "^9.0.2",
     "node-fetch": "^3.3.2",

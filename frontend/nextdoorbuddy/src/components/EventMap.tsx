@@ -11,7 +11,7 @@ L.Icon.Default.mergeOptions({
 });
 
 interface EventMapProps {
-  address: string;
+  address?: string;
   latitude?: number;
   longitude?: number;
   eventName: string;
@@ -59,7 +59,9 @@ const EventMap: React.FC<EventMapProps> = ({
 
     // If no coordinates provided, try to geocode the address
     if (!latitude || !longitude) {
-      geocodeAddress(address, map, marker);
+      if (address) { // <-- Protect here
+        geocodeAddress(address, map, marker);
+      }
     }
 
     // Cleanup function

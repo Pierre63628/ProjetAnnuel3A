@@ -1,18 +1,15 @@
-import { io } from "socket.io-client";
-import type { Socket } from "socket.io-client";
+import io  from "socket.io-client";
 
-import { 
-    ServerToClientEvents, 
-    ClientToServerEvents, 
-    Message, 
-    UserPresence, 
+import type {
+    Message,
+    UserPresence,
     TypingIndicator,
-    MessageReaction 
+    MessageReaction
 } from '../types/messaging.types';
 
+
 class WebSocketService {
-    private socket: Socket<ServerToClientEvents, ClientToServerEvents> | null = null;
-    private token: string | null = null;
+    private socket: ReturnType<typeof io> | null = null;    private token: string | null = null;
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private reconnectDelay = 1000;
@@ -46,13 +43,13 @@ class WebSocketService {
                 resolve();
             });
 
-            this.socket.on('connect_error', (error) => {
+            this.socket.on('connect_error', (error: any) => {
                 console.error('WebSocket connection error:', error);
                 this.handleReconnect();
                 reject(error);
             });
 
-            this.socket.on('disconnect', (reason) => {
+            this.socket.on('disconnect', (reason: string) => {
                 console.log('Disconnected from WebSocket server:', reason);
                 if (reason === 'io server disconnect') {
                     // Server disconnected, try to reconnect
@@ -65,39 +62,39 @@ class WebSocketService {
     private setupEventListeners() {
         if (!this.socket) return;
 
-        this.socket.on('message_received', (message) => {
+        this.socket.on('message_received', (message: Message) => {
             this.messageListeners.forEach(listener => listener(message));
         });
 
-        this.socket.on('message_updated', (message) => {
+        this.socket.on('message_updated', (message: Message) => {
             this.messageUpdateListeners.forEach(listener => listener(message));
         });
 
-        this.socket.on('message_deleted', (messageId, chatRoomId) => {
+        this.socket.on('message_deleted', (messageId: number, chatRoomId: number) => {
             this.messageDeleteListeners.forEach(listener => listener(messageId, chatRoomId));
         });
 
-        this.socket.on('messages_loaded', (data) => {
+        this.socket.on('messages_loaded', (data: { chatRoomId: number; messages: Message[]; page?: number; }) => {
             this.messagesLoadedListeners.forEach(listener => listener(data));
         });
 
-        this.socket.on('typing_start', (data) => {
+        this.socket.on('typing_start', (data: TypingIndicator) => {
             this.typingListeners.forEach(listener => listener(data));
         });
 
-        this.socket.on('typing_stop', (data) => {
+        this.socket.on('typing_stop', (data: { userId: number; chatRoomId: number; }) => {
             this.typingStopListeners.forEach(listener => listener(data));
         });
 
-        this.socket.on('user_presence_updated', (presence) => {
+        this.socket.on('user_presence_updated', (presence: UserPresence) => {
             this.presenceListeners.forEach(listener => listener(presence));
         });
 
-        this.socket.on('message_reaction_added', (reaction) => {
+        this.socket.on('message_reaction_added', (reaction: MessageReaction) => {
             this.reactionListeners.forEach(listener => listener(reaction));
         });
 
-        this.socket.on('error', (error) => {
+        this.socket.on('error', (error: { message: string; code?: string; }) => {
             this.errorListeners.forEach(listener => listener(error));
         });
     }

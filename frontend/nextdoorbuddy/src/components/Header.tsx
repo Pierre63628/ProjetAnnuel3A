@@ -10,9 +10,6 @@ import {
     Heart,
     MessageCircle,
     User,
-    Users,
-    MapPin,
-    Settings,
     LogOut,
     Sparkles
 } from 'lucide-react';

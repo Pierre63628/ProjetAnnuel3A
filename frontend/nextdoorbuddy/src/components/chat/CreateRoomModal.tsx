@@ -99,7 +99,7 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
                                         </h2>
                                     </div>
                                     <Button
-                                        variant="ghost"
+                                        variant="outline"
                                         size="sm"
                                         onClick={handleClose}
                                         disabled={isLoading}

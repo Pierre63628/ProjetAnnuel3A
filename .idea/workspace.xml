@@ -5,30 +5,42 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="549b3728-53cb-4adf-9f07-a61427b4c3b5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/LanguageSelector.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/locales/en.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/i18n/locales/fr.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/I18nTest.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker/init/01_schema.sql" beforeDir="false" afterPath="$PROJECT_DIR$/docker/init/01_schema.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/AddressAutocomplete.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/AddressAutocomplete.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/DashboardStats.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/DashboardStats.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/EventMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/EventMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/Header.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/ChatWindow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/AuthContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/AuthContext.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/CreateRoomModal.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/CreateRoomModal.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/MessageBubble.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/MessageBubble.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/MessageInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/MessageInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/OnlineUsers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/chat/OnlineUsers.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/contexts/ChatContext.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminDashboard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminDashboard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminQuartiers.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminQuartiers.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminTrocs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/AdminTrocs.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Chat.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Events.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventsDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/EventsDetail.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Login.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Login.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/I18nTest.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/I18nTest.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/MyEvents.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/MyEvents.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Profile.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Profile.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Signup.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Signup.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/Troc.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocDetail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocDetail.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/pages/TrocForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/evenement.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/evenement.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/troc.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/services/websocket.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/utils/permissions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/src/utils/permissions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/tsconfig.node.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/tsconfig.node.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/nextdoorbuddy/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,9 +97,11 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.Front.executor": "Run",
+    "npm.build (1).executor": "Run",
     "npm.build.executor": "Run",
     "npm.dev (1).executor": "Run",
     "npm.dev.executor": "Run",
+    "npm.lint.executor": "Run",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "ts.external.directory.path": "/Users/pes/WebstormProjects/ProjetAnnuel3A/frontend/nextdoorbuddy/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
@@ -109,7 +123,7 @@
       <recent name="$PROJECT_DIR$/backend/sqldata" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.dev">
+  <component name="RunManager" selected="npm.build (1)">
     <configuration name="test-image-processing.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/test-image-processing.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
@@ -119,21 +133,8 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="docker-compose.yaml.db: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="services">
-            <list>
-              <option value="db" />
-            </list>
-          </option>
-          <option name="sourceFilePath" value="docker-compose.yaml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
-    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/backend/package.json" />
+    <configuration name="build (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" />
       <command value="run" />
       <scripts>
         <script value="build" />
@@ -162,20 +163,30 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="lint" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/nextdoorbuddy/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="lint" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Docker.docker-compose.yaml.db: Compose Deployment" />
       <item itemvalue="Node.js.test-image-processing.js" />
-      <item itemvalue="npm.build" />
+      <item itemvalue="npm.build (1)" />
+      <item itemvalue="npm.lint" />
       <item itemvalue="npm.dev (1)" />
       <item itemvalue="npm.dev" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.build (1)" />
+        <item itemvalue="npm.lint" />
         <item itemvalue="npm.dev" />
         <item itemvalue="Node.js.test-image-processing.js" />
         <item itemvalue="npm.dev (1)" />
-        <item itemvalue="npm.build" />
-        <item itemvalue="Docker.docker-compose.yaml.db: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -211,7 +222,8 @@
       <workItem from="1750257394578" duration="8325000" />
       <workItem from="1750387729452" duration="12582000" />
       <workItem from="1750712294605" duration="5255000" />
-      <workItem from="1750800330481" duration="25561000" />
+      <workItem from="1750800330481" duration="28323000" />
+      <workItem from="1751356178928" duration="3487000" />
     </task>
     <servers />
   </component>

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { useAuth } from './AuthContext';
-import webSocketService from '../services/websocket.service';
+import webSocketService from '../services/websocket.service.ts';
 import messagingService from '../services/messaging.service';
 import { 
     ChatRoom, 

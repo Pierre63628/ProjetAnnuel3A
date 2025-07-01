@@ -11,7 +11,6 @@ import {
     Circle,
     MessageCircle,
     Crown,
-    Shield,
     User,
     Hash
 } from 'lucide-react';

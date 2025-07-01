@@ -9,6 +9,7 @@ interface ButtonProps {
   asChild?: boolean;
   disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
+  title?: string;
 }
 
 const getVariantClasses = (variant: string) => {
@@ -39,11 +40,11 @@ const getSizeClasses = (size: string) => {
   }
 };
 
-export const Button: React.FC<ButtonProps> = ({ 
-  children, 
-  className = '', 
-  onClick, 
-  variant = 'solid', 
+export const Button: React.FC<ButtonProps> = ({
+  children,
+  className = '',
+  onClick,
+  variant = 'solid',
   size = 'md',
   asChild = false,
   disabled = false,
@@ -52,11 +53,13 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   const variantClasses = getVariantClasses(variant);
   const sizeClasses = getSizeClasses(size);
-  
+
   const allClasses = `${baseClasses} ${variantClasses} ${sizeClasses} ${className}`;
 
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(children, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
       className: allClasses,
       onClick,
       disabled
@@ -64,7 +67,7 @@ export const Button: React.FC<ButtonProps> = ({
   }
 
   return (
-    <button 
+    <button
       className={allClasses}
       onClick={onClick}
       disabled={disabled}

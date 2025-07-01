@@ -33,7 +33,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     const [message, setMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
-    const typingTimeoutRef = useRef<NodeJS.Timeout>();
+    const typingTimeoutRef = useRef<NodeJS.Timeout>(null);
 
     // Auto-resize textarea
     useEffect(() => {
@@ -118,7 +118,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                         {onCancelReply && (
                             <Button
                                 size="sm"
-                                variant="ghost"
+                                variant="outline"
                                 onClick={onCancelReply}
                                 className="ml-2 p-1 h-auto"
                             >
@@ -161,7 +161,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
                         <div className="absolute right-3 bottom-3 flex items-center gap-1">
                             <Button
                                 type="button"
-                                variant="ghost"
+                                variant="outline"
                                 size="sm"
                                 className="p-1 h-auto text-gray-500 hover:text-gray-700"
                                 disabled={disabled}

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import { useChat } from '../contexts/ChatContext';
 import ChatRoomList from '../components/chat/ChatRoomList';

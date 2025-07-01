@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
-import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, removeQuartierFromUser, Quartier, UserQuartier } from '../services/quartier.service';
+import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, Quartier, UserQuartier } from '../services/quartier.service';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 
 const Profile = () => {
     const { user, accessToken, refreshAccessToken, logout, updateUserInfo } = useAuth();
-    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -30,7 +28,6 @@ const Profile = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [quartiers, setQuartiers] = useState<Quartier[]>([]);
     const [userQuartiers, setUserQuartiers] = useState<UserQuartier[]>([]);
-    const [selectedQuartier, setSelectedQuartier] = useState<string>('');
 
     // Charger les données de l'utilisateur
     useEffect(() => {
@@ -110,11 +107,6 @@ const Profile = () => {
             ...formData,
             [name]: value
         });
-
-        // Si c'est le sélecteur de quartier à ajouter
-        if (name === 'selectedQuartier') {
-            setSelectedQuartier(value);
-        }
     };
 
     const validateForm = () => {

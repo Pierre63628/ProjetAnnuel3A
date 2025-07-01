@@ -80,7 +80,7 @@ export const isEventOrganizer = (user: User | null, evenement: Evenement): boole
  * @param troc - L'annonce de troc à vérifier
  * @returns true si l'utilisateur peut supprimer l'annonce, false sinon
  */
-export const canDeleteTroc = (user: User | null, troc: AnnonceTroc): boolean => {
+export const canDeleteTroc = (user: User | null, troc: AnnonceTroc | null): boolean => {
     if (!user || !troc) {
         return false;
     }
@@ -104,7 +104,7 @@ export const canDeleteTroc = (user: User | null, troc: AnnonceTroc): boolean => 
  * @param troc - L'annonce de troc à vérifier
  * @returns true si l'utilisateur peut modifier l'annonce, false sinon
  */
-export const canEditTroc = (user: User | null, troc: AnnonceTroc): boolean => {
+export const canEditTroc = (user: User | null, troc: AnnonceTroc | null): boolean => {
     if (!user || !troc) {
         return false;
     }

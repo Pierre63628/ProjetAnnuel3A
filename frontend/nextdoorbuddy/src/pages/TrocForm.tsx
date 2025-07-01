@@ -376,7 +376,7 @@ function TrocForm() {
             }
 
             // Vérifier que la création/modification a réussi
-            if (result && (result.id || result.message)) {
+            if (result) {
                 console.log('Navigating to /trocs...');
 
                 // Clear the form state

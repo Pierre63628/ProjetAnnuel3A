@@ -4,7 +4,6 @@ import Header from '../components/Header';
 import { trocService, AnnonceTroc } from '../services/troc.service';
 import ImageCarousel from '../components/ImageCarousel';
 import ErrorBoundary from '../components/ErrorBoundary';
-import { getImageUrl } from '../utils/imageUtils';
 
 function Troc() {
     const [annonces, setAnnonces] = useState<AnnonceTroc[]>([]);
@@ -121,7 +120,9 @@ function Troc() {
             return (
                 <div className="mb-4 p-4 bg-gray-100 rounded-lg text-center text-gray-500">
                     <p>Impossible d'afficher les images</p>
-                    <p className="text-xs mt-1">Erreur: {error.message}</p>
+                    <p className="text-xs mt-1">
+                        Erreur: {error instanceof Error ? error.message : String(error)}
+                    </p>
                 </div>
             );
         }

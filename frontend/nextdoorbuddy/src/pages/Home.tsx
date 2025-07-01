@@ -422,7 +422,7 @@ const Home = () => {
                                                             </div>
                                                             <div className="flex items-start text-sm text-gray-600">
                                                                 <MapPin className="w-4 h-4 mr-2 text-red-500 mt-0.5 flex-shrink-0" />
-                                                                <span className="line-clamp-2">{event.detailed_address || event.lieu}</span>
+                                                                <span className="line-clamp-2">{event.detailed_address }</span>
                                                             </div>
                                                             {eventStatus && (
                                                                 <div className="flex items-center text-sm text-gray-600">
@@ -524,7 +524,7 @@ const Home = () => {
                                                             </div>
                                                             <div className="flex items-start text-sm text-gray-600">
                                                                 <MapPin className="w-4 h-4 mr-2 text-red-500 mt-0.5 flex-shrink-0" />
-                                                                <span className="line-clamp-1">{event.detailed_address || event.lieu}</span>
+                                                                <span className="line-clamp-1">{event.detailed_address }</span>
                                                             </div>
                                                         </div>
                                                         <Button asChild size="sm" variant="outline" className="ml-4">

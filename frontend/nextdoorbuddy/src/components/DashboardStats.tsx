@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Card } from './ui/card';
-import { Calendar, Heart, TrendingUp, Users } from 'lucide-react';
+import { Calendar, Heart, TrendingUp } from 'lucide-react';
 
 interface DashboardStatsProps {
     todaysEventsCount: number;

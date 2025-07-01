@@ -15,8 +15,6 @@ import {
     Activity,
     BarChart3,
     Settings,
-    Sparkles,
-    Plus,
     Eye,
     Edit,
     Shield
@@ -220,10 +218,9 @@ const AdminDashboard = () => {
                                     </div>
                                     <div className="space-y-4">
                                         <h3 className="font-semibold text-gray-700">Répartition par type</h3>
-                                        {Object.entries(trocStats.byType).map(([type, count]) => (
+                                        {Object.entries(trocStats.byType).map(([type]) => (
                                             <div key={type} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                                 <span className="text-gray-700 capitalize">{type}</span>
-                                                <span className="font-semibold text-gray-900">{count}</span>
                                             </div>
                                         ))}
                                     </div>

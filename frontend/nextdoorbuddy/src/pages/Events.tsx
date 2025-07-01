@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import {
     getPastEvenementsByQuartier,
@@ -98,7 +97,7 @@ const Events = () => {
         if (!searchTerm.trim()) return setFilteredEvenements(evenements);
         setFilteredEvenements(
             evenements.filter((e) =>
-                [e.nom, e.description, e.detailed_address || e.lieu, e.type_evenement]
+                [e.nom, e.description, e.detailed_address, e.type_evenement]
                     .filter(Boolean)
                     .some((field) => field?.toLowerCase().includes(searchTerm.toLowerCase()))
             )
@@ -364,7 +363,7 @@ const Events = () => {
 
                                             <div className="flex items-start text-gray-600">
                                                 <MapPin className="w-4 h-4 mr-3 text-red-500 mt-0.5 flex-shrink-0" />
-                                                <p className="text-sm line-clamp-2">{evenement.detailed_address || evenement.lieu}</p>
+                                                <p className="text-sm line-clamp-2">{evenement.detailed_address }</p>
                                             </div>
 
                                             {eventStatus && (
