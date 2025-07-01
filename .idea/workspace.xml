@@ -6,22 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="19657930-f5fd-4e64-a9b6-2f1bcda94716" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/DialogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/DialogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDetailsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDetailsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/FilterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/models/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/models/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/eventViewer.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/application.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/application.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/blue-night-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/blue-night-theme.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/dark-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/dark-theme.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/modern-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/modern-theme.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/styles/nature-green-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/styles/nature-green-theme.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,7 +211,7 @@
       <workItem from="1749719258101" duration="18000" />
       <workItem from="1749740056373" duration="14602000" />
       <workItem from="1751276861013" duration="17000" />
-      <workItem from="1751276892642" duration="2986000" />
+      <workItem from="1751276892642" duration="8031000" />
     </task>
     <servers />
   </component>
