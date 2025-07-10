@@ -60,7 +60,7 @@ interface ChatProviderProps {
 }
 
 export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
-    const { user, accessToken } = useAuth();
+    const { user, accessToken, refreshAccessToken } = useAuth();
     console.log(user, accessToken);
     // Connection state
     const [isConnected, setIsConnected] = useState(false);
@@ -83,24 +83,25 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         try {
             setIsConnecting(true);
             setError(null);
-            
-            await webSocketService.connect(accessToken);
+
+            // Pass the token refresh callback to WebSocket service
+            await webSocketService.connect(accessToken, refreshAccessToken);
             setIsConnected(true);
-            
+
             // Load initial data
             const rooms = await messagingService.getChatRooms();
             setChatRooms(rooms);
-            
+
             const online = await messagingService.getOnlineUsers();
             setOnlineUsers(online);
-            
+
         } catch (err) {
             console.error('Failed to connect to chat:', err);
             setError(err instanceof Error ? err.message : 'Failed to connect to chat');
         } finally {
             setIsConnecting(false);
         }
-    }, [accessToken, user, isConnecting, isConnected]);
+    }, [accessToken, user, isConnecting, isConnected, refreshAccessToken]);
 
     // Disconnect from chat
     const disconnectFromChat = useCallback(() => {

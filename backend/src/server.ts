@@ -35,5 +35,5 @@ const webSocketService = new WebSocketService(server);
 // Lancer le serveur
 server.listen(PORT, () => {
     console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-    console.log(`💬 WebSocket service initialized` ,webSocketService);
+    console.log(`💬 WebSocket service initialized`);
 });

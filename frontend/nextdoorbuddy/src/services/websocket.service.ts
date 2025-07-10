@@ -9,10 +9,12 @@ import type {
 
 
 class WebSocketService {
-    private socket: ReturnType<typeof io> | null = null;    private token: string | null = null;
+    private socket: ReturnType<typeof io> | null = null;
+    private token: string | null = null;
     private reconnectAttempts = 0;
     private maxReconnectAttempts = 5;
     private reconnectDelay = 1000;
+    private tokenRefreshCallback: (() => Promise<string | null>) | null = null;
 
     // Event listeners
     private messageListeners: ((message: Message) => void)[] = [];
@@ -25,11 +27,12 @@ class WebSocketService {
     private reactionListeners: ((reaction: MessageReaction) => void)[] = [];
     private errorListeners: ((error: { message: string; code?: string }) => void)[] = [];
 
-    connect(token: string): Promise<void> {
+    connect(token: string, tokenRefreshCallback?: () => Promise<string | null>): Promise<void> {
         return new Promise((resolve, reject) => {
             this.token = token;
-            
-            this.socket = io('http://localhost:3000', {
+            this.tokenRefreshCallback = tokenRefreshCallback || null;
+
+            this.socket = io('https://doorbudy.cloud', {
                 auth: {
                     token: token
                 },
@@ -45,7 +48,12 @@ class WebSocketService {
 
             this.socket.on('connect_error', (error: any) => {
                 console.error('WebSocket connection error:', error);
-                this.handleReconnect();
+                // Check if it's an authentication error
+                if (error.message && error.message.includes('authentication')) {
+                    this.handleAuthenticationError();
+                } else {
+                    this.handleReconnect();
+                }
                 reject(error);
             });
 
@@ -99,6 +107,28 @@ class WebSocketService {
         });
     }
 
+    private async handleAuthenticationError() {
+        console.log('Authentication error detected, attempting token refresh...');
+
+        if (this.tokenRefreshCallback) {
+            try {
+                const newToken = await this.tokenRefreshCallback();
+                if (newToken) {
+                    console.log('Token refreshed, reconnecting...');
+                    this.token = newToken;
+                    this.reconnectAttempts = 0;
+                    await this.connect(newToken, this.tokenRefreshCallback);
+                } else {
+                    console.error('Failed to refresh token');
+                }
+            } catch (error) {
+                console.error('Token refresh failed:', error);
+            }
+        } else {
+            console.error('No token refresh callback available');
+        }
+    }
+
     private handleReconnect() {
         if (this.reconnectAttempts >= this.maxReconnectAttempts) {
             console.error('Max reconnection attempts reached');
@@ -107,11 +137,11 @@ class WebSocketService {
 
         this.reconnectAttempts++;
         const delay = this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1);
-        
+
         setTimeout(() => {
             if (this.token) {
                 console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-                this.connect(this.token).catch(() => {
+                this.connect(this.token, this.tokenRefreshCallback || undefined).catch(() => {
                     // Reconnection failed, will try again
                 });
             }

@@ -18,7 +18,7 @@ export class WebSocketService {
     constructor(server: HTTPServer) {
         this.io = new SocketIOServer(server, {
             cors: {
-                origin: process.env.FRONTEND_URL || "http://localhost:5173",
+                origin: process.env.FRONTEND_URL || "http://37.59.118.112:80",
                 methods: ["GET", "POST"],
                 credentials: true
             }
