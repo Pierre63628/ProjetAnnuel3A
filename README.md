@@ -210,13 +210,23 @@ git clone https://github.com/Pierre63628/ProjetAnnuel3A.git
 cd ProjetAnnuel-NextDoorBuddy
 
 # Lancer les conteneurs Docker
+
+## Production
 docker-compose up --build -d
+
+## Développement local (si vous avez les fichiers de dev)
+docker-compose -f docker-compose.dev.yaml up --build -d
 ```
 
 ## Accès
 
-- **Frontend** : http://localhost:5173
-- **Backend API** : http://localhost:3000
+### Production
+- **Application** : https://doorbudy.cloud
+- **Backend API** : https://doorbudy.cloud/api
+
+### Développement local
+- **Application** : http://localhost
+- **Backend API** : http://localhost:3000 (accès direct) ou http://localhost/api (via nginx)
 
 ## Utilisateurs de test
 

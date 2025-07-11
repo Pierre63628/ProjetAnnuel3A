@@ -103,6 +103,10 @@ Thumbs.db
 # Docker
 .dockerignore
 
+# Development configuration files
+nginx-dev.conf
+docker-compose.dev.yaml
+
 # Uploads (if you don't want to commit uploaded files)
 backend/uploads/*
 !backend/uploads/.gitkeep

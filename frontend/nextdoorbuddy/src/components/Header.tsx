@@ -2,11 +2,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import LanguageSelector from './LanguageSelector';
 import {
     Home,
     Calendar,
     ArrowRightLeft,
+    Briefcase,
     Heart,
     MessageCircle,
     User,
@@ -35,6 +37,7 @@ const Header = () => {
         { to: '/', label: t('navigation.home'), icon: Home },
         { to: '/events', label: t('navigation.events'), icon: Calendar },
         { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
+        { to: '/services', label: 'Services', icon: Briefcase },
         { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
         { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
         { to: '/profile', label: t('navigation.profile'), icon: User },
@@ -144,7 +147,7 @@ const Header = () => {
                     )}
                 </div>
             </div>
-        </motion.header>
+        </header>
     );
 };
 
