@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useChat } from '../../contexts/ChatContext';
+import { useMobileChat } from '../../contexts/MobileChatContext';
 import { Message } from '../../types/messaging.types';
 import { Button } from '../ui/button';
-import { 
-    MoreVertical, 
-    Reply, 
-    Edit, 
+import {
+    MoreVertical,
+    Reply,
+    Edit,
     Trash2,
     Smile,
     Check,
@@ -27,6 +28,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     showTimestamp
 }) => {
     const { addReaction, removeReaction } = useChat();
+    const { isMobile } = useMobileChat();
     const [showActions, setShowActions] = useState(false);
     const [showReactions, setShowReactions] = useState(false);
 
@@ -75,20 +77,28 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
     const reactionEmojis = ['👍', '❤️', '😂', '😮', '😢', '😡'];
 
     return (
-        <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group`}>
-            <div className={`flex max-w-xs lg:max-w-md ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group ${
+            isMobile ? 'mb-3' : 'mb-2'
+        }`}>
+            <div className={`flex ${
+                isMobile
+                    ? 'max-w-[85%]' // More space on mobile
+                    : 'max-w-xs lg:max-w-md'
+            } ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
                 {/* Avatar */}
                 {!isOwn && (
-                    <div className="flex-shrink-0 mr-3">
+                    <div className={`flex-shrink-0 ${isMobile ? 'mr-2' : 'mr-3'}`}>
                         {showAvatar ? (
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-medium">
-                                {message.sender ? 
-                                    getInitials(message.sender.nom, message.sender.prenom) : 
+                            <div className={`rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium ${
+                                isMobile ? 'w-7 h-7 text-xs' : 'w-8 h-8 text-xs'
+                            }`}>
+                                {message.sender ?
+                                    getInitials(message.sender.nom, message.sender.prenom) :
                                     '?'
                                 }
                             </div>
                         ) : (
-                            <div className="w-8 h-8" />
+                            <div className={isMobile ? 'w-7 h-7' : 'w-8 h-8'} />
                         )}
                     </div>
                 )}
@@ -103,7 +113,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 
                     {/* Sender name for group messages */}
                     {!isOwn && showAvatar && (
-                        <div className="text-xs text-gray-600 mb-1 px-2 font-medium">
+                        <div className={`text-gray-600 mb-1 px-2 font-medium ${
+                            isMobile ? 'text-sm' : 'text-xs'
+                        }`}>
                             {message.sender?.prenom} {message.sender?.nom}
                         </div>
                     )}
@@ -124,17 +136,23 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
 
                     {/* Message bubble */}
                     <motion.div
-                        className={`relative px-4 py-2 rounded-2xl shadow-sm ${
+                        className={`relative rounded-2xl shadow-sm ${
                             isOwn
                                 ? 'bg-blue-600 text-white'
                                 : 'bg-white text-gray-900 border border-gray-200'
+                        } ${
+                            isMobile ? 'px-3 py-3' : 'px-4 py-2'
                         }`}
-                        whileHover={{ scale: 1.02 }}
-                        onMouseEnter={() => setShowActions(true)}
-                        onMouseLeave={() => setShowActions(false)}
+                        whileHover={!isMobile ? { scale: 1.02 } : {}}
+                        onMouseEnter={() => !isMobile && setShowActions(true)}
+                        onMouseLeave={() => !isMobile && setShowActions(false)}
+                        onTouchStart={() => isMobile && setShowActions(true)}
+                        onTouchEnd={() => isMobile && setTimeout(() => setShowActions(false), 3000)}
                     >
                         {/* Message content */}
-                        <div className="break-words">
+                        <div className={`break-words ${
+                            isMobile ? 'text-base leading-relaxed' : 'text-sm'
+                        }`}>
                             {message.content}
                         </div>
 
@@ -160,7 +178,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                             <motion.div
                                 className={`absolute top-0 ${isOwn ? 'left-0' : 'right-0'} transform ${
                                     isOwn ? '-translate-x-full' : 'translate-x-full'
-                                } -translate-y-1/2 flex items-center gap-1 bg-white rounded-lg shadow-lg border p-1`}
+                                } -translate-y-1/2 flex items-center gap-1 bg-white rounded-lg shadow-lg border p-1 z-10`}
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
@@ -169,14 +187,14 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                     size="sm"
                                     variant="outline"
                                     onClick={() => setShowReactions(!showReactions)}
-                                    className="w-8 h-8 p-0"
+                                    className={isMobile ? 'min-w-[44px] min-h-[44px] p-2' : 'w-8 h-8 p-0'}
                                 >
                                     <Smile className="w-4 h-4" />
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="outline"
-                                    className="w-8 h-8 p-0"
+                                    className={isMobile ? 'min-w-[44px] min-h-[44px] p-2' : 'w-8 h-8 p-0'}
                                 >
                                     <Reply className="w-4 h-4" />
                                 </Button>

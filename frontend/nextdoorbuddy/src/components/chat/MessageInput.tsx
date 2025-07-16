@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '../ui/button';
-import { 
-    Send, 
-    Paperclip, 
-    Smile, 
-    Image, 
+import { useMobileChat } from '../../contexts/MobileChatContext';
+import {
+    Send,
+    Paperclip,
+    Smile,
+    Image,
     Mic,
     X
 } from 'lucide-react';
@@ -30,6 +31,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
     replyTo,
     onCancelReply
 }) => {
+    const { isMobile, isKeyboardVisible, setKeyboardVisible } = useMobileChat();
     const [message, setMessage] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -39,9 +41,38 @@ const MessageInput: React.FC<MessageInputProps> = ({
     useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto';
-            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+            const maxHeight = isMobile ? 100 : 120; // Smaller max height on mobile
+            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, maxHeight)}px`;
         }
-    }, [message]);
+    }, [message, isMobile]);
+
+    // Handle virtual keyboard visibility on mobile
+    useEffect(() => {
+        if (!isMobile) return;
+
+        const handleFocus = () => {
+            setKeyboardVisible(true);
+            // Scroll to input on mobile when keyboard appears
+            setTimeout(() => {
+                textareaRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        };
+
+        const handleBlur = () => {
+            setKeyboardVisible(false);
+        };
+
+        const textarea = textareaRef.current;
+        if (textarea) {
+            textarea.addEventListener('focus', handleFocus);
+            textarea.addEventListener('blur', handleBlur);
+
+            return () => {
+                textarea.removeEventListener('focus', handleFocus);
+                textarea.removeEventListener('blur', handleBlur);
+            };
+        }
+    }, [isMobile, setKeyboardVisible]);
 
     // Handle typing indicators
     useEffect(() => {
@@ -102,16 +133,24 @@ const MessageInput: React.FC<MessageInputProps> = ({
     };
 
     return (
-        <div className="p-4">
+        <div className={`${isMobile ? 'p-3' : 'p-4'} ${
+            isMobile && isKeyboardVisible ? 'pb-safe' : ''
+        }`}>
             {/* Reply indicator */}
             {replyTo && (
-                <div className="mb-3 p-3 bg-gray-50 border-l-4 border-blue-500 rounded-r-lg">
+                <div className={`mb-3 bg-gray-50 border-l-4 border-blue-500 rounded-r-lg ${
+                    isMobile ? 'p-2' : 'p-3'
+                }`}>
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
-                            <div className="text-sm font-medium text-gray-700 mb-1">
+                            <div className={`font-medium text-gray-700 mb-1 ${
+                                isMobile ? 'text-base' : 'text-sm'
+                            }`}>
                                 Répondre à {replyTo.sender}
                             </div>
-                            <div className="text-sm text-gray-600 truncate">
+                            <div className={`text-gray-600 truncate ${
+                                isMobile ? 'text-sm' : 'text-sm'
+                            }`}>
                                 {replyTo.content}
                             </div>
                         </div>
@@ -120,7 +159,9 @@ const MessageInput: React.FC<MessageInputProps> = ({
                                 size="sm"
                                 variant="outline"
                                 onClick={onCancelReply}
-                                className="ml-2 p-1 h-auto"
+                                className={`ml-2 ${
+                                    isMobile ? 'p-2 min-h-[44px] min-w-[44px]' : 'p-1 h-auto'
+                                }`}
                             >
                                 <X className="w-4 h-4" />
                             </Button>
@@ -130,17 +171,21 @@ const MessageInput: React.FC<MessageInputProps> = ({
             )}
 
             {/* Message input form */}
-            <form onSubmit={handleSubmit} className="flex items-end gap-3">
-                {/* Attachment button */}
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="flex-shrink-0 mb-1"
-                    disabled={disabled}
-                >
-                    <Paperclip className="w-4 h-4" />
-                </Button>
+            <form onSubmit={handleSubmit} className={`flex items-end ${
+                isMobile ? 'gap-2' : 'gap-3'
+            }`}>
+                {/* Attachment button - Hidden on mobile for space */}
+                {!isMobile && (
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="flex-shrink-0 mb-1"
+                        disabled={disabled}
+                    >
+                        <Paperclip className="w-4 h-4" />
+                    </Button>
+                )}
 
                 {/* Message input container */}
                 <div className="flex-1 relative">
@@ -150,57 +195,72 @@ const MessageInput: React.FC<MessageInputProps> = ({
                             value={message}
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
-                            placeholder={disabled ? "Connexion en cours..." : "Tapez votre message..."}
+                            placeholder={disabled ? "Connexion en cours..." : (isMobile ? "Message..." : "Tapez votre message...")}
                             disabled={disabled}
-                            className="w-full px-4 py-3 pr-12 resize-none border-0 rounded-lg focus:outline-none focus:ring-0 placeholder-gray-500"
+                            className={`w-full pr-12 resize-none border-0 rounded-lg focus:outline-none focus:ring-0 placeholder-gray-500 ${
+                                isMobile
+                                    ? 'px-3 py-3 text-base' // Larger touch target and text on mobile
+                                    : 'px-4 py-3 text-sm'
+                            }`}
                             rows={1}
-                            style={{ minHeight: '44px', maxHeight: '120px' }}
+                            style={{
+                                minHeight: '44px',
+                                maxHeight: isMobile ? '100px' : '120px',
+                                fontSize: isMobile ? '16px' : '14px' // Prevent zoom on iOS
+                            }}
                         />
                         
-                        {/* Emoji button */}
-                        <div className="absolute right-3 bottom-3 flex items-center gap-1">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                className="p-1 h-auto text-gray-500 hover:text-gray-700"
-                                disabled={disabled}
-                            >
-                                <Smile className="w-4 h-4" />
-                            </Button>
-                        </div>
+                        {/* Emoji button - Hidden on mobile for space */}
+                        {!isMobile && (
+                            <div className="absolute right-3 bottom-3 flex items-center gap-1">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="p-1 h-auto text-gray-500 hover:text-gray-700"
+                                    disabled={disabled}
+                                >
+                                    <Smile className="w-4 h-4" />
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Additional action buttons */}
-                <div className="flex items-center gap-2 mb-1">
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={disabled}
-                    >
-                        <Image className="w-4 h-4" />
-                    </Button>
-                    
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={disabled}
-                    >
-                        <Mic className="w-4 h-4" />
-                    </Button>
-                </div>
+                {/* Additional action buttons - Hidden on mobile for space */}
+                {!isMobile && (
+                    <div className="flex items-center gap-2 mb-1">
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={disabled}
+                        >
+                            <Image className="w-4 h-4" />
+                        </Button>
+
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            disabled={disabled}
+                        >
+                            <Mic className="w-4 h-4" />
+                        </Button>
+                    </div>
+                )}
 
                 {/* Send button */}
                 <Button
                     type="submit"
                     disabled={!message.trim() || disabled}
-                    className="flex-shrink-0 mb-1"
-                    size="sm"
+                    className={`flex-shrink-0 mb-1 ${
+                        isMobile ? 'min-h-[44px] min-w-[44px] p-3' : ''
+                    }`}
+                    size={isMobile ? "lg" : "sm"}
                 >
                     <Send className="w-4 h-4" />
+                    {!isMobile && <span className="ml-2">Envoyer</span>}
                 </Button>
             </form>
 

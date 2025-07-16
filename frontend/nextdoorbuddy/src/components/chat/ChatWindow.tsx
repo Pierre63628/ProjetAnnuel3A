@@ -2,20 +2,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useMobileChat } from '../../contexts/MobileChatContext';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
 import TypingIndicator from './TypingIndicator';
+import PullToRefresh from './PullToRefresh';
 import { Button } from '../ui/button';
 import {
     MessageCircle,
     Users,
     Hash,
     Settings,
-    Phone
+    Phone,
+    ArrowLeft
 } from 'lucide-react';
 
 const ChatWindow: React.FC = () => {
     const { user } = useAuth();
+    const { isMobile, navigateToView, isKeyboardVisible } = useMobileChat();
     const {
         currentRoom,
         messages,
@@ -23,7 +27,8 @@ const ChatWindow: React.FC = () => {
         sendMessage,
         markAsRead,
         startTyping,
-        stopTyping
+        stopTyping,
+        loadMessages
     } = useChat();
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -80,6 +85,12 @@ const ChatWindow: React.FC = () => {
         }
     };
 
+    const handleRefresh = async () => {
+        if (currentRoom) {
+            await loadMessages(currentRoom.id, 1);
+        }
+    };
+
     if (!currentRoom) {
         return (
             <div
@@ -87,18 +98,36 @@ const ChatWindow: React.FC = () => {
                 style={{ height: '100%' }}
             >
                 <motion.div
-                    className="text-center"
+                    className="text-center px-4"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.3 }}
                 >
-                    <MessageCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                        Sélectionnez un salon
+                    <MessageCircle className={`text-gray-400 mx-auto mb-4 ${
+                        isMobile ? 'w-12 h-12' : 'w-16 h-16'
+                    }`} />
+                    <h3 className={`font-semibold text-gray-600 mb-2 ${
+                        isMobile ? 'text-lg' : 'text-xl'
+                    }`}>
+                        {isMobile ? 'Aucun salon sélectionné' : 'Sélectionnez un salon'}
                     </h3>
-                    <p className="text-gray-500">
-                        Choisissez un salon de discussion pour commencer à chatter avec vos voisins.
+                    <p className={`text-gray-500 ${
+                        isMobile ? 'text-sm' : 'text-base'
+                    }`}>
+                        {isMobile
+                            ? 'Retournez à la liste des salons pour commencer'
+                            : 'Choisissez un salon de discussion pour commencer à chatter avec vos voisins.'
+                        }
                     </p>
+                    {isMobile && (
+                        <Button
+                            onClick={() => navigateToView('rooms')}
+                            className="mt-4"
+                        >
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Voir les salons
+                        </Button>
+                    )}
                 </motion.div>
             </div>
         );
@@ -106,15 +135,18 @@ const ChatWindow: React.FC = () => {
 
     return (
         <div
-            className="flex flex-col w-full relative"
+            className={`flex flex-col w-full relative ${
+                isMobile && isKeyboardVisible ? 'pb-safe' : ''
+            }`}
             style={{
                 height: '100%',
                 maxHeight: '100%',
                 overflow: 'hidden'
             }}
         >
-            {/* Chat Header */}
-            <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-white">
+            {/* Chat Header - Hidden on mobile (handled by MobileNavigation) */}
+            {!isMobile && (
+                <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-white">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center">
                         {currentRoom.room_type === 'group' ? (
@@ -146,80 +178,166 @@ const ChatWindow: React.FC = () => {
                         </Button>
                     </div>
                 </div>
-            </div>
+                </div>
+            )}
 
             {/* Messages Area */}
             <div
-                ref={messagesContainerRef}
-                className="relative p-4"
+                className="flex-1 min-h-0 max-h-full"
                 style={{
                     flex: '1 1 0%',
-                    overflow: 'auto',
-                    overflowX: 'hidden',
                     minHeight: 0,
                     maxHeight: '100%'
                 }}
-                onScroll={handleScroll}
             >
-                <div className="space-y-4">
-                    <AnimatePresence>
-                        {currentMessages.map((message, index) => {
-                            const isOwn = message.sender_id === user?.id;
-                            const showAvatar = !isOwn && (
-                                index === 0 ||
-                                currentMessages[index - 1].sender_id !== message.sender_id
-                            );
-                            const showTimestamp = index === 0 ||
-                                new Date(message.created_at).getTime() -
-                                new Date(currentMessages[index - 1].created_at).getTime() > 300000;
+                {isMobile ? (
+                    <PullToRefresh
+                        onRefresh={handleRefresh}
+                        className={`relative ${isMobile ? 'p-3' : 'p-4'} h-full`}
+                    >
+                    <div
+                        ref={messagesContainerRef}
+                        onScroll={handleScroll}
+                        className="space-y-4"
+                        style={{
+                            height: '100%',
+                            overflow: 'auto',
+                            overflowX: 'hidden',
+                            WebkitOverflowScrolling: 'touch'
+                        }}
+                    >
+                        <AnimatePresence>
+                            {currentMessages.map((message, index) => {
+                                const isOwn = message.sender_id === user?.id;
+                                const showAvatar = !isOwn && (
+                                    index === 0 ||
+                                    currentMessages[index - 1].sender_id !== message.sender_id
+                                );
+                                const showTimestamp = index === 0 ||
+                                    new Date(message.created_at).getTime() -
+                                    new Date(currentMessages[index - 1].created_at).getTime() > 300000;
 
-                            return (
+                                return (
+                                    <motion.div
+                                        key={message.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <MessageBubble
+                                            message={message}
+                                            isOwn={isOwn}
+                                            showAvatar={showAvatar}
+                                            showTimestamp={showTimestamp}
+                                        />
+                                    </motion.div>
+                                );
+                            })}
+                        </AnimatePresence>
+
+                        {currentTypingUsers.length > 0 && (
+                            <TypingIndicator users={currentTypingUsers} />
+                        )}
+
+                        <div ref={messagesEndRef} />
+
+                        {/* Scroll to Bottom Button */}
+                        {!isAtBottom && (
+                            <div className="absolute bottom-4 right-4 z-10">
                                 <motion.div
-                                    key={message.id}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
                                 >
-                                    <MessageBubble
-                                        message={message}
-                                        isOwn={isOwn}
-                                        showAvatar={showAvatar}
-                                        showTimestamp={showTimestamp}
-                                    />
+                                    <Button
+                                        size="sm"
+                                        className="rounded-full shadow-lg"
+                                        onClick={() => {
+                                            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                            setIsAtBottom(true);
+                                        }}
+                                    >
+                                        ↓
+                                    </Button>
                                 </motion.div>
-                            );
-                        })}
-                    </AnimatePresence>
-
-                    {currentTypingUsers.length > 0 && (
-                        <TypingIndicator users={currentTypingUsers} />
-                    )}
-
-                    <div ref={messagesEndRef} />
-                </div>
-
-                {/* Scroll to Bottom Button */}
-                {!isAtBottom && (
-                    <div className="absolute bottom-4 right-4 z-10">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.8 }}
-                        >
-                            <Button
-                                size="sm"
-                                className="rounded-full shadow-lg"
-                                onClick={() => {
-                                    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-                                    setIsAtBottom(true);
-                                }}
-                            >
-                                ↓
-                            </Button>
-                        </motion.div>
+                            </div>
+                        )}
                     </div>
-                )}
+                </PullToRefresh>
+            ) : (
+                <div
+                    ref={messagesContainerRef}
+                    className={`relative ${isMobile ? 'p-3' : 'p-4'} h-full`}
+                    style={{
+                        overflow: 'auto',
+                        overflowX: 'hidden',
+                        // Better scrolling on mobile
+                        WebkitOverflowScrolling: 'touch'
+                    }}
+                    onScroll={handleScroll}
+                >
+                    <div className="space-y-4">
+                        <AnimatePresence>
+                            {currentMessages.map((message, index) => {
+                                const isOwn = message.sender_id === user?.id;
+                                const showAvatar = !isOwn && (
+                                    index === 0 ||
+                                    currentMessages[index - 1].sender_id !== message.sender_id
+                                );
+                                const showTimestamp = index === 0 ||
+                                    new Date(message.created_at).getTime() -
+                                    new Date(currentMessages[index - 1].created_at).getTime() > 300000;
+
+                                return (
+                                    <motion.div
+                                        key={message.id}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        <MessageBubble
+                                            message={message}
+                                            isOwn={isOwn}
+                                            showAvatar={showAvatar}
+                                            showTimestamp={showTimestamp}
+                                        />
+                                    </motion.div>
+                                );
+                            })}
+                        </AnimatePresence>
+
+                        {currentTypingUsers.length > 0 && (
+                            <TypingIndicator users={currentTypingUsers} />
+                        )}
+
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Scroll to Bottom Button */}
+                    {!isAtBottom && (
+                        <div className="absolute bottom-4 right-4 z-10">
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                            >
+                                <Button
+                                    size="sm"
+                                    className="rounded-full shadow-lg"
+                                    onClick={() => {
+                                        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+                                        setIsAtBottom(true);
+                                    }}
+                                >
+                                    ↓
+                                </Button>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+            )}
             </div>
             {/* Message Input */}
             <div className="flex-shrink-0 border-t border-gray-200 bg-white">

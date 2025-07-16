@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useChat } from '../../contexts/ChatContext';
+import { useMobileChat } from '../../contexts/MobileChatContext';
 import { ChatRoom } from '../../types/messaging.types';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
-import { 
-    Hash, 
-    Users, 
-    Plus, 
-    Search, 
+import {
+    Hash,
+    Users,
+    Plus,
+    Search,
     MessageCircle,
     Clock,
-    User
+    User,
+    X
 } from 'lucide-react';
 
 interface ChatRoomListProps {
@@ -20,18 +22,29 @@ interface ChatRoomListProps {
     onShowCreateRoom: () => void;
 }
 
-const ChatRoomList: React.FC<ChatRoomListProps> = ({ 
-    rooms, 
-    currentRoom, 
-    onShowCreateRoom 
+const ChatRoomList: React.FC<ChatRoomListProps> = ({
+    rooms,
+    currentRoom,
+    onShowCreateRoom
 }) => {
     const { selectRoom } = useChat();
+    const { navigateToView, isMobile } = useMobileChat();
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredRooms = rooms.filter(room =>
         room.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         room.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleRoomSelect = (room: ChatRoom) => {
+        console.log(`🖱️ Room clicked:`, room.id, room.name);
+        selectRoom(room);
+
+        // Navigate to chat view on mobile
+        if (isMobile) {
+            navigateToView('chat');
+        }
+    };
 
     const formatLastMessageTime = (dateString: string) => {
         const date = new Date(dateString);
@@ -52,18 +65,25 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
     return (
         <div className="h-full flex flex-col">
             {/* Header */}
-            <div className="p-4 border-b border-gray-200">
+            <div className={`border-b border-gray-200 ${isMobile ? 'p-3' : 'p-4'}`}>
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                        <MessageCircle className="w-5 h-5 mr-2 text-blue-600" />
-                        Salons de discussion
+                    <h2 className={`font-semibold text-gray-900 flex items-center ${
+                        isMobile ? 'text-base' : 'text-lg'
+                    }`}>
+                        <MessageCircle className={`mr-2 text-blue-600 ${
+                            isMobile ? 'w-4 h-4' : 'w-5 h-5'
+                        }`} />
+                        {isMobile ? 'Salons' : 'Salons de discussion'}
                     </h2>
                     <Button
                         size="sm"
                         onClick={onShowCreateRoom}
-                        className="shadow-md"
+                        className={`shadow-md ${
+                            isMobile ? 'min-h-[44px] min-w-[44px] p-2' : ''
+                        }`}
                     >
                         <Plus className="w-4 h-4" />
+                        {!isMobile && <span className="ml-1">Nouveau</span>}
                     </Button>
                 </div>
 
@@ -72,11 +92,21 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                     <input
                         type="text"
-                        placeholder="Rechercher un salon..."
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                        placeholder={isMobile ? "Rechercher..." : "Rechercher un salon..."}
+                        className={`w-full pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm ${
+                            isMobile ? 'py-3 pr-10 min-h-[44px]' : 'py-2 pr-4'
+                        }`}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                    {searchTerm && (
+                        <button
+                            onClick={() => setSearchTerm('')}
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -100,7 +130,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                         )}
                     </div>
                 ) : (
-                    <div className="p-2">
+                    <div className={isMobile ? 'p-1' : 'p-2'}>
                         {filteredRooms.map((room, index) => (
                             <motion.div
                                 key={room.id}
@@ -109,17 +139,14 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                                 transition={{ duration: 0.2, delay: index * 0.05 }}
                             >
                                 <Card
-                                    className={`mb-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
+                                    className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
                                         currentRoom?.id === room.id
                                             ? 'bg-blue-50 border-blue-200 shadow-md'
                                             : 'bg-white hover:bg-gray-50 border-gray-200'
-                                    }`}
-                                    onClick={() => {
-                                        console.log(`🖱️ Room clicked:`, room.id, room.name);
-                                        selectRoom(room);
-                                    }}
+                                    } ${isMobile ? 'mb-1' : 'mb-2'}`}
+                                    onClick={() => handleRoomSelect(room)}
                                 >
-                                    <CardContent className="p-3">
+                                    <CardContent className={isMobile ? 'p-4' : 'p-3'}>
                                         <div className="flex items-start justify-between">
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center mb-1">
@@ -132,13 +159,15 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({
                                                         currentRoom?.id === room.id
                                                             ? 'text-blue-900'
                                                             : 'text-gray-900'
-                                                    }`}>
+                                                    } ${isMobile ? 'text-base' : 'text-sm'}`}>
                                                         {room.name}
                                                     </h3>
                                                 </div>
 
                                                 {room.last_message && (
-                                                    <div className="flex items-center text-xs text-gray-600 mb-1">
+                                                    <div className={`flex items-center text-gray-600 mb-1 ${
+                                                        isMobile ? 'text-sm' : 'text-xs'
+                                                    }`}>
                                                         <span className="font-medium mr-1">
                                                             {room.last_message.sender?.prenom}:
                                                         </span>
