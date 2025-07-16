@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import LanguageSelector from './LanguageSelector';
+import logoSvg from '../assets/logo.svg';
 import {
   Home,
   Calendar,
@@ -51,7 +52,7 @@ const Header = () => {
           {/* Logo and Brand */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center group">
-              <img src="/vite.svg" alt="Logo" className="w-10 h-10" />
+              <img src={logoSvg} alt="Logo" className="w-10 h-10" />
               <span className="ml-2 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Les copains du Quartier
               </span>
