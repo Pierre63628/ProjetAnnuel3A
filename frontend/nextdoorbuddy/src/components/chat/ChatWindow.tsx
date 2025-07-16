@@ -7,6 +7,7 @@ import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
 import TypingIndicator from './TypingIndicator';
 import PullToRefresh from './PullToRefresh';
+import OfflineUserIndicator from './OfflineUserIndicator';
 import { Button } from '../ui/button';
 import {
     MessageCircle,
@@ -178,6 +179,13 @@ const ChatWindow: React.FC = () => {
                         </Button>
                     </div>
                 </div>
+                </div>
+            )}
+
+            {/* Offline User Indicator */}
+            {currentRoom && (
+                <div className="flex-shrink-0 px-4">
+                    <OfflineUserIndicator room={currentRoom} />
                 </div>
             )}
 

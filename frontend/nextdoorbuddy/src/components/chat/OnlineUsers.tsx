@@ -20,9 +20,11 @@ import {
 interface OnlineUsersProps {
     users: UserPresence[];
     currentRoom: ChatRoom | null;
+    onToggleView?: () => void;
+    showToggle?: boolean;
 }
 
-const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
+const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom, onToggleView, showToggle = false }) => {
     const { selectRoom, chatRooms, refreshChatRooms } = useChat();
     const { user: currentUser } = useAuth();
     const { isMobile, navigateToView } = useMobileChat();
@@ -127,16 +129,29 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
                             : (currentRoom ? 'Membres du salon' : 'Utilisateurs en ligne')
                         }
                     </h2>
-                    {isMobile && (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => navigateToView('chat')}
-                            className="p-2 min-h-[44px] min-w-[44px]"
-                        >
-                            <ArrowLeft className="w-4 h-4" />
-                        </Button>
-                    )}
+                    <div className="flex items-center gap-2">
+                        {showToggle && onToggleView && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onToggleView}
+                                className="text-xs"
+                            >
+                                <Users className="h-3 w-3 mr-1" />
+                                Voisins
+                            </Button>
+                        )}
+                        {isMobile && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => navigateToView('chat')}
+                                className="p-2 min-h-[44px] min-w-[44px]"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                            </Button>
+                        )}
+                    </div>
                 </div>
                 {currentRoom && (
                     <div className={`flex items-center mt-2 text-gray-600 ${

@@ -10,8 +10,9 @@ import {
     Edit,
     Trash2,
     Smile,
-    Check,
-    CheckCheck
+    CheckCheck,
+    Clock,
+    WifiOff
 } from 'lucide-react';
 
 interface MessageBubbleProps {
@@ -54,6 +55,47 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                 day: '2-digit',
                 month: 'short'
             });
+        }
+    };
+
+    const renderDeliveryStatus = () => {
+        const status = message.delivery_status || 'sent';
+        const iconClass = `w-3 h-3 ${isOwn ? 'text-blue-200' : 'text-gray-500'}`;
+
+        switch (status) {
+            case 'read':
+                return (
+                    <div className="flex items-center" title="Lu">
+                        <CheckCheck className={iconClass} />
+                    </div>
+                );
+            case 'delivered':
+                return (
+                    <div className="flex items-center" title="Livré">
+                        <CheckCheck className={`${iconClass} opacity-60`} />
+                    </div>
+                );
+            case 'sent':
+            default:
+                // Check if message is recent (less than 5 minutes) to show pending status
+                const messageTime = new Date(message.created_at).getTime();
+                const now = new Date().getTime();
+                const diffInMinutes = (now - messageTime) / (1000 * 60);
+
+                if (diffInMinutes < 5) {
+                    return (
+                        <div className="flex items-center" title="En attente de livraison">
+                            <Clock className={`${iconClass} opacity-60`} />
+                        </div>
+                    );
+                } else {
+                    // Older message that's still only "sent" - might be to offline user
+                    return (
+                        <div className="flex items-center" title="Envoyé (destinataire hors ligne)">
+                            <WifiOff className={`${iconClass} opacity-60`} />
+                        </div>
+                    );
+                }
         }
     };
 
@@ -162,11 +204,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                 isOwn ? 'text-blue-200' : 'text-gray-500'
                             }`}>
                                 <span className="mr-1">{formatTime(message.created_at)}</span>
-                                {message.delivery_status === 'read' ? (
-                                    <CheckCheck className="w-3 h-3" />
-                                ) : (
-                                    <Check className="w-3 h-3" />
-                                )}
+                                {renderDeliveryStatus()}
                                 {message.is_edited && (
                                     <span className="ml-1 text-xs opacity-75">modifié</span>
                                 )}

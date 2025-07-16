@@ -39,7 +39,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ className = '' }) =
             case 'chat':
                 return currentRoom?.name || 'Chat';
             case 'users':
-                return 'Utilisateurs en ligne';
+                return 'Utilisateurs';
             default:
                 return 'Chat';
         }

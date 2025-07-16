@@ -6,9 +6,11 @@ import { MobileChatProvider, useMobileChat } from '../contexts/MobileChatContext
 import ChatRoomList from '../components/chat/ChatRoomList';
 import ChatWindow from '../components/chat/ChatWindow';
 import OnlineUsers from '../components/chat/OnlineUsers';
+import NeighborhoodUsers from '../components/chat/NeighborhoodUsers';
 import CreateRoomModal from '../components/chat/CreateRoomModal';
 import MobileNavigation from '../components/chat/MobileNavigation';
 import SwipeGestureHandler from '../components/chat/SwipeGestureHandler';
+import UndeliveredMessagesNotification from '../components/chat/UndeliveredMessagesNotification';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import {
@@ -41,6 +43,7 @@ const ChatContent: React.FC = () => {
 
     const [showOnlineUsers, setShowOnlineUsers] = useState(false);
     const [showCreateRoom, setShowCreateRoom] = useState(false);
+    const [userViewMode, setUserViewMode] = useState<'online' | 'neighborhood'>('online');
 
     if (error) {
         return (
@@ -112,10 +115,20 @@ const ChatContent: React.FC = () => {
             case 'users':
                 return (
                     <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
-                        <OnlineUsers
-                            users={onlineUsers}
-                            currentRoom={currentRoom}
-                        />
+                        {userViewMode === 'online' ? (
+                            <OnlineUsers
+                                users={onlineUsers}
+                                currentRoom={currentRoom}
+                                onToggleView={() => setUserViewMode('neighborhood')}
+                                showToggle={isMobile}
+                            />
+                        ) : (
+                            <NeighborhoodUsers
+                                currentRoom={currentRoom}
+                                onToggleView={() => setUserViewMode('online')}
+                                showToggle={isMobile}
+                            />
+                        )}
                     </Card>
                 );
             default:
@@ -170,15 +183,30 @@ const ChatContent: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setShowOnlineUsers(!showOnlineUsers)}
-                                className="hidden md:flex"
-                            >
-                                <Users className="w-4 h-4 mr-2" />
-                                En ligne ({onlineUsers.length})
-                            </Button>
+                            <div className="hidden md:flex items-center gap-2">
+                                <Button
+                                    variant={userViewMode === 'online' ? 'solid' : 'outline'}
+                                    size="sm"
+                                    onClick={() => {
+                                        setUserViewMode('online');
+                                        setShowOnlineUsers(true);
+                                    }}
+                                >
+                                    <Wifi className="w-4 h-4 mr-2" />
+                                    En ligne ({onlineUsers.length})
+                                </Button>
+                                <Button
+                                    variant={userViewMode === 'neighborhood' ? 'solid' : 'outline'}
+                                    size="sm"
+                                    onClick={() => {
+                                        setUserViewMode('neighborhood');
+                                        setShowOnlineUsers(true);
+                                    }}
+                                >
+                                    <Users className="w-4 h-4 mr-2" />
+                                    Voisins
+                                </Button>
+                            </div>
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -242,10 +270,20 @@ const ChatContent: React.FC = () => {
                                 transition={{ duration: 0.5, delay: 0.3 }}
                             >
                                 <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
-                                    <OnlineUsers
-                                        users={onlineUsers}
-                                        currentRoom={currentRoom}
-                                    />
+                                    {userViewMode === 'online' ? (
+                                        <OnlineUsers
+                                            users={onlineUsers}
+                                            currentRoom={currentRoom}
+                                            onToggleView={() => setUserViewMode('neighborhood')}
+                                            showToggle={false}
+                                        />
+                                    ) : (
+                                        <NeighborhoodUsers
+                                            currentRoom={currentRoom}
+                                            onToggleView={() => setUserViewMode('online')}
+                                            showToggle={false}
+                                        />
+                                    )}
                                 </Card>
                             </motion.div>
                         </div>
@@ -268,6 +306,9 @@ const ChatContent: React.FC = () => {
                     isOpen={showCreateRoom}
                     onClose={() => setShowCreateRoom(false)}
                 />
+
+                {/* Undelivered Messages Notification */}
+                <UndeliveredMessagesNotification />
             </div>
         </div>
     );

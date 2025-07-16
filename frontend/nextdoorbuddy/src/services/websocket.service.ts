@@ -25,6 +25,7 @@ class WebSocketService {
     private typingStopListeners: ((data: { userId: number; chatRoomId: number }) => void)[] = [];
     private presenceListeners: ((presence: UserPresence) => void)[] = [];
     private reactionListeners: ((reaction: MessageReaction) => void)[] = [];
+    private undeliveredMessagesListeners: ((data: { count: number; messages: Message[] }) => void)[] = [];
     private errorListeners: ((error: { message: string; code?: string }) => void)[] = [];
 
     connect(token: string, tokenRefreshCallback?: () => Promise<string | null>): Promise<void> {
@@ -100,6 +101,10 @@ class WebSocketService {
 
         this.socket.on('message_reaction_added', (reaction: MessageReaction) => {
             this.reactionListeners.forEach(listener => listener(reaction));
+        });
+
+        this.socket.on('undelivered_messages_notification', (data: { count: number; messages: Message[] }) => {
+            this.undeliveredMessagesListeners.forEach(listener => listener(data));
         });
 
         this.socket.on('error', (error: { message: string; code?: string; }) => {
@@ -288,6 +293,16 @@ class WebSocketService {
             const index = this.reactionListeners.indexOf(listener);
             if (index > -1) {
                 this.reactionListeners.splice(index, 1);
+            }
+        };
+    }
+
+    onUndeliveredMessages(listener: (data: { count: number; messages: Message[] }) => void) {
+        this.undeliveredMessagesListeners.push(listener);
+        return () => {
+            const index = this.undeliveredMessagesListeners.indexOf(listener);
+            if (index > -1) {
+                this.undeliveredMessagesListeners.splice(index, 1);
             }
         };
     }
