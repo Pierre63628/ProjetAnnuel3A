@@ -14,6 +14,7 @@ import { Calendar, MapPin, User, Tag, ArrowLeft, Clock, Trash2, Edit, ExternalLi
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { canDeleteEvent, canEditEvent } from '../utils/permissions';
+import { getImageUrl } from '../utils/imageUtils';
 
 const EventDetails = () => {
     const { id } = useParams<{ id: string }>();
@@ -194,9 +195,15 @@ const EventDetails = () => {
                                 {evenement.photo_url && (
                                     <div className="h-80 w-full overflow-hidden relative">
                                         <img
-                                            src={evenement.photo_url}
+                                            src={getImageUrl(evenement.photo_url) || evenement.photo_url}
                                             alt={evenement.nom}
                                             className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                            onError={(e) => {
+                                                console.error('Failed to load event image:', evenement.photo_url);
+                                                // Hide the image container if it fails to load
+                                                const container = e.currentTarget.closest('.h-80') as HTMLElement;
+                                                if (container) container.style.display = 'none';
+                                            }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                                     </div>
