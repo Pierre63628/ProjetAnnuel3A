@@ -9,11 +9,15 @@ COPY package.json package-lock.json ./
 # Supprimer le node_modules s'il existe
 RUN rm -rf node_modules
 
-# Installer les dépendances
+# Installer les dépendances et nodemon globalement
 RUN npm install
+RUN npm install -g nodemon
 
 # Copier le reste des fichiers
 COPY . .
+
+# Donner les permissions nécessaires
+RUN chmod +x node_modules/.bin/nodemon
 
 EXPOSE 3000
 

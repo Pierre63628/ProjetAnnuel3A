@@ -11,11 +11,19 @@ import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import AdminTrocs from "./pages/AdminTrocs"
 import AdminDashboard from "./pages/AdminDashboard"
+
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
 import MyEvents from "./pages/MyEvents"
 import Chat from "./pages/Chat"
+import Journal from "./pages/Journal"
+import NewJournal from "./pages/NewJournal"
+import CreateJournal from "./pages/CreateJournal"
+import ArticleForm from "./pages/ArticleForm"
+import ArticleDetail from "./pages/ArticleDetail"
+import EditionDetail from "./pages/EditionDetail"
+
 import I18nTest from "./pages/I18nTest"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ChatProvider } from "./contexts/ChatContext"
@@ -111,6 +119,44 @@ function AppRoutes() {
           <Chat />
         </ProtectedRoute>
       } />
+      <Route path="/journal" element={
+        <ProtectedRoute>
+          <Journal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/new" element={
+        <ProtectedRoute>
+          <NewJournal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/create-journal" element={
+        <ProtectedRoute>
+          <CreateJournal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/create" element={
+        <ProtectedRoute>
+          <ArticleForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/edit/:id" element={
+        <ProtectedRoute>
+          <ArticleForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/:id" element={
+        <ProtectedRoute>
+          <ArticleDetail />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/edition/:uuid" element={
+        <ProtectedRoute>
+          <EditionDetail />
+        </ProtectedRoute>
+      } />
       <Route path="/events/:id" element={
         <ProtectedRoute>
           <EventDetails />
@@ -146,6 +192,7 @@ function AppRoutes() {
           <AdminTrocs />
         </AdminRoute>
       } />
+
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/test-carousel" element={<TestCarousel />} />

@@ -20,10 +20,10 @@ export class UserModel {
     // Trouver un utilisateur par email
     static async findByEmail(email: string): Promise<User | null> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Utilisateur" WHERE email = $1',
-                [email]
-            );
+                    const result = await pool.query(
+            'SELECT * FROM "Utilisateur" WHERE email = $1',
+            [email]
+        );
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by email:', error);
@@ -34,10 +34,10 @@ export class UserModel {
     // Trouver un utilisateur par ID
     static async findById(id: number): Promise<User | null> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Utilisateur" WHERE id = $1',
-                [id]
-            );
+                    const result = await pool.query(
+            'SELECT * FROM "Utilisateur" WHERE id = $1',
+            [id]
+        );
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by id:', error);

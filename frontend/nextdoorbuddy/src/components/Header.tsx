@@ -11,7 +11,8 @@ import {
     MessageCircle,
     User,
     LogOut,
-    Sparkles
+    Sparkles,
+    BookOpen
 } from 'lucide-react';
 
 const Header = () => {
@@ -30,6 +31,7 @@ const Header = () => {
         { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
         { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
         { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
+        { to: '/journal', label: t('navigation.journal'), icon: BookOpen },
         { to: '/profile', label: t('navigation.profile'), icon: User },
     ];
 

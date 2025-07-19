@@ -14,7 +14,7 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 5173,
+    port: 5174,
     watch: {
       usePolling: true,
     },
@@ -26,7 +26,6 @@ export default defineConfig({
       '/uploads': {
         target: 'http://localhost:3000',
         changeOrigin: true,
-        rewrite: (path) => path,
       },
     },
   },

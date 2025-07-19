@@ -1,6 +1,7 @@
 import { createServer } from 'http';
 import app from './app.js';
 import pool from './config/db.js';
+import { connectToMongoDB } from './config/mongodb.js';
 import { TokenModel } from './models/token.model.js';
 import { WebSocketService } from './services/websocket.service.js';
 
@@ -9,14 +10,23 @@ const PORT = process.env.PORT || 3000;
 // Create HTTP server
 const server = createServer(app);
 
-// Test de connexion DB
+// Test de connexion DB PostgreSQL
 pool.query('SELECT NOW()', (err) => {
     if (err) {
-        console.error('❌ Erreur de connexion à la base de données:', err);
+        console.error('❌ Erreur de connexion à PostgreSQL:', err);
     } else {
-        console.log('✅ Connexion à la base de données établie');
+        console.log('✅ Connexion à PostgreSQL établie');
     }
 });
+
+// Test de connexion MongoDB
+connectToMongoDB()
+    .then(() => {
+        console.log('✅ Connexion à MongoDB établie');
+    })
+    .catch((error) => {
+        console.error('❌ Erreur de connexion à MongoDB:', error);
+    });
 
 // Nettoyage des tokens expirés toutes les 24h
 setInterval(async () => {
