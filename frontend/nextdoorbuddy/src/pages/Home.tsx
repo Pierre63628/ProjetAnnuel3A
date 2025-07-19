@@ -15,6 +15,7 @@ import {
     Evenement
 } from '../services/evenement.service';
 import { trocService, AnnonceTroc } from '../services/troc.service';
+import serviceService, { Service } from '../services/service.service';
 import { getImageUrl } from '../utils/imageUtils';
 import {
     Calendar,
@@ -31,7 +32,9 @@ import {
     Package,
     ArrowRightLeft,
     Eye,
-    Image as ImageIcon
+    Image as ImageIcon,
+    Briefcase,
+    Euro
 } from 'lucide-react';
 
 const Home = () => {
@@ -40,6 +43,7 @@ const Home = () => {
     const [todaysEvents, setTodaysEvents] = useState<Evenement[]>([]);
     const [userEvents, setUserEvents] = useState<Evenement[]>([]);
     const [trocs, setTrocs] = useState<AnnonceTroc[]>([]);
+    const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [participationStatus, setParticipationStatus] = useState<{[key: number]: {isParticipant: boolean, participantCount: number}}>({});
@@ -112,6 +116,10 @@ const Home = () => {
                     images: processImageData(troc.images)
                 }));
                 setTrocs(processedTrocs.slice(0, 6)); // Show only first 6
+
+                // Fetch available services
+                const availableServices = await serviceService.getServices();
+                setServices(availableServices.slice(0, 6)); // Show only first 6
 
                 // Fetch participation status for today's events
                 if (todayEvents.length > 0) {
@@ -331,6 +339,160 @@ const Home = () => {
                         </CardContent>
                     </Card>
                 </motion.div>
+
+                {/* Services Section */}
+                <motion.div
+                    className="mb-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.15 }}
+                >
+                    <Card className="shadow-lg border-0 bg-white/90 backdrop-blur-sm">
+                        <CardContent className="p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                                    <Briefcase className="w-6 h-6 text-orange-600 mr-3" />
+                                    Services disponibles
+                                </h2>
+                                <Button asChild variant="outline" size="sm">
+                                    <Link to="/services">
+                                        Voir tous les services
+                                        <ChevronRight className="w-4 h-4 ml-1" />
+                                    </Link>
+                                </Button>
+                            </div>
+
+                            {loading ? (
+                                <div className="flex items-center justify-center py-12">
+                                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+                                    <p className="ml-3 text-gray-600">Chargement...</p>
+                                </div>
+                            ) : error ? (
+                                <div className="text-center py-12">
+                                    <p className="text-red-600 mb-4">{error}</p>
+                                    <Button onClick={() => window.location.reload()}>
+                                        Réessayer
+                                    </Button>
+                                </div>
+                            ) : services.length === 0 ? (
+                                <div className="text-center py-12">
+                                    <Briefcase className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                                    <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun service disponible</h3>
+                                    <p className="text-gray-500 mb-6">Soyez le premier à proposer un service dans votre quartier !</p>
+                                    <Button asChild>
+                                        <Link to="/services/create">
+                                            <Plus className="w-4 h-4 mr-2" />
+                                            Créer un service
+                                        </Link>
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {services.map((service, index) => (
+                                        <motion.div
+                                            key={service.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                                            whileHover={{ y: -4 }}
+                                            className="group"
+                                        >
+                                            <Card className="h-full shadow-md hover:shadow-xl transition-all duration-300 border-0 bg-white">
+                                                <CardContent className="p-4">
+                                                    {/* Service header */}
+                                                    <div className="mb-3 relative">
+                                                        <div className="w-full h-32 bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center">
+                                                            <Briefcase className="w-8 h-8 text-orange-400" />
+                                                        </div>
+                                                        <div className="absolute top-2 right-2">
+                                                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                                                service.type_service === 'offre'
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : 'bg-blue-100 text-blue-800'
+                                                            }`}>
+                                                                {service.type_service === 'offre' ? 'Offre' : 'Demande'}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex items-start justify-between mb-3">
+                                                        <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                                                            {service.titre}
+                                                        </h3>
+                                                    </div>
+
+                                                    <div className="space-y-2 mb-4">
+                                                        <div className="flex items-center text-sm text-gray-600">
+                                                            <Package className="w-4 h-4 mr-2 text-orange-500" />
+                                                            <span className="line-clamp-1 capitalize">{service.categorie}</span>
+                                                        </div>
+                                                        {service.lieu && (
+                                                            <div className="flex items-center text-sm text-gray-600">
+                                                                <MapPin className="w-4 h-4 mr-2 text-red-500" />
+                                                                <span className="line-clamp-1">{service.lieu}</span>
+                                                            </div>
+                                                        )}
+                                                        {(service.prix || service.budget_max) && (
+                                                            <div className="flex items-center text-sm text-gray-600">
+                                                                <Euro className="w-4 h-4 mr-2 text-green-500" />
+                                                                <span className="font-medium text-green-600">
+                                                                    {service.type_service === 'offre'
+                                                                        ? `${service.prix}€`
+                                                                        : `Budget max: ${service.budget_max}€`
+                                                                    }
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                        {service.urgence && service.urgence !== 'normale' && (
+                                                            <div className="flex items-center text-sm">
+                                                                <Clock className="w-4 h-4 mr-2 text-red-500" />
+                                                                <span className={`font-medium ${
+                                                                    service.urgence === 'elevee' ? 'text-red-600' : 'text-yellow-600'
+                                                                }`}>
+                                                                    Urgence {service.urgence}
+                                                                </span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex items-center justify-between">
+                                                        <Button asChild size="sm" className="flex-1 mr-2">
+                                                            <Link to={`/services/${service.id}`}>
+                                                                <Eye className="w-4 h-4 mr-1" />
+                                                                Voir détails
+                                                            </Link>
+                                                        </Button>
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Quick Actions for Services */}
+                            {services.length > 0 && (
+                                <div className="mt-6 pt-6 border-t border-gray-200">
+                                    <div className="flex flex-col sm:flex-row gap-3">
+                                        <Button asChild variant="outline" className="flex-1">
+                                            <Link to="/services">
+                                                <Briefcase className="w-4 h-4 mr-2" />
+                                                Parcourir tous les services
+                                            </Link>
+                                        </Button>
+                                        <Button asChild className="flex-1">
+                                            <Link to="/services/create">
+                                                <Plus className="w-4 h-4 mr-2" />
+                                                Créer un service
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </motion.div>
+
                 {/* Quick Stats */}
                 <DashboardStats
                     todaysEventsCount={todaysEvents.length}
@@ -586,6 +748,12 @@ const Home = () => {
                                     <Link to="/trocs/create">
                                         <ArrowRightLeft className="w-5 h-5 mr-3" />
                                         Créer un troc
+                                    </Link>
+                                </Button>
+                                <Button asChild variant="outline" className="w-full justify-start" size="lg">
+                                    <Link to="/services/create">
+                                        <Briefcase className="w-5 h-5 mr-3" />
+                                        Créer un service
                                     </Link>
                                 </Button>
                                 <Button asChild variant="outline" className="w-full justify-start" size="lg">
