@@ -16,6 +16,7 @@ import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
 import { canDeleteEvent } from '../utils/permissions';
+import { getImageUrl } from '../utils/imageUtils';
 import {
     ExternalLink,
     Users,
@@ -298,10 +299,21 @@ const Events = () => {
                                         {evenement.photo_url ? (
                                             <div className="h-48 w-full overflow-hidden">
                                                 <img
-                                                    src={evenement.photo_url}
+                                                    src={getImageUrl(evenement.photo_url) || evenement.photo_url}
                                                     alt={evenement.nom}
                                                     className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                                    onError={(e) => {
+                                                        console.error('Failed to load event image:', evenement.photo_url);
+                                                        // Replace with placeholder
+                                                        const target = e.target as HTMLImageElement;
+                                                        target.style.display = 'none';
+                                                        const placeholder = target.nextElementSibling as HTMLElement;
+                                                        if (placeholder) placeholder.style.display = 'flex';
+                                                    }}
                                                 />
+                                                <div className="h-48 w-full bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center" style={{display: 'none'}}>
+                                                    <Calendar className="w-12 h-12 text-blue-400" />
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="h-48 w-full bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center">

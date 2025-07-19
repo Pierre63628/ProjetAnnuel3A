@@ -48,6 +48,12 @@ router.post('/direct-message',
     MessagingController.createOrGetDirectMessage
 );
 
+router.post('/offline-direct-message',
+    body('target_user_id').isInt({ min: 1 }).withMessage('Target user ID must be a positive integer'),
+    validateRequest,
+    MessagingController.createOfflineDirectMessage
+);
+
 // Messages Routes
 router.get('/rooms/:roomId/messages',
     param('roomId').isInt({ min: 1 }).withMessage('Room ID must be a positive integer'),
@@ -71,6 +77,17 @@ router.post('/rooms/:roomId/mark-read',
     MessagingController.markAsRead
 );
 
+// Offline Messages Routes
+router.get('/messages/undelivered', MessagingController.getUndeliveredMessages);
+
+router.get('/messages/undelivered/count', MessagingController.getUndeliveredMessageCount);
+
+router.post('/messages/:messageId/mark-read',
+    param('messageId').isInt({ min: 1 }).withMessage('Message ID must be a positive integer'),
+    validateRequest,
+    MessagingController.markMessageAsRead
+);
+
 // Members Routes
 router.get('/rooms/:roomId/members',
     param('roomId').isInt({ min: 1 }).withMessage('Room ID must be a positive integer'),
@@ -80,5 +97,8 @@ router.get('/rooms/:roomId/members',
 
 // Presence Routes
 router.get('/users/online', MessagingController.getOnlineUsers);
+
+// Neighborhood Users Routes
+router.get('/users/neighborhood', MessagingController.getNeighborhoodUsers);
 
 export default router;

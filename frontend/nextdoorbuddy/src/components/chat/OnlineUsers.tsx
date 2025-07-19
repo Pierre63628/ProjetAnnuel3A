@@ -5,6 +5,7 @@ import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
+import { useMobileChat } from '../../contexts/MobileChatContext';
 import messagingService from '../../services/messaging.service';
 import {
     Users,
@@ -12,17 +13,21 @@ import {
     MessageCircle,
     Crown,
     User,
-    Hash
+    Hash,
+    ArrowLeft
 } from 'lucide-react';
 
 interface OnlineUsersProps {
     users: UserPresence[];
     currentRoom: ChatRoom | null;
+    onToggleView?: () => void;
+    showToggle?: boolean;
 }
 
-const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
+const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom, onToggleView, showToggle = false }) => {
     const { selectRoom, chatRooms, refreshChatRooms } = useChat();
     const { user: currentUser } = useAuth();
+    const { isMobile, navigateToView } = useMobileChat();
 
     const getStatusColor = (status: string) => {
         switch (status) {
@@ -111,34 +116,72 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
     return (
         <div className="h-full flex flex-col">
             {/* Header */}
-            <div className="p-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
-                    <Users className="w-5 h-5 mr-2 text-blue-600" />
-                    {currentRoom ? 'Membres du salon' : 'Utilisateurs en ligne'}
-                </h2>
+            <div className={`border-b border-gray-200 ${isMobile ? 'p-3' : 'p-4'}`}>
+                <div className="flex items-center justify-between">
+                    <h2 className={`font-semibold text-gray-900 flex items-center ${
+                        isMobile ? 'text-base' : 'text-lg'
+                    }`}>
+                        <Users className={`mr-2 text-blue-600 ${
+                            isMobile ? 'w-4 h-4' : 'w-5 h-5'
+                        }`} />
+                        {isMobile
+                            ? (currentRoom ? 'Membres' : 'En ligne')
+                            : (currentRoom ? 'Membres du salon' : 'Utilisateurs en ligne')
+                        }
+                    </h2>
+                    <div className="flex items-center gap-2">
+                        {showToggle && onToggleView && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onToggleView}
+                                className="text-xs"
+                            >
+                                <Users className="h-3 w-3 mr-1" />
+                                Voisins
+                            </Button>
+                        )}
+                        {isMobile && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => navigateToView('chat')}
+                                className="p-2 min-h-[44px] min-w-[44px]"
+                            >
+                                <ArrowLeft className="w-4 h-4" />
+                            </Button>
+                        )}
+                    </div>
+                </div>
                 {currentRoom && (
-                    <div className="flex items-center mt-2 text-sm text-gray-600">
+                    <div className={`flex items-center mt-2 text-gray-600 ${
+                        isMobile ? 'text-sm' : 'text-sm'
+                    }`}>
                         {currentRoom.room_type === 'group' ? (
                             <Hash className="w-4 h-4 mr-2" />
                         ) : (
                             <User className="w-4 h-4 mr-2" />
                         )}
-                        {currentRoom.name}
+                        <span className="truncate">{currentRoom.name}</span>
                     </div>
                 )}
             </div>
 
             {/* Users List */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
                 {users.length === 0 ? (
-                    <div className="p-6 text-center">
-                        <Users className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                        <p className="text-gray-600 text-sm">
+                    <div className={`text-center ${isMobile ? 'p-4' : 'p-6'}`}>
+                        <Users className={`text-gray-400 mx-auto mb-3 ${
+                            isMobile ? 'w-10 h-10' : 'w-12 h-12'
+                        }`} />
+                        <p className={`text-gray-600 ${
+                            isMobile ? 'text-sm' : 'text-sm'
+                        }`}>
                             Aucun utilisateur en ligne
                         </p>
                     </div>
                 ) : (
-                    <div className="p-2">
+                    <div className={isMobile ? 'p-1' : 'p-2'}>
                         {users.map((userPresence, index) => (
                             <motion.div
                                 key={userPresence.user_id}
@@ -146,22 +189,30 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.2, delay: index * 0.05 }}
                             >
-                                <Card className="mb-2 hover:shadow-md transition-shadow cursor-pointer">
-                                    <CardContent className="p-3">
+                                <Card className={`hover:shadow-md transition-shadow cursor-pointer ${
+                                    isMobile ? 'mb-1' : 'mb-2'
+                                }`}>
+                                    <CardContent className={isMobile ? 'p-4' : 'p-3'}>
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center flex-1 min-w-0">
                                                 {/* Avatar */}
-                                                <div className="relative flex-shrink-0 mr-3">
-                                                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white text-sm font-medium">
-                                                        {userPresence.user ? 
-                                                            getInitials(userPresence.user.nom, userPresence.user.prenom) : 
+                                                <div className={`relative flex-shrink-0 ${
+                                                    isMobile ? 'mr-3' : 'mr-3'
+                                                }`}>
+                                                    <div className={`rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium ${
+                                                        isMobile ? 'w-12 h-12 text-sm' : 'w-10 h-10 text-sm'
+                                                    }`}>
+                                                        {userPresence.user ?
+                                                            getInitials(userPresence.user.nom, userPresence.user.prenom) :
                                                             '?'
                                                         }
                                                     </div>
                                                     {/* Status indicator */}
                                                     <div className="absolute -bottom-1 -right-1">
-                                                        <Circle 
-                                                            className={`w-4 h-4 ${getStatusColor(userPresence.status)} fill-current`}
+                                                        <Circle
+                                                            className={`${getStatusColor(userPresence.status)} fill-current ${
+                                                                isMobile ? 'w-5 h-5' : 'w-4 h-4'
+                                                            }`}
                                                         />
                                                     </div>
                                                 </div>
@@ -200,7 +251,9 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom }) => {
                                             <Button
                                                 size="sm"
                                                 variant="outline"
-                                                className="ml-2 p-2"
+                                                className={`ml-2 ${
+                                                    isMobile ? 'p-3 min-h-[44px] min-w-[44px]' : 'p-2'
+                                                }`}
                                                 onClick={() => handleStartDirectMessage(userPresence)}
                                                 disabled={!userPresence.user || userPresence.user_id === currentUser?.id}
                                                 title={userPresence.user_id === currentUser?.id ?

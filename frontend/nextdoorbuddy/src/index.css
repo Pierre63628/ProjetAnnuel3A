@@ -16,3 +16,73 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* Mobile-specific chat optimizations */
+@media (max-width: 768px) {
+    /* Ensure proper touch targets */
+    .touch-target {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Better scrolling on mobile */
+    .mobile-scroll {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Prevent zoom on input focus (iOS) */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        font-size: 16px !important;
+    }
+
+    /* Safe area padding for devices with notches */
+    .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .pt-safe {
+        padding-top: env(safe-area-inset-top);
+    }
+
+    /* Chat-specific mobile styles */
+    .chat-mobile-container {
+        height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+
+    /* Message bubble optimizations */
+    .message-bubble-mobile {
+        max-width: 85%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Virtual keyboard handling */
+    .keyboard-visible {
+        height: calc(100vh - env(keyboard-inset-height, 0px));
+    }
+}
+
+/* Touch gesture support */
+.touch-pan-y {
+    touch-action: pan-y;
+}
+
+.touch-pan-x {
+    touch-action: pan-x;
+}
+
+/* Smooth transitions for mobile navigation */
+.mobile-transition {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Loading states for mobile */
+.mobile-loading {
+    pointer-events: none;
+    opacity: 0.6;
+}

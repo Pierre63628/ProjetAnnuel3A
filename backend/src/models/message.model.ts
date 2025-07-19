@@ -286,4 +286,70 @@ export class MessageModel {
         const result = await pool.query(query, [chatRoomId, userId]);
         return parseInt(result.rows[0].count) || 0;
     }
+
+    // Get undelivered messages for a user (for offline messaging)
+    static async getUndeliveredMessages(userId: number): Promise<Message[]> {
+        const query = `
+            SELECT
+                m.*,
+                json_build_object(
+                    'id', u.id,
+                    'nom', u.nom,
+                    'prenom', u.prenom,
+                    'email', u.email
+                ) as sender,
+                cr.name as room_name,
+                cr.room_type
+            FROM "Message" m
+            INNER JOIN "MessageDelivery" md ON m.id = md.message_id
+            INNER JOIN "ChatRoom" cr ON m.chat_room_id = cr.id
+            LEFT JOIN "Utilisateur" u ON m.sender_id = u.id
+            WHERE md.user_id = $1
+            AND md.status = 'sent'
+            AND m.is_deleted = false
+            ORDER BY m.created_at ASC
+        `;
+
+        const result = await pool.query(query, [userId]);
+        return result.rows;
+    }
+
+    // Mark messages as delivered for a user
+    static async markMessagesAsDelivered(userId: number, messageIds: number[]): Promise<void> {
+        if (messageIds.length === 0) return;
+
+        const query = `
+            UPDATE "MessageDelivery"
+            SET status = 'delivered', timestamp = CURRENT_TIMESTAMP
+            WHERE user_id = $1 AND message_id = ANY($2) AND status = 'sent'
+        `;
+
+        await pool.query(query, [userId, messageIds]);
+    }
+
+    // Get undelivered message count for a user
+    static async getUndeliveredMessageCount(userId: number): Promise<number> {
+        const query = `
+            SELECT COUNT(*) as count
+            FROM "MessageDelivery" md
+            INNER JOIN "Message" m ON md.message_id = m.id
+            WHERE md.user_id = $1
+            AND md.status = 'sent'
+            AND m.is_deleted = false
+        `;
+
+        const result = await pool.query(query, [userId]);
+        return parseInt(result.rows[0].count) || 0;
+    }
+
+    // Mark a specific message as read
+    static async markMessageAsRead(messageId: number, userId: number): Promise<void> {
+        const query = `
+            UPDATE "MessageDelivery"
+            SET status = 'read', timestamp = CURRENT_TIMESTAMP
+            WHERE message_id = $1 AND user_id = $2
+        `;
+
+        await pool.query(query, [messageId, userId]);
+    }
 }

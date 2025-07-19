@@ -4,11 +4,11 @@ import { useAuth } from '../contexts/AuthContext'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'framer-motion'
 import LanguageSelector from '../components/LanguageSelector'
+import logoSvg from '../assets/logo.svg'
 import {
     Mail,
     Lock,
     LogIn,
-    Sparkles,
     Users,
     Home,
     Heart,
@@ -72,14 +72,9 @@ const Login = () => {
                         transition={{ duration: 0.6 }}
                     >
                         <div className="flex items-center justify-center mb-4">
-                            <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl shadow-lg">
-                                <Sparkles className="w-8 h-8 text-white" />
-                            </div>
+                            <img src={logoSvg} alt="Logo" className="w-40 h-40" />
                         </div>
-                        <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                            NextDoorBuddy
-                        </h1>
-                        <p className="text-gray-600 text-lg">
+                        <p className="text-indigo-600 text-xl">
                             Connectez-vous à votre quartier
                         </p>
                     </motion.div>

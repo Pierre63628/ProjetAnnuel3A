@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import { EvenementModel, Evenement } from '../models/evenement.model.js';
 import { ApiErrors } from '../errors/ApiErrors.js';
 
+// Helper function to validate event date
+const validateEventDate = (dateString: string): string | null => {
+    if (!dateString) return "La date de l'événement est requise";
+
+    const eventDate = new Date(dateString);
+    const now = new Date();
+    // Allow a 5-minute buffer to account for form filling time
+    const bufferTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+    const minimumDate = new Date(now.getTime() - bufferTime);
+
+    if (isNaN(eventDate.getTime())) {
+        return "Format de date invalide";
+    }
+
+    if (eventDate < minimumDate) {
+        return "La date de l'événement ne peut pas être antérieure à maintenant";
+    }
+
+    return null;
+};
+
 // Récupérer tous les événements (sans filtre quartier)
 export const getAllEvenements = async (req: Request, res: Response) => {
     try {
@@ -102,6 +123,12 @@ export const getEvenementsByOrganisateur = async (req: Request, res: Response) =
 // Créer un nouvel événement
 export const createEvenement = async (req: Request, res: Response) => {
     try {
+        // Validate event date
+        const dateError = validateEventDate(req.body.date_evenement);
+        if (dateError) {
+            return res.status(400).json({ message: dateError });
+        }
+
         const evenementData: Evenement = {
             organisateur_id: req.user.id,
             nom: req.body.nom,
@@ -120,7 +147,8 @@ export const createEvenement = async (req: Request, res: Response) => {
 
         res.status(201).json(newEvenement);
     } catch (error) {
-        throw new ApiErrors("Erreur lors de la création de l'événement", 500);
+        console.error('Erreur lors de la création de l\'événement:', error);
+        res.status(500).json({ message: "Erreur lors de la création de l'événement" });
     }
 };
 
@@ -136,6 +164,14 @@ export const updateEvenement = async (req: Request, res: Response) => {
 
         if (existingEvenement.organisateur_id !== req.user.id && req.user.role !== 'admin') {
             return res.status(403).json({ message: 'Accès refusé. Vous n\'êtes pas l\'organisateur de cet événement.' });
+        }
+
+        // Validate event date if it's being updated
+        if (req.body.date_evenement !== undefined) {
+            const dateError = validateEventDate(req.body.date_evenement);
+            if (dateError) {
+                return res.status(400).json({ message: dateError });
+            }
         }
 
         const evenementData: Partial<Evenement> = {};

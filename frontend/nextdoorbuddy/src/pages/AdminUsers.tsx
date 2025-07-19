@@ -60,7 +60,7 @@ const AdminUsers = () => {
                     throw new Error('Vous devez être connecté pour accéder à cette page');
                 }
 
-                const response = await fetch('http://localhost:3000/api/users', {
+                const response = await fetch('https://doorbudy.cloud/api/users', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -87,7 +87,7 @@ const AdminUsers = () => {
     useEffect(() => {
         const fetchQuartiers = async () => {
             try {
-                const response = await fetch('http://localhost:3000/api/quartiers');
+                const response = await fetch('https://doorbudy.cloud/api/quartiers');
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des quartiers');
                 }
@@ -161,7 +161,7 @@ const AdminUsers = () => {
             }
 
             // Envoyer la requête de mise à jour
-            const response = await fetch(`http://localhost:3000/api/users/${editingUser.id}`, {
+            const response = await fetch(`https://doorbudy.cloud/api/users/${editingUser.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -204,7 +204,7 @@ const AdminUsers = () => {
             }
 
             // Envoyer la requête de suppression
-            const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+            const response = await fetch(`https://doorbudy.cloud/api/users/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`
