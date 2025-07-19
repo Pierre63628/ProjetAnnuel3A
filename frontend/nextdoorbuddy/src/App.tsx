@@ -5,11 +5,16 @@ import Troc from "./pages/Troc"
 import TrocForm from "./pages/TrocForm"
 import TrocDetail from "./pages/TrocDetail"
 import MyTrocs from "./pages/MyTrocs"
+import Services from "./pages/Services"
+import ServiceForm from "./pages/ServiceForm"
+import ServiceDetail from "./pages/ServiceDetail"
+import MyServices from "./pages/MyServices"
 import Signup from "./pages/Signup"
 import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import AdminTrocs from "./pages/AdminTrocs"
+import AdminServices from "./pages/AdminServices"
 import AdminDashboard from "./pages/AdminDashboard"
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
@@ -96,6 +101,31 @@ function AppRoutes() {
           <MyTrocs />
         </ProtectedRoute>
       } />
+      <Route path="/services" element={
+        <ProtectedRoute>
+          <Services />
+        </ProtectedRoute>
+      } />
+      <Route path="/services/create" element={
+        <ProtectedRoute>
+          <ServiceForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/services/:id" element={
+        <ProtectedRoute>
+          <ServiceDetail />
+        </ProtectedRoute>
+      } />
+      <Route path="/services/edit/:id" element={
+        <ProtectedRoute>
+          <ServiceForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/services/my-services" element={
+        <ProtectedRoute>
+          <MyServices />
+        </ProtectedRoute>
+      } />
       <Route path="/events" element={
         <ProtectedRoute>
           <Events />
@@ -144,6 +174,11 @@ function AppRoutes() {
       <Route path="/admin/trocs" element={
         <AdminRoute>
           <AdminTrocs />
+        </AdminRoute>
+      } />
+      <Route path="/admin/services" element={
+        <AdminRoute>
+          <AdminServices />
         </AdminRoute>
       } />
       <Route path="/login" element={<Login />} />

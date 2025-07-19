@@ -8,6 +8,7 @@ import quartierRoutes from './routes/quartier.routes.js';
 import utilisateurQuartierRoutes from './routes/utilisateur-quartier.routes.js';
 import evenementRoutes from './routes/evenement.routes.js';
 import trocRoutes from './routes/troc.routes.js';
+import serviceRoutes from './routes/service.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import messagingRoutes from './routes/messaging.routes.js';
 
@@ -35,6 +36,7 @@ app.use('/api/quartiers', quartierRoutes);
 app.use('/api/users-quartiers', utilisateurQuartierRoutes);
 app.use('/api/evenements', evenementRoutes);
 app.use('/api/troc', trocRoutes);
+app.use('/api/services', serviceRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/messaging', messagingRoutes);
 
