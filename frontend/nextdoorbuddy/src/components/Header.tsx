@@ -6,17 +6,17 @@ import { motion } from 'framer-motion';
 import LanguageSelector from './LanguageSelector';
 import logoSvg from '../assets/logo.svg';
 import {
-    Home,
-    Calendar,
-    ArrowRightLeft,
-    Briefcase,
-    Heart,
-    MessageCircle,
-    User,
-    LogOut,
-    Sparkles,
-    Menu,
-    X
+  Home,
+  Calendar,
+  ArrowRightLeft,
+  Briefcase,
+  Heart,
+  MessageCircle,
+  User,
+  LogOut,
+  Sparkles,
+  Menu,
+  X
 } from 'lucide-react';
 
 const Header = () => {
@@ -34,15 +34,15 @@ const Header = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-    const navigationItems = [
-        { to: '/', label: t('navigation.home'), icon: Home },
-        { to: '/events', label: t('navigation.events'), icon: Calendar },
-        { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
-        { to: '/services', label: 'Services', icon: Briefcase },
-        { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
-        { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
-        { to: '/profile', label: t('navigation.profile'), icon: User },
-    ];
+  const navigationItems = [
+    { to: '/', label: t('navigation.home'), icon: Home },
+    { to: '/events', label: t('navigation.events'), icon: Calendar },
+    { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
+    { to: '/services', label: 'Services', icon: Briefcase },
+    { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
+    { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
+    { to: '/profile', label: t('navigation.profile'), icon: User },
+  ];
 
   const adminNavigationItems = [
     { to: '/admin/dashboard', label: t('navigation.adminDashboard'), icon: Sparkles },
@@ -76,20 +76,21 @@ const Header = () => {
                 </Link>
               ))}
 
-              {user.role === 'admin' && adminNavigationItems.map(({ to, label, icon: Icon }) => (
-                <Link
-                  key={to}
-                  to={to}
-                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-600 hover:text-purple-600 hover:bg-purple-50 transition"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden xl:inline">{label}</span>
-                </Link>
-              ))}
+              {user.role === 'admin' &&
+                adminNavigationItems.map(({ to, label, icon: Icon }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-600 hover:text-purple-600 hover:bg-purple-50 transition"
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="hidden xl:inline">{label}</span>
+                  </Link>
+                ))}
             </nav>
           )}
 
-          {/* Right section */}
+          {/* Right Section */}
           {user && (
             <div className="flex items-center space-x-3">
               {/* Mobile menu toggle */}
@@ -100,7 +101,7 @@ const Header = () => {
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
 
-              {/* User greeting */}
+              {/* User Greeting */}
               <div className="hidden md:flex items-center px-3 py-1 bg-white/60 rounded-md border border-blue-100 text-sm">
                 <User className="w-4 h-4 text-blue-600 mr-2" />
                 <span>
@@ -111,19 +112,21 @@ const Header = () => {
 
               <LanguageSelector />
 
-              {/* Logout */}
-              <button
+              {/* Logout Button (animated) */}
+              <motion.button
                 onClick={handleLogout}
-                className="flex items-center space-x-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md"
+                className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 group"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
                 <span className="hidden sm:inline">{t('navigation.logout')}</span>
-              </button>
+              </motion.button>
             </div>
           )}
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile Navigation */}
         {user && mobileMenuOpen && (
           <div className="lg:hidden mt-3 border-t border-blue-100 pt-4">
             <nav className="space-y-2">
@@ -156,21 +159,6 @@ const Header = () => {
       </div>
     </header>
   );
-                            <motion.button
-                                onClick={handleLogout}
-                                className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 group"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                                <span className="hidden sm:inline">{t('navigation.logout')}</span>
-                            </motion.button>
-                        </motion.div>
-                    )}
-                </div>
-            </div>
-        </header>
-    );
 };
 
 export default Header;

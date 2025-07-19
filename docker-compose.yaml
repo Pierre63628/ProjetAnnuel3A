@@ -35,6 +35,8 @@ services:
     image: postgis/postgis:15-3.3
     container_name: nextdoorbuddy-db
     restart: always
+    ports:
+      - "0.0.0.0:5432:5432"  # Expose to all interfaces
     environment:
       POSTGRES_PASSWORD: rootpass
       POSTGRES_USER: user
