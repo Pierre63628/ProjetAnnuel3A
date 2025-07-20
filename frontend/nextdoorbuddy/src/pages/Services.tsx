@@ -6,18 +6,18 @@ import { useAuth } from '../contexts/AuthContext';
 import serviceService, { Service, ServiceSearchFilters } from '../services/service.service';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { motion } from 'framer-motion';
-import { 
-    Calendar, 
-    Clock, 
-    MapPin, 
-    User, 
-    Euro, 
+import {
+    Calendar,
+    Clock,
+    MapPin,
+    User,
     Search,
     Filter,
     Plus,
     Briefcase,
     Users,
-    AlertCircle
+    AlertCircle,
+    Euro
 } from 'lucide-react';
 
 function Services() {
@@ -152,120 +152,156 @@ function Services() {
             <Header />
             <ErrorBoundary>
                 <div className="container mx-auto p-6">
-                    {/* En-tête */}
-                    <motion.div 
-                        className="mb-6 flex items-center justify-between"
+                    {/* En-tête amélioré */}
+                    <motion.div
+                        className="mb-8"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className="flex items-center">
-                            <Briefcase className="w-8 h-8 text-blue-600 mr-3" />
-                            <h1 className="text-3xl font-bold text-gray-800">Services du quartier</h1>
+                        <div className="text-center mb-6">
+                            <div className="flex items-center justify-center mb-4">
+                                <div className="bg-blue-100 p-3 rounded-full">
+                                    <Briefcase className="w-8 h-8 text-blue-600" />
+                                </div>
+                            </div>
+                            <h1 className="text-4xl font-bold text-gray-900 mb-2">Services du quartier</h1>
+                            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                                Découvrez les services proposés par vos voisins ou partagez vos compétences avec la communauté
+                            </p>
                         </div>
-                        <div className="flex space-x-4">
+
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <Link
                                 to="/services/my-services"
-                                className="rounded-md bg-gray-500 px-4 py-2 text-white hover:bg-gray-600 transition-colors flex items-center"
+                                className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium shadow-sm"
                             >
-                                <User className="w-4 h-4 mr-2" />
+                                <User className="w-5 h-5 mr-2" />
                                 Mes services
                             </Link>
                             <Link
                                 to="/services/create"
-                                className="rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 transition-colors flex items-center"
+                                className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl"
                             >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Créer un service
+                                <Plus className="w-5 h-5 mr-2" />
+                                Proposer un service
                             </Link>
                         </div>
                     </motion.div>
 
-                    {/* Barre de recherche et filtres */}
-                    <motion.div 
-                        className="bg-white rounded-lg shadow-md p-4 mb-6"
+                    {/* Barre de recherche et filtres améliorée */}
+                    <motion.div
+                        className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                        <div className="flex flex-col md:flex-row gap-4">
+                        <div className="flex flex-col lg:flex-row gap-4">
                             <div className="flex-1">
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                                     <input
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Rechercher un service..."
-                                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="Rechercher un service (ex: jardinage, baby-sitting...)"
+                                        className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-gray-700 placeholder-gray-400"
                                     />
                                 </div>
                             </div>
                             <button
                                 onClick={() => setShowFilters(!showFilters)}
-                                className="flex items-center px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                                className={`flex items-center justify-center px-6 py-3 border rounded-xl transition-all duration-200 font-medium ${
+                                    showFilters
+                                        ? 'bg-blue-50 border-blue-200 text-blue-700'
+                                        : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'
+                                }`}
                             >
-                                <Filter className="w-4 h-4 mr-2" />
+                                <Filter className="w-5 h-5 mr-2" />
                                 Filtres
+                                {Object.keys(filters).length > 0 && (
+                                    <span className="ml-2 bg-blue-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                        {Object.keys(filters).length}
+                                    </span>
+                                )}
                             </button>
                         </div>
 
-                        {/* Filtres avancés */}
+                        {/* Filtres avancés améliorés */}
                         {showFilters && (
-                            <motion.div 
-                                className="mt-4 pt-4 border-t border-gray-200 grid grid-cols-1 md:grid-cols-4 gap-4"
+                            <motion.div
+                                className="mt-6 pt-6 border-t border-gray-100"
                                 initial={{ opacity: 0, height: 0 }}
                                 animate={{ opacity: 1, height: 'auto' }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                                    <select
-                                        value={filters.type_service || ''}
-                                        onChange={(e) => setFilters({...filters, type_service: e.target.value as 'offre' | 'demande' || undefined})}
-                                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    >
-                                        <option value="">Tous</option>
-                                        <option value="offre">Offres</option>
-                                        <option value="demande">Demandes</option>
-                                    </select>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Type de service</label>
+                                        <select
+                                            value={filters.type_service || ''}
+                                            onChange={(e) => setFilters({...filters, type_service: e.target.value as 'offre' | 'demande' || undefined})}
+                                            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                                        >
+                                            <option value="">Tous les types</option>
+                                            <option value="offre">🟢 Offres de service</option>
+                                            <option value="demande">🔵 Demandes de service</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
+                                        <select
+                                            value={filters.categorie || ''}
+                                            onChange={(e) => setFilters({...filters, categorie: e.target.value || undefined})}
+                                            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                                        >
+                                            <option value="">Toutes les catégories</option>
+                                            {categories.map(cat => (
+                                                <option key={cat} value={cat}>
+                                                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Urgence</label>
+                                        <select
+                                            value={filters.urgence || ''}
+                                            onChange={(e) => setFilters({...filters, urgence: e.target.value || undefined})}
+                                            className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                                        >
+                                            <option value="">Toutes les urgences</option>
+                                            <option value="elevee">🔴 Urgent</option>
+                                            <option value="normale">🟡 Normal</option>
+                                            <option value="faible">🟢 Pas pressé</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-2">Prix maximum</label>
+                                        <div className="relative">
+                                            <Euro className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                            <input
+                                                type="number"
+                                                value={filters.prix_max || ''}
+                                                onChange={(e) => setFilters({...filters, prix_max: e.target.value ? parseFloat(e.target.value) : undefined})}
+                                                placeholder="Ex: 50"
+                                                className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-gray-50 hover:bg-white"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Catégorie</label>
-                                    <select
-                                        value={filters.categorie || ''}
-                                        onChange={(e) => setFilters({...filters, categorie: e.target.value || undefined})}
-                                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    >
-                                        <option value="">Toutes</option>
-                                        {categories.map(cat => (
-                                            <option key={cat} value={cat}>{cat}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Urgence</label>
-                                    <select
-                                        value={filters.urgence || ''}
-                                        onChange={(e) => setFilters({...filters, urgence: e.target.value || undefined})}
-                                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    >
-                                        <option value="">Toutes</option>
-                                        <option value="elevee">Urgent</option>
-                                        <option value="normale">Normal</option>
-                                        <option value="faible">Pas pressé</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Prix max (€)</label>
-                                    <input
-                                        type="number"
-                                        value={filters.prix_max || ''}
-                                        onChange={(e) => setFilters({...filters, prix_max: e.target.value ? parseFloat(e.target.value) : undefined})}
-                                        placeholder="Prix maximum"
-                                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    />
-                                </div>
+
+                                {/* Bouton pour effacer les filtres */}
+                                {Object.keys(filters).length > 0 && (
+                                    <div className="mt-4 text-center">
+                                        <button
+                                            onClick={() => setFilters({})}
+                                            className="text-sm text-gray-500 hover:text-gray-700 underline transition-colors duration-200"
+                                        >
+                                            Effacer tous les filtres
+                                        </button>
+                                    </div>
+                                )}
                             </motion.div>
                         )}
                     </motion.div>
@@ -291,38 +327,40 @@ function Services() {
                         </motion.div>
                     )}
 
-                    {/* Liste des services */}
+                    {/* Liste des services améliorée */}
                     {filteredServices.length === 0 ? (
-                        <motion.div 
-                            className="rounded-lg bg-white p-8 text-center shadow"
+                        <motion.div
+                            className="rounded-2xl bg-white p-12 text-center shadow-lg border border-gray-100"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.2 }}
                         >
-                            <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                            <h3 className="mb-4 text-lg font-semibold text-gray-600">
-                                {searchTerm || Object.keys(filters).length > 0 
-                                    ? 'Aucun service trouvé' 
+                            <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <Users className="w-10 h-10 text-gray-400" />
+                            </div>
+                            <h3 className="mb-4 text-2xl font-bold text-gray-800">
+                                {searchTerm || Object.keys(filters).length > 0
+                                    ? 'Aucun service trouvé'
                                     : 'Aucun service dans votre quartier'
                                 }
                             </h3>
-                            <p className="mb-6 text-gray-500">
+                            <p className="mb-8 text-gray-600 text-lg max-w-md mx-auto">
                                 {searchTerm || Object.keys(filters).length > 0
-                                    ? 'Essayez de modifier vos critères de recherche'
-                                    : 'Soyez le premier à proposer ou demander un service !'
+                                    ? 'Essayez de modifier vos critères de recherche ou explorez d\'autres catégories'
+                                    : 'Soyez le premier à proposer ou demander un service dans votre quartier !'
                                 }
                             </p>
                             <Link
                                 to="/services/create"
-                                className="rounded-md bg-blue-500 px-6 py-3 text-white hover:bg-blue-600 transition-colors inline-flex items-center"
+                                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl"
                             >
-                                <Plus className="w-4 h-4 mr-2" />
+                                <Plus className="w-5 h-5 mr-2" />
                                 Créer le premier service
                             </Link>
                         </motion.div>
                     ) : (
-                        <motion.div 
-                            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+                        <motion.div
+                            className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
@@ -330,52 +368,61 @@ function Services() {
                             {filteredServices.map((service, index) => (
                                 <motion.div
                                     key={service.id}
-                                    className="rounded-lg bg-white p-6 shadow hover:shadow-lg transition-shadow cursor-pointer"
+                                    className="group rounded-2xl bg-white border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.1 }}
-                                    whileHover={{ y: -2 }}
+                                    whileHover={{ y: -4, scale: 1.02 }}
                                 >
-                                    <Link to={`/services/${service.id}`} className="block">
+                                    <Link to={`/services/${service.id}`} className="block p-6">
+                                        {/* En-tête de la carte */}
                                         <div className="mb-4">
-                                            <div className="flex items-start justify-between mb-2">
-                                                <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">
+                                            <div className="flex items-start justify-between mb-3">
+                                                <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200">
                                                     {service.titre}
                                                 </h3>
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgenceColor(service.urgence)}`}>
+                                                <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ml-2 ${getUrgenceColor(service.urgence)}`}>
                                                     {getUrgenceText(service.urgence)}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center mb-2">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium mr-2 ${
+
+                                            {/* Tags de type et catégorie */}
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                                                     service.type_service === 'offre'
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : 'bg-blue-100 text-blue-800'
+                                                        ? 'bg-green-100 text-green-700 border border-green-200'
+                                                        : 'bg-blue-100 text-blue-700 border border-blue-200'
                                                 }`}>
-                                                    {service.type_service === 'offre' ? 'Offre' : 'Demande'}
+                                                    {service.type_service === 'offre' ? '🟢 Offre' : '🔵 Demande'}
                                                 </span>
-                                                <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs font-medium">
-                                                    {service.categorie}
+                                                <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium border border-gray-200">
+                                                    {service.categorie.charAt(0).toUpperCase() + service.categorie.slice(1)}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <p className="text-gray-600 mb-4 line-clamp-3">
+                                        {/* Description */}
+                                        <p className="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
                                             {service.description}
                                         </p>
 
-                                        <div className="space-y-2 text-sm text-gray-500">
+                                        {/* Informations détaillées */}
+                                        <div className="space-y-3 mb-6">
                                             {service.lieu && (
-                                                <div className="flex items-center">
-                                                    <MapPin className="w-4 h-4 mr-2" />
-                                                    <span>{service.lieu}</span>
+                                                <div className="flex items-center text-sm text-gray-600">
+                                                    <div className="bg-gray-100 p-1.5 rounded-lg mr-3">
+                                                        <MapPin className="w-4 h-4 text-gray-500" />
+                                                    </div>
+                                                    <span className="font-medium">{service.lieu}</span>
                                                 </div>
                                             )}
 
                                             {(service.prix || service.budget_max) && (
-                                                <div className="flex items-center">
-                                                    <Euro className="w-4 h-4 mr-2" />
-                                                    <span>
+                                                <div className="flex items-center text-sm text-gray-600">
+                                                    <div className="bg-green-100 p-1.5 rounded-lg mr-3">
+                                                        <Euro className="w-4 h-4 text-green-600" />
+                                                    </div>
+                                                    <span className="font-semibold text-green-700">
                                                         {service.type_service === 'offre'
                                                             ? formatPrice(service.prix)
                                                             : `Budget max: ${formatPrice(service.budget_max)}`
@@ -385,41 +432,48 @@ function Services() {
                                             )}
 
                                             {service.date_debut && (
-                                                <div className="flex items-center">
-                                                    <Calendar className="w-4 h-4 mr-2" />
+                                                <div className="flex items-center text-sm text-gray-600">
+                                                    <div className="bg-blue-100 p-1.5 rounded-lg mr-3">
+                                                        <Calendar className="w-4 h-4 text-blue-600" />
+                                                    </div>
                                                     <span>À partir du {formatDate(service.date_debut)}</span>
                                                 </div>
                                             )}
 
                                             {service.horaires && (
-                                                <div className="flex items-center">
-                                                    <Clock className="w-4 h-4 mr-2" />
+                                                <div className="flex items-center text-sm text-gray-600">
+                                                    <div className="bg-purple-100 p-1.5 rounded-lg mr-3">
+                                                        <Clock className="w-4 h-4 text-purple-600" />
+                                                    </div>
                                                     <span>{service.horaires}</span>
                                                 </div>
                                             )}
-
-                                            <div className="flex items-center">
-                                                <User className="w-4 h-4 mr-2" />
-                                                <span>{service.nom} {service.prenom}</span>
-                                            </div>
                                         </div>
 
-                                        <div className="mt-4 pt-4 border-t border-gray-200">
-                                            <p className="text-xs text-gray-400">
-                                                Publié le {formatDate(service.date_publication)}
-                                            </p>
+                                        {/* Informations utilisateur et date */}
+                                        <div className="pt-4 border-t border-gray-100">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center text-sm text-gray-600">
+                                                    <div className="bg-indigo-100 p-1.5 rounded-lg mr-3">
+                                                        <User className="w-4 h-4 text-indigo-600" />
+                                                    </div>
+                                                    <span className="font-medium">{service.nom} {service.prenom}</span>
+                                                </div>
+                                                <p className="text-xs text-gray-400">
+                                                    {formatDate(service.date_publication)}
+                                                </p>
+                                            </div>
                                         </div>
                                     </Link>
 
                                     {/* Contact Button - Only show for other users' services */}
                                     {user && service.utilisateur_id && service.utilisateur_id !== user.id && (
-                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                        <div className="p-6 pt-0">
                                             <ContactButton
                                                 targetUserId={service.utilisateur_id}
                                                 targetUserName={`${service.prenom} ${service.nom}`}
-                                                className="w-full"
-                                                size="sm"
-                                                variant="outline"
+                                                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg"
+                                                size="md"
                                             />
                                         </div>
                                     )}
