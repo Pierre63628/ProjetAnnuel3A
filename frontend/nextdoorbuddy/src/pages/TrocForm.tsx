@@ -280,7 +280,7 @@ function TrocForm() {
 
         try {
             setLoading(true);
-            await trocService.removeTrocImage(parseInt(id), imageUrl);
+            await trocService.removeTrocImage(parseInt(id));
 
             // Mettre à jour l'état local
             setForm({

@@ -1,5 +1,3 @@
-import { apiRequest } from './api';
-
 export interface UploadResponse {
     message: string;
     imageUrl: string;
@@ -93,7 +91,7 @@ class UploadService {
     async uploadMultipleImages(files: File[]): Promise<MultipleUploadResponse> {
         try {
             const formData = new FormData();
-            files.forEach((file, index) => {
+            files.forEach((file) => {
                 formData.append('images', file);
             });
 
@@ -125,9 +123,21 @@ class UploadService {
     // Supprimer une image
     async deleteImage(filename: string): Promise<void> {
         try {
-            await apiRequest(`/upload/image/${filename}`, {
+            const accessToken = localStorage.getItem('accessToken');
+            const headers: Record<string, string> = {};
+            
+            if (accessToken) {
+                headers['Authorization'] = `Bearer ${accessToken}`;
+            }
+
+            const response = await fetch(`/api/upload/image/${filename}`, {
                 method: 'DELETE',
+                headers,
             });
+
+            if (!response.ok) {
+                throw new Error(`Erreur suppression: ${response.status} ${response.statusText}`);
+            }
         } catch (error) {
             console.error('Erreur lors de la suppression de l\'image:', error);
             throw new Error('Erreur lors de la suppression de l\'image');

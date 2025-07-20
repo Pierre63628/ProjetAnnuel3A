@@ -17,14 +17,11 @@ import {
     User,
     Tag
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import journalService, { JournalArticle } from '../services/journal.service';
-import uploadService from '../services/upload.service';
 import RejectModal from '../components/RejectModal';
 
 const ArticleDetail: React.FC = () => {
-    const { t } = useTranslation();
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const { user } = useAuth();
@@ -201,7 +198,7 @@ const ArticleDetail: React.FC = () => {
                             <CardContent className="p-0">
                                 <div className="relative">
                                     <img 
-                                        src={uploadService.getImageUrl(article.imageUrl)} 
+                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
                                         alt={`Image de l'article : ${article.title}`}
                                         className="w-full h-64 md:h-80 object-cover"
                                         onError={(e) => {
@@ -209,7 +206,7 @@ const ArticleDetail: React.FC = () => {
                                             const target = e.target as HTMLImageElement;
                                             target.style.display = 'none';
                                         }}
-                                        onLoad={(e) => {
+                                        onLoad={() => {
                                             console.log('Image chargée avec succès:', article.imageUrl);
                                         }}
                                     />

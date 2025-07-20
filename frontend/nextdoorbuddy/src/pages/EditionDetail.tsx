@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { useAuth } from '../contexts/AuthContext';
 import {
     BookOpen,
     ArrowLeft,
@@ -13,19 +12,16 @@ import {
     MapPin,
     Tag,
     Eye,
-    FileText,
     Clock,
     FileDown
 } from 'lucide-react';
 import journalService, { JournalArticle, Edition } from '../services/journal.service';
-import uploadService from '../services/upload.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 const EditionDetail: React.FC = () => {
     const { uuid } = useParams<{ uuid: string }>();
     const navigate = useNavigate();
-    const { user } = useAuth();
     const [edition, setEdition] = useState<Edition | null>(null);
     const [articles, setArticles] = useState<JournalArticle[]>([]);
     const [loading, setLoading] = useState(true);
@@ -112,7 +108,7 @@ const EditionDetail: React.FC = () => {
             pdfContent.appendChild(header);
 
             // Articles
-            articles.forEach((article, index) => {
+            articles.forEach((article) => {
                 const articleDiv = document.createElement('div');
                 articleDiv.style.marginBottom = '30px';
                 articleDiv.style.pageBreakInside = 'avoid';
@@ -133,7 +129,7 @@ const EditionDetail: React.FC = () => {
                 let articleLayout = '';
                 
                 if (article.imageUrl) {
-                    const imageUrl = uploadService.getImageUrl(article.imageUrl);
+                    const imageUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`;
                     articleLayout = `
                         <div style="margin-bottom: 20px;">
                             <div style="text-align: center; margin-bottom: 15px;">
@@ -375,7 +371,7 @@ const EditionDetail: React.FC = () => {
                                                 {article.imageUrl && (
                                                     <div className="flex-shrink-0 lg:w-48">
                                                         <img 
-                                                            src={uploadService.getImageUrl(article.imageUrl)} 
+                                                            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
                                                             alt={`Image de l'article : ${article.title}`}
                                                             className="w-full h-32 lg:h-40 object-cover rounded-lg shadow-md"
                                                             onError={(e) => {

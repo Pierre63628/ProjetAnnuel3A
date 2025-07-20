@@ -11,16 +11,12 @@ import {
     AlertCircle,
     CheckCircle,
     Upload,
-    X,
-    Image as ImageIcon
+    X
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import journalService, { CreateArticleData, UpdateArticleData } from '../services/journal.service';
-import uploadService from '../services/upload.service';
 
 const ArticleForm: React.FC = () => {
-    const { t } = useTranslation();
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const { user } = useAuth();
@@ -122,7 +118,22 @@ const ArticleForm: React.FC = () => {
             console.log('ARTICLE FORM: Appel du service d\'upload...');
             
             // Uploader l'image sur le serveur
-            const uploadResponse = await uploadService.uploadImage(file);
+            const formData = new FormData();
+            formData.append('image', file);
+            
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/upload/image`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+            
+            const uploadResponse = await response.json();
             
             console.log('ARTICLE FORM: Upload response reçue:', uploadResponse);
             
@@ -153,8 +164,16 @@ const ArticleForm: React.FC = () => {
             if (uploadedImage && formData.imageUrl && formData.imageUrl.startsWith('/uploads/')) {
                 const filename = formData.imageUrl.split('/').pop();
                 if (filename) {
-                    await uploadService.deleteImage(filename);
-                    console.log('Image supprimée du serveur:', filename);
+                    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/upload/image/${filename}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Image supprimée du serveur:', filename);
+                    }
                 }
             }
         } catch (error) {

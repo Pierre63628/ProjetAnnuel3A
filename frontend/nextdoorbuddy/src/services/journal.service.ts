@@ -399,7 +399,7 @@ class JournalService {
             console.log('URL:', `/journal/user/${articleId}/submit`);
             console.log('Token:', localStorage.getItem('accessToken') ? 'Présent' : 'Absent');
             
-            const response = await api.patch(`/journal/user/${articleId}/submit`);
+            const response = await api.patch(`/journal/user/${articleId}/submit`, {});
             
             console.log('SERVICE: Réponse submitForValidation:', {
                 status: response.status,

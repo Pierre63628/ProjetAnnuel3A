@@ -4,11 +4,9 @@ import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import {
     BookOpen,
-    Plus,
     ArrowLeft,
     Save,
     AlertCircle,
@@ -22,7 +20,6 @@ interface LocationState {
 }
 
 const CreateJournal: React.FC = () => {
-    const { t } = useTranslation();
     const { user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -106,7 +103,7 @@ const CreateJournal: React.FC = () => {
             console.log('FRONTEND: Données du journal à créer:', journalData);
             
             // Appeler l'API pour créer le journal
-            const result = await journalService.createJournal(journalData);
+            await journalService.createJournal(journalData);
             
             console.log('FRONTEND: Journal créé avec succès');
             setSuccess('Journal créé avec succès !');

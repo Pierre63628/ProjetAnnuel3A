@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import ConfirmationModal from '../components/ConfirmationModal';
 import RejectModal from '../components/RejectModal';
@@ -25,10 +24,8 @@ import {
     Image
 } from 'lucide-react';
 import journalService, { JournalArticle, Edition } from '../services/journal.service';
-import uploadService from '../services/upload.service';
 
 const Journal: React.FC = () => {
-    const { t } = useTranslation();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [articles, setArticles] = useState<JournalArticle[]>([]);
@@ -264,34 +261,6 @@ const Journal: React.FC = () => {
         const days = Math.floor((date.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
         const weekNumber = Math.ceil((days + startOfYear.getDay() + 1) / 7);
         return `${date.getFullYear()}-W${weekNumber.toString().padStart(2, '0')}`;
-    };
-
-    const getWeekLabel = (weekKey: string): string => {
-        if (weekKey === 'all') return 'Toutes les semaines';
-        const [year, week] = weekKey.split('-W');
-        const startDate = new Date(parseInt(year), 0, 1 + (parseInt(week) - 1) * 7);
-        const endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 6);
-        
-        return `Semaine ${week} (${startDate.toLocaleDateString('fr-FR')} - ${endDate.toLocaleDateString('fr-FR')})`;
-    };
-
-    const getAvailableWeeks = (): string[] => {
-        const weeks = new Set<string>();
-        articles.forEach(article => {
-            const articleDate = new Date(article.date);
-            weeks.add(getWeekNumber(articleDate));
-        });
-        return ['all', ...Array.from(weeks).sort().reverse()];
-    };
-
-    const getAvailableWeeksForValidated = (): string[] => {
-        const weeks = new Set<string>();
-        validatedArticles.forEach(article => {
-            const articleDate = new Date(article.date);
-            weeks.add(getWeekNumber(articleDate));
-        });
-        return ['all', ...Array.from(weeks).sort().reverse()];
     };
 
     const filteredArticles = articles.filter(article => {
@@ -586,7 +555,7 @@ const Journal: React.FC = () => {
                                             {article.imageUrl && (
                                                 <div className="flex-shrink-0 lg:w-48">
                                                     <img 
-                                                        src={uploadService.getImageUrl(article.imageUrl)} 
+                                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
                                                         alt={`Image de l'article : ${article.title}`}
                                                         className="w-full h-32 lg:h-40 object-cover rounded-lg shadow-md"
                                                         onError={(e) => {
@@ -921,7 +890,7 @@ const Journal: React.FC = () => {
                                                     {article.imageUrl && (
                                                         <div className="flex-shrink-0 lg:w-48">
                                                             <img 
-                                                                src={uploadService.getImageUrl(article.imageUrl)} 
+                                                                src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
                                                                 alt={`Image de l'article : ${article.title}`}
                                                                 className="w-full h-32 lg:h-40 object-cover rounded-lg shadow-md"
                                                                 onError={(e) => {

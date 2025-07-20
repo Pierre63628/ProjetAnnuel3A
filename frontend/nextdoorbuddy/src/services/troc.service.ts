@@ -94,9 +94,9 @@ export const trocService = {
     },
 
     // Supprimer une image spécifique d'un troc
-    async removeTrocImage(id: number, imageUrl?: string): Promise<{ message: string; images?: string[] }> {
+    async removeTrocImage(id: number): Promise<{ message: string; images?: string[] }> {
         try {
-            const data = await api.delete(`/troc/${id}/image`, imageUrl ? { imageUrl } : undefined);
+            const data = await api.delete(`/troc/${id}/image`);
             return data;
         } catch (error) {
             console.error('Erreur lors de la suppression de l\'image:', error);

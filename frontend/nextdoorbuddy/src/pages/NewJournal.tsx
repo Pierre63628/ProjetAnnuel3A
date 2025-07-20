@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import {
     BookOpen,
@@ -15,10 +14,8 @@ import {
     AlertCircle
 } from 'lucide-react';
 import journalService, { JournalArticle } from '../services/journal.service';
-import uploadService from '../services/upload.service';
 
 const NewJournal: React.FC = () => {
-    const { t } = useTranslation();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [articles, setArticles] = useState<JournalArticle[]>([]);
@@ -270,7 +267,7 @@ const NewJournal: React.FC = () => {
                                             {article.imageUrl && (
                                                 <div className="flex-shrink-0 w-32">
                                                     <img 
-                                                        src={uploadService.getImageUrl(article.imageUrl)} 
+                                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
                                                         alt={`Image de l'article : ${article.title}`}
                                                         className="w-full h-24 object-cover rounded-lg shadow-md"
                                                         onError={(e) => {

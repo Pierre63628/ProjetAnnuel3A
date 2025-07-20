@@ -2,7 +2,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import LanguageSelector from './LanguageSelector';
 import logoSvg from '../assets/logo.svg';
 import {
@@ -15,7 +14,7 @@ import {
     User,
     LogOut,
     Sparkles,
-    BookOpen
+    BookOpen,
     Menu,
     X
 } from 'lucide-react';
@@ -158,21 +157,6 @@ const Header = () => {
       </div>
     </header>
   );
-                            <motion.button
-                                onClick={handleLogout}
-                                className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 group"
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-                                <span className="hidden sm:inline">{t('navigation.logout')}</span>
-                            </motion.button>
-                        </motion.div>
-                    )}
-                </div>
-            </div>
-        </header>
-    );
 };
 
 export default Header;

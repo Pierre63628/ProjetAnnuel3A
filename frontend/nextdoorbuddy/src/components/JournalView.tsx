@@ -4,18 +4,13 @@ import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
 import {
     Search,
-    Filter,
     Eye,
     Calendar,
     User,
-    Tag,
     BookOpen,
-    MapPin,
     Clock,
-    AlertCircle,
-    TrendingUp
+    AlertCircle
 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import journalService, { JournalArticle } from '../services/journal.service';
 import uploadService from '../services/upload.service';
@@ -29,7 +24,6 @@ const JournalView: React.FC<JournalViewProps> = ({
     selectedWeek,
     onViewArticle
 }) => {
-    const { t } = useTranslation();
     const { user } = useAuth();
     const [articles, setArticles] = useState<JournalArticle[]>([]);
     const [stats, setStats] = useState<any | null>(null);
