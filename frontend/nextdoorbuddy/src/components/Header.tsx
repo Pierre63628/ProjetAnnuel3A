@@ -7,7 +7,6 @@ import NotificationBadge from './NotificationBadge';
 import { useUnreadMessageCount } from '../hooks/useUnreadMessageCount';
 import logoSvg from '../assets/logo.svg';
 import {
-<<<<<<< HEAD
     Home,
     Calendar,
     ArrowRightLeft,
@@ -20,19 +19,6 @@ import {
     BookOpen,
     Menu,
     X
-=======
-  Home,
-  Calendar,
-  ArrowRightLeft,
-  Briefcase,
-  Heart,
-  MessageCircle,
-  User,
-  LogOut,
-  Sparkles,
-  Menu,
-  X
->>>>>>> prod
 } from 'lucide-react';
 
 const Header = () => {
@@ -51,7 +37,6 @@ const Header = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-<<<<<<< HEAD
     const navigationItems = [
         { to: '/', label: t('navigation.home'), icon: Home },
         { to: '/events', label: t('navigation.events'), icon: Calendar },
@@ -62,18 +47,6 @@ const Header = () => {
         { to: '/journal', label: t('navigation.journal'), icon: BookOpen },
         { to: '/profile', label: t('navigation.profile'), icon: User },
     ];
-=======
-  const navigationItems = [
-    { to: '/', label: t('navigation.home'), icon: Home },
-    { to: '/events', label: t('navigation.events'), icon: Calendar },
-    { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
-    { to: '/services', label: 'Services', icon: Briefcase },
-    { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
-    { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
-    { to: '/profile', label: t('navigation.profile'), icon: User },
-  ];
->>>>>>> prod
-
   const adminNavigationItems = [
     { to: '/admin/dashboard', label: t('navigation.adminDashboard'), icon: Sparkles },
   ];

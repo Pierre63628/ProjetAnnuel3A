@@ -16,12 +16,9 @@ services:
       - DB_USER=user
       - DB_PASSWORD=rootpass
       - DB_NAME=nextdoorbuddy
-<<<<<<< HEAD
       - MONGODB_URI=mongodb://mongodb:27017/journal
       - MONGODB_DB=journal
-=======
       # Email Configuration
-      
       - SMTP_HOST=smtp.gmail.com
       - SMTP_PORT=587
       - SMTP_SECURE=false
@@ -33,7 +30,6 @@ services:
       - VERIFICATION_CODE_EXPIRY=15
       - MAX_VERIFICATION_ATTEMPTS=3
       - MAX_RESEND_ATTEMPTS=3
->>>>>>> prod
     depends_on:
       - db
       - mongodb
