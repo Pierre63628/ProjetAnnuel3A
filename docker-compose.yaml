@@ -16,8 +16,24 @@ services:
       - DB_USER=user
       - DB_PASSWORD=rootpass
       - DB_NAME=nextdoorbuddy
+<<<<<<< HEAD
       - MONGODB_URI=mongodb://mongodb:27017/journal
       - MONGODB_DB=journal
+=======
+      # Email Configuration
+      
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER=doorbudy@gmail.com
+      - SMTP_PASS=jymi ameu shij siys 
+      - FROM_EMAIL=noreply@doorbudy.cloud
+      - FROM_NAME=DoorBudy
+      # Verification Settings
+      - VERIFICATION_CODE_EXPIRY=15
+      - MAX_VERIFICATION_ATTEMPTS=3
+      - MAX_RESEND_ATTEMPTS=3
+>>>>>>> prod
     depends_on:
       - db
       - mongodb
@@ -43,6 +59,8 @@ services:
     image: postgis/postgis:15-3.3
     container_name: nextdoorbuddy-db
     restart: always
+    ports:
+      - "0.0.0.0:5432:5432"  # Expose to all interfaces
     environment:
       POSTGRES_PASSWORD: rootpass
       POSTGRES_USER: user

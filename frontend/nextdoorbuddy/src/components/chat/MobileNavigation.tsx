@@ -214,32 +214,7 @@ const MobileNavigation: React.FC<MobileNavigationProps> = ({ className = '' }) =
                 </motion.div>
             )}
 
-            {/* Bottom Tab Navigation (Alternative) */}
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-40 md:hidden">
-                <div className="flex">
-                    {navigationItems.map((item) => (
-                        <button
-                            key={item.view}
-                            onClick={() => navigateToView(item.view)}
-                            className={`flex-1 flex flex-col items-center py-2 px-1 transition-colors ${
-                                currentView === item.view
-                                    ? 'text-blue-600 bg-blue-50'
-                                    : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
-                            }`}
-                        >
-                            <div className="relative">
-                                {item.icon}
-                                {item.badge !== undefined && item.badge > 0 && (
-                                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                                        {item.badge > 99 ? '99+' : item.badge}
-                                    </span>
-                                )}
-                            </div>
-                            <span className="text-xs mt-1 font-medium">{item.label}</span>
-                        </button>
-                    ))}
-                </div>
-            </div>
+
         </>
     );
 };

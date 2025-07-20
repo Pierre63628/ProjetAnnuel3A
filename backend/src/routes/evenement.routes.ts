@@ -42,6 +42,4 @@ router.get('/:id/check-participation', authenticateJWT, evenementController.chec
 
 router.get('/user/my-events', authenticateJWT, evenementController.getUserParticipations);
 
-router.get('/:id/check-participation', authenticateJWT, evenementController.checkParticipation);
-
 export default router;

@@ -26,6 +26,7 @@ export interface ChatRoomMember {
         nom: string;
         prenom: string;
         email: string;
+        profile_picture?: string;
     };
 }
 
@@ -46,6 +47,7 @@ export interface Message {
         nom: string;
         prenom: string;
         email: string;
+        profile_picture?: string;
     };
     reply_to?: Message;
     reactions?: MessageReaction[];
@@ -62,6 +64,7 @@ export interface MessageReaction {
         id: number;
         nom: string;
         prenom: string;
+        profile_picture?: string;
     };
 }
 
@@ -75,6 +78,7 @@ export interface UserPresence {
     user?: {
         nom: string;
         prenom: string;
+        profile_picture?: string;
     };
 }
 
@@ -84,6 +88,7 @@ export interface TypingIndicator {
     user: {
         nom: string;
         prenom: string;
+        profile_picture?: string;
     };
 }
 

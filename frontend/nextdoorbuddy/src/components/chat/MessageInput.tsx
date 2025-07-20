@@ -3,10 +3,6 @@ import { Button } from '../ui/button';
 import { useMobileChat } from '../../contexts/MobileChatContext';
 import {
     Send,
-    Paperclip,
-    Smile,
-    Image,
-    Mic,
     X
 } from 'lucide-react';
 
@@ -174,18 +170,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
             <form onSubmit={handleSubmit} className={`flex items-end ${
                 isMobile ? 'gap-2' : 'gap-3'
             }`}>
-                {/* Attachment button - Hidden on mobile for space */}
-                {!isMobile && (
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="flex-shrink-0 mb-1"
-                        disabled={disabled}
-                    >
-                        <Paperclip className="w-4 h-4" />
-                    </Button>
-                )}
+
 
                 {/* Message input container */}
                 <div className="flex-1 relative">
@@ -209,46 +194,11 @@ const MessageInput: React.FC<MessageInputProps> = ({
                                 fontSize: isMobile ? '16px' : '14px' // Prevent zoom on iOS
                             }}
                         />
-                        
-                        {/* Emoji button - Hidden on mobile for space */}
-                        {!isMobile && (
-                            <div className="absolute right-3 bottom-3 flex items-center gap-1">
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="p-1 h-auto text-gray-500 hover:text-gray-700"
-                                    disabled={disabled}
-                                >
-                                    <Smile className="w-4 h-4" />
-                                </Button>
-                            </div>
-                        )}
+
                     </div>
                 </div>
 
-                {/* Additional action buttons - Hidden on mobile for space */}
-                {!isMobile && (
-                    <div className="flex items-center gap-2 mb-1">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            disabled={disabled}
-                        >
-                            <Image className="w-4 h-4" />
-                        </Button>
 
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            disabled={disabled}
-                        >
-                            <Mic className="w-4 h-4" />
-                        </Button>
-                    </div>
-                )}
 
                 {/* Send button */}
                 <Button

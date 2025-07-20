@@ -10,6 +10,8 @@ import ServiceForm from "./pages/ServiceForm"
 import ServiceDetail from "./pages/ServiceDetail"
 import MyServices from "./pages/MyServices"
 import Signup from "./pages/Signup"
+import EmailVerification from "./pages/EmailVerification"
+import VerificationSent from "./pages/VerificationSent"
 import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
@@ -36,7 +38,7 @@ import EventDetails from "./pages/EventsDetail.tsx";
 
 // Composant pour les routes protégées
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -49,6 +51,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
+  // If user exists but email is not verified, redirect to verification
+  if (user && !user.email_verified) {
+    return <Navigate to="/verify-email" state={{
+      email: user.email,
+      userId: user.id,
+      fromProtectedRoute: true
+    }} replace />;
+  }
+
+  // If no user at all, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -229,6 +241,8 @@ function AppRoutes() {
       } />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify-email" element={<EmailVerification />} />
+      <Route path="/verification-sent" element={<VerificationSent />} />
       <Route path="/test-carousel" element={<TestCarousel />} />
       <Route path="/i18n-test" element={<I18nTest />} />
     </Routes>

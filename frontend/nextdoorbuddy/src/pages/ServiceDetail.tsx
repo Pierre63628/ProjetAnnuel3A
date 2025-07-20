@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import serviceService, { Service } from '../services/service.service';
 import Header from '../components/Header';
+import ContactButton from '../components/ContactButton';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { motion } from 'framer-motion';
@@ -20,7 +21,6 @@ import {
     Phone,
     AlertCircle,
     Award,
-    MessageCircle,
     Wrench
 } from 'lucide-react';
 
@@ -385,12 +385,15 @@ function ServiceDetail() {
                                     )}
 
                                     {/* Actions de contact */}
-                                    {!canEdit && (
+                                    {!canEdit && service.utilisateur_id && (
                                         <div className="space-y-2 pt-4 border-t">
-                                            <Button className="w-full" size="sm">
-                                                <MessageCircle className="w-4 h-4 mr-2" />
-                                                Contacter
-                                            </Button>
+                                            <ContactButton
+                                                targetUserId={service.utilisateur_id}
+                                                targetUserName={`${service.prenom} ${service.nom}`}
+                                                className="w-full"
+                                                size="sm"
+                                                variant="solid"
+                                            />
                                             {service.email && (
                                                 <Button variant="outline" className="w-full" size="sm" asChild>
                                                     <a href={`mailto:${service.email}`}>
