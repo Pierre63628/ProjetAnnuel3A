@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import LanguageSelector from './LanguageSelector';
 import NotificationBadge from './NotificationBadge';
 import { useUnreadMessageCount } from '../hooks/useUnreadMessageCount';
