@@ -11,6 +11,7 @@ export interface User {
     date_naissance?: Date;
     telephone?: string;
     quartier_id?: number;
+    profile_picture?: string;
     role?: string;
     email_verified?: boolean;
     email_verified_at?: Date;
@@ -55,8 +56,8 @@ export class UserModel {
 
             const result = await pool.query(
                 `INSERT INTO "Utilisateur"
-                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id, email_verified)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id, profile_picture, email_verified)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
                 [
                     userData.nom,
                     userData.prenom,
@@ -66,6 +67,7 @@ export class UserModel {
                     userData.date_naissance || null,
                     userData.telephone || null,
                     userData.quartier_id || null,
+                    userData.profile_picture || null,
                     userData.email_verified || false
                 ]
             );
@@ -151,6 +153,11 @@ export class UserModel {
                 values.push(userData.quartier_id);
             }
 
+            if (userData.profile_picture !== undefined) {
+                fields.push(`profile_picture = $${paramIndex++}`);
+                values.push(userData.profile_picture);
+            }
+
             if (userData.role !== undefined) {
                 fields.push(`role = $${paramIndex++}`);
                 values.push(userData.role);
@@ -219,6 +226,7 @@ export class UserModel {
                     u.adresse,
                     u.telephone,
                     u.date_naissance,
+                    u.profile_picture,
                     u.role,
                     u.email_verified,
                     u.email_verified_at,

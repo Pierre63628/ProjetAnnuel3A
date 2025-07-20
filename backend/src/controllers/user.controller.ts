@@ -83,7 +83,7 @@ export const updateUser = async (req: Request, res: Response) => {
         // Extraire les données à mettre à jour
         const {
             nom, prenom, email, password, adresse,
-            date_naissance, telephone, quartier_id, role
+            date_naissance, telephone, quartier_id, profile_picture, role
         } = req.body;
 
         // Vérifier si l'email est déjà utilisé par un autre utilisateur
@@ -110,6 +110,7 @@ export const updateUser = async (req: Request, res: Response) => {
         if (date_naissance !== undefined) userData.date_naissance = date_naissance ? new Date(date_naissance) : undefined;
         if (telephone !== undefined) userData.telephone = telephone;
         if (quartier_id !== undefined) userData.quartier_id = quartier_id;
+        if (profile_picture !== undefined) userData.profile_picture = profile_picture;
         if (role !== undefined && req.user.role === 'admin') userData.role = role;
 
         // Mettre à jour l'utilisateur

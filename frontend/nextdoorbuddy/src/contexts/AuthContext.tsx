@@ -12,6 +12,7 @@ interface User {
     date_naissance?: string;
     telephone?: string;
     quartier_id?: number;
+    profile_picture?: string;
     role?: string;
     email_verified?: boolean;
     email_verified_at?: string;

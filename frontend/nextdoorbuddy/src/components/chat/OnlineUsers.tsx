@@ -6,10 +6,10 @@ import { Button } from '../ui/button';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMobileChat } from '../../contexts/MobileChatContext';
+import UserAvatar from '../UserAvatar';
 import messagingService from '../../services/messaging.service';
 import {
     Users,
-    Circle,
     MessageCircle,
     Crown,
     User,
@@ -53,10 +53,6 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom, onToggleV
             default:
                 return 'Hors ligne';
         }
-    };
-
-    const getInitials = (nom: string, prenom: string) => {
-        return `${prenom?.charAt(0) || ''}${nom?.charAt(0) || ''}`.toUpperCase();
     };
 
     const formatLastSeen = (lastSeen: string) => {
@@ -199,22 +195,12 @@ const OnlineUsers: React.FC<OnlineUsersProps> = ({ users, currentRoom, onToggleV
                                                 <div className={`relative flex-shrink-0 ${
                                                     isMobile ? 'mr-3' : 'mr-3'
                                                 }`}>
-                                                    <div className={`rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium ${
-                                                        isMobile ? 'w-12 h-12 text-sm' : 'w-10 h-10 text-sm'
-                                                    }`}>
-                                                        {userPresence.user ?
-                                                            getInitials(userPresence.user.nom, userPresence.user.prenom) :
-                                                            '?'
-                                                        }
-                                                    </div>
-                                                    {/* Status indicator */}
-                                                    <div className="absolute -bottom-1 -right-1">
-                                                        <Circle
-                                                            className={`${getStatusColor(userPresence.status)} fill-current ${
-                                                                isMobile ? 'w-5 h-5' : 'w-4 h-4'
-                                                            }`}
-                                                        />
-                                                    </div>
+                                                    <UserAvatar
+                                                        user={userPresence.user}
+                                                        size={isMobile ? 'lg' : 'md'}
+                                                        showOnlineStatus={true}
+                                                        isOnline={userPresence.status === 'online'}
+                                                    />
                                                 </div>
 
                                                 {/* User info */}

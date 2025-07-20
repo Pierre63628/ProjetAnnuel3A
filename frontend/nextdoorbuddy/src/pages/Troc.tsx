@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import ContactButton from '../components/ContactButton';
+import { useAuth } from '../contexts/AuthContext';
 import { trocService, AnnonceTroc } from '../services/troc.service';
 import ImageCarousel from '../components/ImageCarousel';
 import ErrorBoundary from '../components/ErrorBoundary';
 
 function Troc() {
+    const { user } = useAuth();
     const [annonces, setAnnonces] = useState<AnnonceTroc[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -318,9 +321,24 @@ function Troc() {
                                             >
                                                 Voir détails
                                             </Link>
-                                            <button className="flex-1 rounded-md bg-blue-500 px-4 py-2 text-sm text-white hover:bg-blue-600 transition-colors">
-                                                Contacter
-                                            </button>
+
+                                            {/* Contact Button - Only show for other users' trocs */}
+                                            {user && annonce.utilisateur_id && annonce.utilisateur_id !== user.id ? (
+                                                <div className="flex-1">
+                                                    <ContactButton
+                                                        targetUserId={annonce.utilisateur_id}
+                                                        targetUserName={`${annonce.prenom} ${annonce.nom}`}
+                                                        className="w-full"
+                                                        size="sm"
+                                                        variant="solid"
+                                                        showIcon={false}
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div className="flex-1 rounded-md bg-gray-300 px-4 py-2 text-sm text-gray-500 text-center cursor-not-allowed">
+                                                    {!user ? 'Connectez-vous' : 'Votre annonce'}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 );

@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { trocService, AnnonceTroc } from '../services/troc.service';
 import { getImageUrl } from '../utils/imageUtils';
 import Header from '../components/Header';
+import ContactButton from '../components/ContactButton';
 import ImageCarousel from '../components/ImageCarousel';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -20,7 +21,6 @@ import {
     Euro,
     Edit,
     Trash2,
-    Mail,
     Clock,
     AlertCircle,
     CheckCircle,
@@ -402,12 +402,17 @@ const TrocDetail = () => {
                                         )}
 
                                         {/* Contact button - only show if not owner */}
-                                        {user && user.id !== troc.utilisateur_id && (
+                                        {user && user.id !== troc.utilisateur_id && troc.utilisateur_id && (
                                             <div className="pt-4 border-t border-gray-200">
-                                                <Button className="w-full" size="lg">
-                                                    <Mail className="w-4 h-4 mr-2" />
+                                                <ContactButton
+                                                    targetUserId={troc.utilisateur_id}
+                                                    targetUserName={`${troc.prenom} ${troc.nom}`}
+                                                    className="w-full"
+                                                    size="lg"
+                                                    variant="solid"
+                                                >
                                                     Contacter le vendeur
-                                                </Button>
+                                                </ContactButton>
                                                 <p className="text-xs text-gray-500 mt-2 text-center">
                                                     Cliquez pour envoyer un message
                                                 </p>

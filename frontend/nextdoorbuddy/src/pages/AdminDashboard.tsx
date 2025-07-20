@@ -93,7 +93,8 @@ const AdminDashboard = () => {
                             Tableau de bord administrateur
                         </h1>
                         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                            Gérez et supervisez votre plateforme NextDoorBuddy
+                            Gérez et supervisez votre plateforme Les copains du Quartier
+
                         </p>
                     </div>
                 </motion.div>

@@ -84,6 +84,16 @@ class MessagingService {
         await this.handleResponse<void>(response);
     }
 
+    // Create or get direct message room between two users
+    async createOrGetDirectMessage(targetUserId: number): Promise<ChatRoom> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/direct-message`, {
+            method: 'POST',
+            headers: this.getAuthHeaders(),
+            body: JSON.stringify({ target_user_id: targetUserId })
+        });
+        return this.handleResponse<ChatRoom>(response);
+    }
+
     // Create or get direct message room for offline users
     async createOfflineDirectMessage(targetUserId: number): Promise<ChatRoom> {
         const response = await fetch(`${API_BASE_URL}/api/messaging/offline-direct-message`, {

@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { useChat } from '../../contexts/ChatContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMobileChat } from '../../contexts/MobileChatContext';
+import UserAvatar from '../UserAvatar';
 import messagingService from '../../services/messaging.service';
 import {
     Users,
@@ -291,7 +292,6 @@ const UserItem: React.FC<UserItemProps> = ({
     onStartDirectMessage,
     getStatusColor,
     getStatusText,
-    getInitials,
     formatLastSeen,
     isMobile
 }) => {
@@ -306,21 +306,12 @@ const UserItem: React.FC<UserItemProps> = ({
                     <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3 flex-1 min-w-0">
                             {/* Avatar */}
-                            <div className="relative">
-                                <div className={`${
-                                    isMobile ? 'w-8 h-8' : 'w-10 h-10'
-                                } bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-medium ${
-                                    isMobile ? 'text-xs' : 'text-sm'
-                                }`}>
-                                    {getInitials(user.user?.nom || '', user.user?.prenom || '')}
-                                </div>
-                                {/* Status indicator */}
-                                <div className={`absolute -bottom-0.5 -right-0.5 ${
-                                    isMobile ? 'w-3 h-3' : 'w-3.5 h-3.5'
-                                } rounded-full border-2 border-white ${
-                                    isOnline ? 'bg-green-500' : 'bg-gray-400'
-                                }`} />
-                            </div>
+                            <UserAvatar
+                                user={user.user}
+                                size={isMobile ? 'md' : 'lg'}
+                                showOnlineStatus={true}
+                                isOnline={user.status === 'online'}
+                            />
 
                             {/* User info */}
                             <div className="flex-1 min-w-0">
