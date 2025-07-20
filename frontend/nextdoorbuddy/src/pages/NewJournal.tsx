@@ -14,6 +14,7 @@ import {
     AlertCircle
 } from 'lucide-react';
 import journalService, { JournalArticle } from '../services/journal.service';
+import uploadService from '../services/upload.service';
 
 const NewJournal: React.FC = () => {
     const { user } = useAuth();
@@ -266,8 +267,8 @@ const NewJournal: React.FC = () => {
                                             {/* Image à gauche */}
                                             {article.imageUrl && (
                                                 <div className="flex-shrink-0 w-32">
-                                                    <img 
-                                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
+                                                    <img
+                                                        src={uploadService.getImageUrl(article.imageUrl)}
                                                         alt={`Image de l'article : ${article.title}`}
                                                         className="w-full h-24 object-cover rounded-lg shadow-md"
                                                         onError={(e) => {

@@ -13,11 +13,11 @@ const handleMulterError = (err: any, req: any, res: any, next: any) => {
     next();
 };
 
-// Route pour l'upload d'une seule image
-router.post('/image', upload.single('image'), handleMulterError, handleImageUpload);
+// Route pour l'upload d'une seule image (avec authentification)
+router.post('/image', authenticateJWT, upload.single('image'), handleMulterError, handleImageUpload);
 
-// Route pour l'upload de plusieurs images (max 5)
-router.post('/images', upload.array('images', 5), handleMulterError, handleMultipleImageUpload);
+// Route pour l'upload de plusieurs images (max 5) (avec authentification)
+router.post('/images', authenticateJWT, upload.array('images', 5), handleMulterError, handleMultipleImageUpload);
 
 // Route de test sans authentification
 router.post('/test', upload.single('image'), handleMulterError, handleImageUpload);
@@ -27,7 +27,7 @@ router.get('/test', (req, res) => {
     res.json({ message: 'Upload service is working' });
 });
 
-// Route pour supprimer une image
-router.delete('/image/:filename', deleteImage);
+// Route pour supprimer une image (avec authentification)
+router.delete('/image/:filename', authenticateJWT, deleteImage);
 
 export default router;

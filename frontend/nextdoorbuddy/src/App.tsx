@@ -18,20 +18,19 @@ import AdminQuartiers from "./pages/AdminQuartiers"
 import AdminTrocs from "./pages/AdminTrocs"
 import AdminServices from "./pages/AdminServices"
 import AdminDashboard from "./pages/AdminDashboard"
-
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
 import MyEvents from "./pages/MyEvents"
 import Chat from "./pages/Chat"
+import I18nTest from "./pages/I18nTest"
 import Journal from "./pages/Journal"
 import NewJournal from "./pages/NewJournal"
 import CreateJournal from "./pages/CreateJournal"
-import ArticleForm from "./pages/ArticleForm"
 import ArticleDetail from "./pages/ArticleDetail"
+import ArticleForm from "./pages/ArticleForm"
 import EditionDetail from "./pages/EditionDetail"
 
-import I18nTest from "./pages/I18nTest"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ChatProvider } from "./contexts/ChatContext"
 import EventDetails from "./pages/EventsDetail.tsx";
@@ -167,19 +166,16 @@ function AppRoutes() {
           <Journal />
         </ProtectedRoute>
       } />
-
       <Route path="/journal/new" element={
         <ProtectedRoute>
           <NewJournal />
         </ProtectedRoute>
       } />
-
       <Route path="/journal/create-journal" element={
         <ProtectedRoute>
           <CreateJournal />
         </ProtectedRoute>
       } />
-
       <Route path="/journal/create" element={
         <ProtectedRoute>
           <ArticleForm />
@@ -200,6 +196,7 @@ function AppRoutes() {
           <EditionDetail />
         </ProtectedRoute>
       } />
+
       <Route path="/events/:id" element={
         <ProtectedRoute>
           <EventDetails />

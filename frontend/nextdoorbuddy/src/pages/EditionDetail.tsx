@@ -16,6 +16,7 @@ import {
     FileDown
 } from 'lucide-react';
 import journalService, { JournalArticle, Edition } from '../services/journal.service';
+import uploadService from '../services/upload.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -129,7 +130,7 @@ const EditionDetail: React.FC = () => {
                 let articleLayout = '';
                 
                 if (article.imageUrl) {
-                    const imageUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`;
+                    const imageUrl = uploadService.getImageUrl(article.imageUrl);
                     articleLayout = `
                         <div style="margin-bottom: 20px;">
                             <div style="text-align: center; margin-bottom: 15px;">
@@ -370,8 +371,8 @@ const EditionDetail: React.FC = () => {
                                                 {/* Image à gauche */}
                                                 {article.imageUrl && (
                                                     <div className="flex-shrink-0 lg:w-48">
-                                                        <img 
-                                                            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
+                                                        <img
+                                                            src={uploadService.getImageUrl(article.imageUrl)}
                                                             alt={`Image de l'article : ${article.title}`}
                                                             className="w-full h-32 lg:h-40 object-cover rounded-lg shadow-md"
                                                             onError={(e) => {

@@ -36,6 +36,8 @@ const router = express.Router();
 // === ROUTES PUBLIQUES (pas d'authentification requise) ===
 // Pour la visualisation du journal par tous les visiteurs
 router.get('/', getPublicArticles);
+router.get('/public', getPublicArticles);
+router.get('/articles', getPublicArticles);
 router.get('/stats', getPublicArticleStats);
 
 // === ROUTES AVEC AUTHENTIFICATION ===

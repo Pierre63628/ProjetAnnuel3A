@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import journalService, { JournalArticle } from '../services/journal.service';
+import uploadService from '../services/upload.service';
 import RejectModal from '../components/RejectModal';
 
 const ArticleDetail: React.FC = () => {
@@ -197,8 +198,8 @@ const ArticleDetail: React.FC = () => {
                         <Card className="shadow-lg border-0 overflow-hidden">
                             <CardContent className="p-0">
                                 <div className="relative">
-                                    <img 
-                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
+                                    <img
+                                        src={uploadService.getImageUrl(article.imageUrl)}
                                         alt={`Image de l'article : ${article.title}`}
                                         className="w-full h-64 md:h-80 object-cover"
                                         onError={(e) => {

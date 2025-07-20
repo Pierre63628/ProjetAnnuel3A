@@ -121,7 +121,7 @@ const ArticleForm: React.FC = () => {
             const formData = new FormData();
             formData.append('image', file);
             
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/upload/image`, {
+            const response = await fetch('/api/upload/image', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`

@@ -24,6 +24,7 @@ import {
     Image
 } from 'lucide-react';
 import journalService, { JournalArticle, Edition } from '../services/journal.service';
+import uploadService from '../services/upload.service';
 
 const Journal: React.FC = () => {
     const { user } = useAuth();
@@ -554,8 +555,8 @@ const Journal: React.FC = () => {
                                             {/* Image à gauche */}
                                             {article.imageUrl && (
                                                 <div className="flex-shrink-0 lg:w-48">
-                                                    <img 
-                                                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${article.imageUrl}`} 
+                                                    <img
+                                                        src={uploadService.getImageUrl(article.imageUrl)}
                                                         alt={`Image de l'article : ${article.title}`}
                                                         className="w-full h-32 lg:h-40 object-cover rounded-lg shadow-md"
                                                         onError={(e) => {
