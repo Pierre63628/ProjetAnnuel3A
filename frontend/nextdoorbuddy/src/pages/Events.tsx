@@ -10,6 +10,8 @@ import {
     getAllEvenements,
     deleteEvenement,
     checkParticipation,
+    participateToEvenement,
+    cancelParticipation,
     Evenement
 } from '../services/evenement.service';
 import { Card, CardContent } from '../components/ui/card';
@@ -113,6 +115,35 @@ const Events = () => {
         } catch (err) {
             console.error(err);
             alert("Impossible de supprimer l'événement.");
+        }
+    };
+
+    const handleParticipation = async (eventId: number, isCurrentlyParticipant: boolean) => {
+        if (!user) return;
+
+        try {
+            if (isCurrentlyParticipant) {
+                await cancelParticipation(eventId);
+                setParticipationStatus(prev => ({
+                    ...prev,
+                    [eventId]: {
+                        isParticipant: false,
+                        participantCount: prev[eventId]?.participantCount ? prev[eventId].participantCount - 1 : 0
+                    }
+                }));
+            } else {
+                await participateToEvenement(eventId);
+                setParticipationStatus(prev => ({
+                    ...prev,
+                    [eventId]: {
+                        isParticipant: true,
+                        participantCount: prev[eventId]?.participantCount ? prev[eventId].participantCount + 1 : 1
+                    }
+                }));
+            }
+        } catch (err: any) {
+            console.error('Error handling participation:', err);
+            alert(err.message || 'Erreur lors de la gestion de la participation.');
         }
     };
 
@@ -395,22 +426,37 @@ const Events = () => {
                                         </div>
 
                                         {/* Action Buttons */}
-                                        <div className="flex gap-2 mt-auto">
-                                            <Button asChild size="md" className="flex-1 shadow-md hover:shadow-lg transition-shadow">
-                                                <Link to={`/events/${evenement.id}`}>
-                                                    Voir détails
-                                                </Link>
-                                            </Button>
-                                            {canDeleteEvent(user, evenement) && (
+                                        <div className="space-y-2 mt-auto">
+                                            {/* Participation button for logged users and future events */}
+                                            {user && !isPast && (
                                                 <Button
                                                     size="md"
-                                                    variant="destructive"
-                                                    onClick={() => handleDeleteEvenement(evenement.id)}
-                                                    className="shadow-md hover:shadow-lg transition-shadow"
+                                                    variant={eventStatus?.isParticipant ? "outline" : "solid"}
+                                                    onClick={() => handleParticipation(evenement.id, eventStatus?.isParticipant || false)}
+                                                    className="w-full shadow-md hover:shadow-lg transition-shadow"
                                                 >
-                                                    Supprimer
+                                                    <Users className="w-4 h-4 mr-2" />
+                                                    {eventStatus?.isParticipant ? 'Se désinscrire' : 'Participer'}
                                                 </Button>
                                             )}
+
+                                            <div className="flex gap-2">
+                                                <Button asChild size="md" className="flex-1 shadow-md hover:shadow-lg transition-shadow">
+                                                    <Link to={`/events/${evenement.id}`}>
+                                                        Voir détails
+                                                    </Link>
+                                                </Button>
+                                                {canDeleteEvent(user, evenement) && (
+                                                    <Button
+                                                        size="md"
+                                                        variant="destructive"
+                                                        onClick={() => handleDeleteEvenement(evenement.id)}
+                                                        className="shadow-md hover:shadow-lg transition-shadow"
+                                                    >
+                                                        Supprimer
+                                                    </Button>
+                                                )}
+                                            </div>
                                         </div>
                                     </CardContent>
                                 </Card>

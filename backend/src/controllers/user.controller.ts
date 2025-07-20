@@ -20,6 +20,24 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+// Récupérer tous les utilisateurs avec leurs informations de quartier (admin seulement)
+export const getAllUsersWithQuartier = async (req: Request, res: Response) => {
+    try {
+        const users = await UserModel.findAllWithQuartier();
+
+        // Supprimer les mots de passe de la réponse
+        const usersWithoutPasswords = users.map(user => {
+            const { password, ...userWithoutPassword } = user;
+            return userWithoutPassword;
+        });
+
+        res.status(200).json(usersWithoutPasswords);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs avec quartier:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la récupération des utilisateurs avec quartier.' });
+    }
+};
+
 // Récupérer un utilisateur par ID
 export const getUserById = async (req: Request, res: Response) => {
     try {
@@ -152,6 +170,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export default {
     getAllUsers,
+    getAllUsersWithQuartier,
     getUserById,
     updateUser,
     deleteUser

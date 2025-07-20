@@ -186,24 +186,34 @@ export const getEvenementParticipants = async (id: number): Promise<Participant[
 };
 
 // Participer à un événement
-export const participateToEvenement = async (id: number): Promise<boolean> => {
+export const participateToEvenement = async (id: number): Promise<{success: boolean, message?: string, participantCount?: number}> => {
     try {
-        await api.post(`/evenements/${id}/participate`, {});
-        return true;
-    } catch (error) {
-        console.error(`Erreur lors de la participation à l'événement ${id}`);
-        return false;
+        const response = await api.post(`/evenements/${id}/participate`, {});
+        return {
+            success: true,
+            message: response.message,
+            participantCount: response.participantCount
+        };
+    } catch (error: any) {
+        console.error(`Erreur lors de la participation à l'événement ${id}:`, error);
+        const message = error.response?.data?.message || 'Erreur lors de la participation à l\'événement';
+        throw new Error(message);
     }
 };
 
 // Annuler sa participation à un événement
-export const cancelParticipation = async (id: number): Promise<boolean> => {
+export const cancelParticipation = async (id: number): Promise<{success: boolean, message?: string, participantCount?: number}> => {
     try {
-        await api.delete(`/evenements/${id}/participate`);
-        return true;
-    } catch (error) {
-        console.error(`Erreur lors de l'annulation de la participation à l'événement ${id}`);
-        return false;
+        const response = await api.delete(`/evenements/${id}/participate`);
+        return {
+            success: true,
+            message: response.message,
+            participantCount: response.participantCount
+        };
+    } catch (error: any) {
+        console.error(`Erreur lors de l'annulation de la participation à l'événement ${id}:`, error);
+        const message = error.response?.data?.message || 'Erreur lors de l\'annulation de la participation';
+        throw new Error(message);
     }
 };
 

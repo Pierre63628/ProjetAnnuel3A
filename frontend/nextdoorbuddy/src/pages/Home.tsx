@@ -195,6 +195,12 @@ const Home = () => {
                     </div>
                 </motion.div>
 
+                {/* Quick Stats */}
+                <DashboardStats
+                    todaysEventsCount={todaysEvents.length}
+                    userEventsCount={userEvents.length}
+                />
+
                 {/* Available Trocs Section */}
                 <motion.div
                     className="mb-8"
@@ -492,13 +498,6 @@ const Home = () => {
                         </CardContent>
                     </Card>
                 </motion.div>
-
-                {/* Quick Stats */}
-                <DashboardStats
-                    todaysEventsCount={todaysEvents.length}
-                    userEventsCount={userEvents.length}
-                    loading={loading}
-                />
 
                 {/* Today's Events Section */}
                 <motion.div

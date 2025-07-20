@@ -39,6 +39,18 @@ const Login = () => {
             await login(email, password)
             navigate('/')
         } catch (err: any) {
+            // Handle email verification error
+            if (err.emailVerified === false && err.user) {
+                navigate('/verify-email', {
+                    state: {
+                        email: err.user.email,
+                        userId: err.user.id,
+                        fromLogin: true
+                    }
+                })
+                return
+            }
+
             setError(err.message || t('auth.login.errors.invalidCredentials'))
         } finally {
             setIsLoading(false)

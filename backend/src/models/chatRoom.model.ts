@@ -256,27 +256,130 @@ export class ChatRoomModel {
 
     // Find existing direct message room between two users
     static async findDirectMessageRoom(userId1: number, userId2: number): Promise<ChatRoom | null> {
-        const query = `
+        // Normalize user IDs to ensure consistent ordering
+        const [minUserId, maxUserId] = userId1 < userId2 ? [userId1, userId2] : [userId2, userId1];
+        const normalizedId = `${minUserId}:${maxUserId}`;
+
+        // First try to find using the normalized identifier (faster)
+        let query = `
             SELECT cr.*
             FROM "ChatRoom" cr
             WHERE cr.room_type = 'direct'
             AND cr.is_active = true
-            AND EXISTS (
-                SELECT 1 FROM "ChatRoomMember" crm1
-                WHERE crm1.chat_room_id = cr.id AND crm1.user_id = $1
-            )
-            AND EXISTS (
-                SELECT 1 FROM "ChatRoomMember" crm2
-                WHERE crm2.chat_room_id = cr.id AND crm2.user_id = $2
-            )
-            AND (
-                SELECT COUNT(*) FROM "ChatRoomMember" crm
-                WHERE crm.chat_room_id = cr.id
-            ) = 2
+            AND cr.direct_room_identifier = $1
             LIMIT 1
         `;
 
-        const result = await pool.query(query, [userId1, userId2]);
+        let result = await pool.query(query, [normalizedId]);
+
+        // If not found with identifier, fall back to the member-based search
+        // (for rooms created before the identifier was implemented)
+        if (result.rows.length === 0) {
+            query = `
+                SELECT cr.*
+                FROM "ChatRoom" cr
+                WHERE cr.room_type = 'direct'
+                AND cr.is_active = true
+                AND EXISTS (
+                    SELECT 1 FROM "ChatRoomMember" crm1
+                    WHERE crm1.chat_room_id = cr.id AND crm1.user_id = $1
+                )
+                AND EXISTS (
+                    SELECT 1 FROM "ChatRoomMember" crm2
+                    WHERE crm2.chat_room_id = cr.id AND crm2.user_id = $2
+                )
+                AND (
+                    SELECT COUNT(*) FROM "ChatRoomMember" crm
+                    WHERE crm.chat_room_id = cr.id
+                ) = 2
+                ORDER BY cr.id ASC
+                LIMIT 1
+            `;
+
+            result = await pool.query(query, [minUserId, maxUserId]);
+
+            // If found, update it with the normalized identifier for future lookups
+            if (result.rows.length > 0) {
+                await pool.query(
+                    'UPDATE "ChatRoom" SET direct_room_identifier = $1 WHERE id = $2',
+                    [normalizedId, result.rows[0].id]
+                );
+            }
+        }
+
         return result.rows[0] || null;
+    }
+
+    // Create a direct message room between two users with atomic operation
+    static async createDirectMessageRoom(
+        userId1: number,
+        userId2: number,
+        quartierId: number,
+        user1Name: string,
+        user2Name: string
+    ): Promise<ChatRoom | null> {
+        // Normalize user IDs to ensure consistent ordering
+        const [minUserId, maxUserId] = userId1 < userId2 ? [userId1, userId2] : [userId2, userId1];
+        const [minUserName, maxUserName] = userId1 < userId2 ? [user1Name, user2Name] : [user2Name, user1Name];
+
+        const client = await pool.connect();
+
+        try {
+            await client.query('BEGIN');
+
+            // Double-check if room already exists (race condition protection)
+            const existingRoom = await this.findDirectMessageRoom(minUserId, maxUserId);
+            if (existingRoom) {
+                await client.query('ROLLBACK');
+                return existingRoom;
+            }
+
+            // Create normalized room name (always in alphabetical order by user ID)
+            const roomName = `${minUserName} & ${maxUserName}`;
+            const description = `Conversation privée entre ${minUserName} et ${maxUserName}`;
+
+            // Create the chat room
+            const roomQuery = `
+                INSERT INTO "ChatRoom" (name, description, quartier_id, room_type, created_by)
+                VALUES ($1, $2, $3, $4, $5)
+                RETURNING *
+            `;
+
+            const roomResult = await client.query(roomQuery, [
+                roomName,
+                description,
+                quartierId,
+                'direct',
+                minUserId
+            ]);
+
+            const room = roomResult.rows[0];
+
+            // Add both users as members
+            await client.query(
+                'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role, last_read_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)',
+                [room.id, minUserId, 'admin']
+            );
+
+            await client.query(
+                'INSERT INTO "ChatRoomMember" (chat_room_id, user_id, role, last_read_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP)',
+                [room.id, maxUserId, 'member']
+            );
+
+            // Set the normalized room identifier for duplicate prevention
+            const normalizedId = `${minUserId}:${maxUserId}`;
+            await client.query(
+                'UPDATE "ChatRoom" SET direct_room_identifier = $1 WHERE id = $2',
+                [normalizedId, room.id]
+            );
+
+            await client.query('COMMIT');
+            return room;
+        } catch (error) {
+            await client.query('ROLLBACK');
+            throw error;
+        } finally {
+            client.release();
+        }
     }
 }

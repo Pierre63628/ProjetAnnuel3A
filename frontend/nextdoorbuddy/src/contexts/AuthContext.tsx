@@ -13,6 +13,8 @@ interface User {
     telephone?: string;
     quartier_id?: number;
     role?: string;
+    email_verified?: boolean;
+    email_verified_at?: string;
     created_at?: string;
     updated_at?: string;
 }
@@ -24,10 +26,12 @@ interface AuthContextType {
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (email: string, password: string) => Promise<void>;
-    register: (userData: any) => Promise<void>;
+    register: (userData: any) => Promise<{ user: User; verification: any }>;
     logout: () => void;
     refreshAccessToken: () => Promise<string | null>;
     updateUserInfo: (userData: Partial<User>) => void;
+    verifyEmail: (userId: number, code: string) => Promise<void>;
+    resendVerificationEmail: (userId: number) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -89,19 +93,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 body: JSON.stringify({ email, password }),
             });
 
-            if (!response.ok) {
-                let errorMessage = 'Échec de la connexion';
-                try {
-                    const errorData = await response.json();
-                    errorMessage = errorData.message || errorMessage;
-                } catch (jsonError) {
-                    // Si la réponse n'est pas du JSON valide, utiliser le message par défaut
-                    console.error('Erreur de parsing JSON:', jsonError);
-                }
-                throw new Error(errorMessage);
-            }
-
             const data = await response.json();
+
+            if (!response.ok) {
+                // Handle email verification error specifically
+                if (response.status === 403 && !data.emailVerified) {
+                    const error = new Error(data.message || 'Email non vérifié');
+                    (error as any).emailVerified = false;
+                    (error as any).verificationStatus = data.verificationStatus;
+                    (error as any).user = data.user;
+                    throw error;
+                }
+
+                throw new Error(data.message || 'Échec de la connexion');
+            }
 
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('accessToken', data.accessToken);
@@ -116,7 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const register = async (userData: any) => {
+    const register = async (userData: any): Promise<{ user: User; verification: any }> => {
         try {
             const response = await fetch(`${API_URL}/auth/register`, {
                 method: 'POST',
@@ -133,13 +138,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             const data = await response.json();
 
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('accessToken', data.accessToken);
-            localStorage.setItem('refreshToken', data.refreshToken);
-
-            setUser(data.user);
-            setAccessToken(data.accessToken);
-            setRefreshToken(data.refreshToken);
+            // Don't auto-login anymore, just return the data
+            return {
+                user: data.user,
+                verification: data.verification
+            };
         } catch (error) {
             console.error('Erreur d\'inscription:', error);
             throw error;
@@ -207,19 +210,76 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('user', JSON.stringify(updatedUser));
     };
 
+    const verifyEmail = async (userId: number, code: string) => {
+        try {
+            const response = await fetch(`${API_URL}/auth/verify-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, code }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                const error = new Error(data.message || 'Erreur lors de la vérification');
+                (error as any).remainingAttempts = data.remainingAttempts;
+                throw error;
+            }
+
+            // Auto-login after successful verification
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('accessToken', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
+
+            setUser(data.user);
+            setAccessToken(data.accessToken);
+            setRefreshToken(data.refreshToken);
+        } catch (error) {
+            console.error('Erreur de vérification email:', error);
+            throw error;
+        }
+    };
+
+    const resendVerificationEmail = async (userId: number) => {
+        try {
+            const response = await fetch(`${API_URL}/auth/resend-verification`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Erreur lors du renvoi du code');
+            }
+
+            return data;
+        } catch (error) {
+            console.error('Erreur de renvoi de vérification:', error);
+            throw error;
+        }
+    };
+
     return (
         <AuthContext.Provider
             value={{
                 user,
                 accessToken,
                 refreshToken,
-                isAuthenticated: !!user,
+                isAuthenticated: !!user && user.email_verified === true,
                 isLoading,
                 login,
                 register,
                 logout,
                 refreshAccessToken,
                 updateUserInfo,
+                verifyEmail,
+                resendVerificationEmail,
             }}
         >
             {children}

@@ -16,6 +16,19 @@ services:
       - DB_USER=user
       - DB_PASSWORD=rootpass
       - DB_NAME=nextdoorbuddy
+      # Email Configuration
+      
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER=doorbudy@gmail.com
+      - SMTP_PASS=jymi ameu shij siys 
+      - FROM_EMAIL=noreply@doorbudy.cloud
+      - FROM_NAME=DoorBudy
+      # Verification Settings
+      - VERIFICATION_CODE_EXPIRY=15
+      - MAX_VERIFICATION_ATTEMPTS=3
+      - MAX_RESEND_ATTEMPTS=3
     depends_on:
       - db
     networks:
