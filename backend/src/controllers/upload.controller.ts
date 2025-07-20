@@ -12,19 +12,12 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         // Dans Docker, le volume est monté sur /app/uploads
         const uploadDir = '/app/uploads/images';
-        console.log('=== MULTER STORAGE ===');
-        console.log('Current working directory:', process.cwd());
-        console.log('Upload directory (Docker):', uploadDir);
-        console.log('Directory exists:', fs.existsSync(uploadDir));
-        
+
         // Créer le dossier s'il n'existe pas
         if (!fs.existsSync(uploadDir)) {
-            console.log('Creating directory:', uploadDir);
             fs.mkdirSync(uploadDir, { recursive: true });
-            console.log('Directory created successfully');
         }
-        
-        console.log('Using directory:', uploadDir);
+
         cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
@@ -38,18 +31,10 @@ const storage = multer.diskStorage({
 
 // Filtre pour n'accepter que les images
 const fileFilter = (req: any, file: any, cb: any) => {
-    console.log('=== MULTER FILE FILTER ===');
-    console.log('File filter - mimetype:', file.mimetype);
-    console.log('File filter - originalname:', file.originalname);
-    console.log('File filter - fieldname:', file.fieldname);
-    console.log('File filter - size:', file.size);
-
     // Vérifier si c'est une image
     if (file.mimetype && file.mimetype.startsWith('image/')) {
-        console.log('File filter - ACCEPTED: valid image type');
         cb(null, true);
     } else {
-        console.log('File filter - REJECTED: mimetype not allowed:', file.mimetype);
         cb(new Error('Seules les images sont autorisées (JPEG, PNG, GIF, WebP, etc.)'), false);
     }
 };
@@ -80,15 +65,9 @@ export const handleImageUpload = async (req: Request, res: Response): Promise<vo
 
         // Vérifier si le fichier a été réellement sauvegardé
         const expectedPath = path.join('/app/uploads', 'images', req.file.filename);
-        console.log('BACKEND UPLOAD: Vérification du fichier sauvegardé');
-        console.log('BACKEND UPLOAD: Chemin attendu:', expectedPath);
-        console.log('BACKEND UPLOAD: Fichier existe:', fs.existsSync(expectedPath));
-        
-        if (fs.existsSync(expectedPath)) {
-            const stats = fs.statSync(expectedPath);
-            console.log('BACKEND UPLOAD: Taille du fichier:', stats.size);
-        } else {
-            console.log('BACKEND UPLOAD: ERREUR - Le fichier n\'existe pas sur le disque !');
+
+        if (!fs.existsSync(expectedPath)) {
+            throw new Error('Le fichier n\'a pas été sauvegardé correctement');
         }
 
         // Construire l'URL de l'image - utiliser une URL relative qui sera servie par le frontend
@@ -107,13 +86,10 @@ export const handleImageUpload = async (req: Request, res: Response): Promise<vo
             filename: req.file.filename
         };
 
-        console.log('BACKEND UPLOAD: Envoi de la réponse:', response);
         res.status(200).json(response);
-        console.log('BACKEND UPLOAD: Réponse envoyée avec succès');
     } catch (error) {
-        console.error('BACKEND UPLOAD: Erreur détaillée:', error);
-        console.error('BACKEND UPLOAD: Stack trace:', error instanceof Error ? error.stack : 'Pas de stack trace');
-        res.status(500).json({ 
+        console.error('Erreur lors de l\'upload de l\'image:', error);
+        res.status(500).json({
             message: 'Erreur lors de l\'upload de l\'image',
             error: error instanceof Error ? error.message : 'Erreur inconnue'
         });

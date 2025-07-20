@@ -197,17 +197,7 @@ class JournalService {
     // Récupérer tous les articles (pour les admins)
     async getAllArticles(): Promise<JournalArticle[]> {
         try {
-            console.log('=== SERVICE: getAllArticles (ADMIN) ===');
-            console.log('URL:', '/journal/admin/all');
-            console.log('Token:', localStorage.getItem('accessToken') ? 'Présent' : 'Absent');
-            
             const response = await api.get('/journal/admin/all');
-            
-            console.log('SERVICE: Réponse reçue:', {
-                status: response.status,
-                statusText: response.statusText,
-                data: response.data
-            });
             
             // Gérer les deux structures de réponse possibles
             let articles: JournalArticle[] = [];
@@ -424,15 +414,9 @@ class JournalService {
                 console.log('SERVICE: Structure détectée: response.data.success.data');
             }
             
-            console.log('SERVICE: Article soumis:', article);
             return article;
         } catch (error: any) {
-            console.error('SERVICE: Erreur lors de la soumission de l\'article:', error);
-            console.error('SERVICE: Détails de l\'erreur:', {
-                message: error?.message || 'Erreur inconnue',
-                status: error?.response?.status,
-                data: error?.response?.data
-            });
+            console.error('Erreur lors de la soumission de l\'article:', error);
             throw error;
         }
     }
@@ -457,13 +441,7 @@ class JournalService {
             const isAdmin = user?.role === 'admin';
             
             const endpoint = isAdmin ? `/journal/admin/${articleId}` : `/journal/user/${articleId}`;
-            
-            console.log('=== SERVICE: getArticleById ===');
-            console.log('User role:', user?.role);
-            console.log('Is admin:', isAdmin);
-            console.log('URL:', endpoint);
-            console.log('Token:', localStorage.getItem('accessToken') ? 'Présent' : 'Absent');
-            
+
             const response = await api.get(endpoint);
             
             console.log('SERVICE: Réponse getArticleById:', {

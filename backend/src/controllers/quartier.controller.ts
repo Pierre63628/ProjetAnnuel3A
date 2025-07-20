@@ -71,6 +71,31 @@ export const createQuartier = async (req: Request, res: Response) => {
             return res.status(400).json({ message: 'Le nom du quartier est obligatoire.' });
         }
 
+        // Vérifier les intersections avec les quartiers existants
+        const intersectionCheck = await QuartierModel.checkGeometryIntersection(geom);
+
+        if (intersectionCheck.hasIntersection) {
+            const intersectingQuartiers = intersectionCheck.intersectingQuartiers;
+            const quartierNames = intersectingQuartiers.map(q => `${q.nom_quartier} (${q.ville || 'ville non spécifiée'})`).join(', ');
+
+            // Calculer le pourcentage d'intersection total
+            const maxIntersectionPercentage = Math.max(...intersectingQuartiers.map(q => q.intersectionPercentage));
+
+            return res.status(409).json({
+                message: `Impossible de créer le quartier. Il y a une intersection géographique avec les quartiers existants : ${quartierNames}`,
+                details: {
+                    intersectingQuartiers: intersectingQuartiers.map(q => ({
+                        id: q.id,
+                        nom_quartier: q.nom_quartier,
+                        ville: q.ville,
+                        intersectionPercentage: Math.round(q.intersectionPercentage * 100) / 100
+                    })),
+                    maxIntersectionPercentage: Math.round(maxIntersectionPercentage * 100) / 100
+                },
+                code: 'GEOMETRY_INTERSECTION'
+            });
+        }
+
         const quartierData: Quartier = {
             nom_quartier,
             ville,
@@ -98,12 +123,38 @@ export const updateQuartier = async (req: Request, res: Response) => {
         }
 
         const id = parseInt(req.params.id);
-        const { nom_quartier, ville, code_postal, description } = req.body;
+        const { nom_quartier, ville, code_postal, description, geom } = req.body;
 
         // Vérifier si le quartier existe
         const existingQuartier = await QuartierModel.findById(id);
         if (!existingQuartier) {
             return res.status(404).json({ message: 'Quartier non trouvé.' });
+        }
+
+        // Si une nouvelle géométrie est fournie, vérifier les intersections
+        if (geom && geom.type && geom.coordinates) {
+            const intersectionCheck = await QuartierModel.checkGeometryIntersection(geom, id);
+
+            if (intersectionCheck.hasIntersection) {
+                const intersectingQuartiers = intersectionCheck.intersectingQuartiers;
+                const quartierNames = intersectingQuartiers.map(q => `${q.nom_quartier} (${q.ville || 'ville non spécifiée'})`).join(', ');
+
+                const maxIntersectionPercentage = Math.max(...intersectingQuartiers.map(q => q.intersectionPercentage));
+
+                return res.status(409).json({
+                    message: `Impossible de modifier la géométrie du quartier. Il y aurait une intersection avec les quartiers existants : ${quartierNames}`,
+                    details: {
+                        intersectingQuartiers: intersectingQuartiers.map(q => ({
+                            id: q.id,
+                            nom_quartier: q.nom_quartier,
+                            ville: q.ville,
+                            intersectionPercentage: Math.round(q.intersectionPercentage * 100) / 100
+                        })),
+                        maxIntersectionPercentage: Math.round(maxIntersectionPercentage * 100) / 100
+                    },
+                    code: 'GEOMETRY_INTERSECTION'
+                });
+            }
         }
 
         // Préparer les données à mettre à jour
@@ -113,6 +164,7 @@ export const updateQuartier = async (req: Request, res: Response) => {
         if (ville !== undefined) quartierData.ville = ville;
         if (code_postal !== undefined) quartierData.code_postal = code_postal;
         if (description !== undefined) quartierData.description = description;
+        if (geom !== undefined) quartierData.geom = geom;
 
         // Mettre à jour le quartier
         const success = await QuartierModel.update(id, quartierData);
@@ -230,27 +282,21 @@ export const findQuartierByCoordinates = async (req: Request, res: Response) => 
         const lat = parseFloat(latitude as string);
 
         if (isNaN(lon) || isNaN(lat)) {
-            console.warn(`Coordonnées invalides reçues: longitude=${longitude}, latitude=${latitude}`);
             return res.status(400).json({
                 message: 'Les coordonnées doivent être des nombres valides',
                 quartierFound: false
             });
         }
 
-        console.log(`Recherche de quartier pour les coordonnées: longitude=${lon}, latitude=${lat}`);
-
         // Rechercher le quartier
         const quartier = await GeoService.findQuartierByCoordinates(lon, lat);
 
         if (!quartier) {
-            console.log(`Aucun quartier trouvé pour les coordonnées: longitude=${lon}, latitude=${lat}`);
             return res.status(404).json({
                 message: 'Aucun quartier trouvé pour ces coordonnées',
                 quartierFound: false
             });
         }
-
-        console.log(`Quartier trouvé:`, JSON.stringify(quartier, null, 2));
 
         res.status(200).json({
             quartier,
@@ -265,6 +311,40 @@ export const findQuartierByCoordinates = async (req: Request, res: Response) => 
     }
 };
 
+// Vérifier les intersections géographiques d'une géométrie
+export const checkGeometryIntersection = async (req: Request, res: Response) => {
+    try {
+        // Vérifier si l'utilisateur est admin
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Accès refusé. Seuls les administrateurs peuvent vérifier les intersections.' });
+        }
+
+        const { geom, excludeId } = req.body;
+
+        if (!geom || !geom.type || !geom.coordinates) {
+            return res.status(400).json({ message: 'La géométrie (geom) est requise et doit être valide.' });
+        }
+
+        const intersectionCheck = await QuartierModel.checkGeometryIntersection(geom, excludeId);
+
+        res.status(200).json({
+            hasIntersection: intersectionCheck.hasIntersection,
+            intersectingQuartiers: intersectionCheck.intersectingQuartiers.map(q => ({
+                id: q.id,
+                nom_quartier: q.nom_quartier,
+                ville: q.ville,
+                intersectionPercentage: Math.round(q.intersectionPercentage * 100) / 100
+            })),
+            message: intersectionCheck.hasIntersection
+                ? `Intersection détectée avec ${intersectionCheck.intersectingQuartiers.length} quartier(s)`
+                : 'Aucune intersection détectée'
+        });
+    } catch (error) {
+        console.error('Erreur lors de la vérification des intersections:', error);
+        res.status(500).json({ message: 'Erreur serveur lors de la vérification des intersections.' });
+    }
+};
+
 export default {
     getAllQuartiers,
     getQuartiersByVille,
@@ -274,5 +354,6 @@ export default {
     deleteQuartier,
     searchQuartiers,
     getQuartierUsers,
-    findQuartierByCoordinates
+    findQuartierByCoordinates,
+    checkGeometryIntersection
 };

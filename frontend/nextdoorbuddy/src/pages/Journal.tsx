@@ -104,23 +104,16 @@ const Journal: React.FC = () => {
                     }
                 });
                 
-                console.log('FRONTEND: Articles filtrés pour admin:', data.length);
             } else {
-                console.log('FRONTEND: Mode USER - Chargement des articles de l\'utilisateur');
                 data = await journalService.getMyArticles();
             }
-            
-            console.log('FRONTEND: Articles reçus:', data);
-            console.log('FRONTEND: Nombre d\'articles:', data.length);
-            
+
             setArticles(data);
-            console.log('FRONTEND: Articles mis à jour dans le state');
         } catch (err) {
-            console.error('FRONTEND: Erreur lors du chargement des articles:', err);
+            console.error('Erreur lors du chargement des articles:', err);
             setError('Erreur lors du chargement des articles');
         } finally {
             setIsLoading(false);
-            console.log('FRONTEND: Chargement terminé');
         }
     };
 

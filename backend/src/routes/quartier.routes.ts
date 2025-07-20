@@ -30,4 +30,7 @@ router.delete('/:id', authenticateJWT, isAdmin, quartierController.deleteQuartie
 
 router.get('/:id/users', authenticateJWT, isAdmin, quartierController.getQuartierUsers);
 
+// Route pour vérifier les intersections géographiques
+router.post('/check-intersection', authenticateJWT, isAdmin, quartierController.checkGeometryIntersection);
+
 export default router;

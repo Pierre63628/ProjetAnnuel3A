@@ -87,13 +87,11 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
             const lat = parseFloat(String(latitude));
 
             if (isNaN(lon) || isNaN(lat)) {
-                console.warn(`Coordonnées invalides lors de l'inscription: longitude=${longitude}, latitude=${latitude}`);
+                // Coordonnées invalides, utiliser le quartier par défaut
             } else {
-                console.log(`Recherche de quartier pour les coordonnées: longitude=${lon}, latitude=${lat}`);
                 const quartier = await GeoService.findQuartierByCoordinates(lon, lat);
 
                 if (quartier) {
-                    console.log(`Quartier trouvé:`, JSON.stringify(quartier, null, 2));
                     finalQuartierId = quartier.id;
                     quartierInfo = {
                         id: quartier.id,
@@ -101,8 +99,6 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
                         ville: quartier.ville,
                         code_postal: quartier.code_postal
                     };
-                } else {
-                    console.log(`Aucun quartier trouvé pour les coordonnées: longitude=${lon}, latitude=${lat}`);
                 }
             }
         } catch (error) {

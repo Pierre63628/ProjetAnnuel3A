@@ -162,10 +162,8 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
 export const getMyArticles = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = (req as any).user;
-        console.log('Récupération des articles pour l\'utilisateur:', user.id);
-        
+
         const articles = await journalModel.getArticlesByAuthor(user.id);
-        console.log('Articles récupérés:', articles.length);
 
         res.json({
             success: true,

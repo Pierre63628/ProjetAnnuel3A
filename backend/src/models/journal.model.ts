@@ -77,7 +77,6 @@ class JournalModel {
             }
             return this.collection;
         } catch (error) {
-            console.log('Tentative de reconnexion MongoDB...');
             await reconnectMongoDB();
             this.collection = getMongoDB().collection<JournalArticle>('articles');
             return this.collection;
@@ -86,9 +85,6 @@ class JournalModel {
 
     // Créer un nouvel article
     async createArticle(articleData: CreateArticleData): Promise<JournalArticle> {
-        console.log('=== MONGODB: createArticle ===');
-        console.log('MONGODB: Données reçues:', articleData);
-        
         const collection = await this.getCollection();
         const now = new Date();
         const article: JournalArticle = {
@@ -98,29 +94,24 @@ class JournalModel {
             updatedAt: now
         };
 
-        console.log('MONGODB: Article à insérer:', article);
-
         const result = await collection.insertOne(article);
-        console.log('MONGODB: Article inséré avec succès, ID:', result.insertedId);
-        
+
         return { ...article, _id: result.insertedId };
     }
 
     // Récupérer tous les articles (pour les admins)
     async getAllArticles(): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getAllArticles ===');
             const collection = await this.getCollection();
-            
+
             const articles = await collection
                 .find({})
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles trouvés:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getAllArticles:', error);
+            console.error('Erreur dans getAllArticles:', error);
             throw error;
         }
     }
@@ -128,21 +119,17 @@ class JournalModel {
     // Récupérer tous les articles d'un quartier spécifique (pour les admins)
     async getAllArticlesByQuartier(quartierId: number): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getAllArticlesByQuartier ===');
-            console.log('MONGODB: Quartier ID recherché:', quartierId);
-            
             const collection = await this.getCollection();
             const filter = { quartierId: quartierId };
-            
+
             const articles = await collection
                 .find(filter)
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles trouvés pour le quartier:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getAllArticlesByQuartier:', error);
+            console.error('Erreur dans getAllArticlesByQuartier:', error);
             throw error;
         }
     }
@@ -150,17 +137,15 @@ class JournalModel {
     // Récupérer tous les articles validés (pour la visualisation)
     async getPublicArticles(): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getPublicArticles ===');
             const collection = await this.getCollection();
-            
+
             const filter = { status: 'valide' as ArticleStatus };
-            
+
             const articles = await collection
                 .find(filter)
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log(`Articles publics trouvés: ${articles.length}`);
+
             return articles;
         } catch (error) {
             console.error('Erreur dans getPublicArticles:', error);
@@ -171,21 +156,17 @@ class JournalModel {
     // Récupérer les articles d'un utilisateur spécifique
     async getArticlesByAuthor(authorId: number): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getArticlesByAuthor ===');
-            console.log('MONGODB: authorId recherché:', authorId);
-            
             const collection = await this.getCollection();
             const filter = { authorId: authorId };
-            
+
             const articles = await collection
                 .find(filter)
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles trouvés pour l\'auteur:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getArticlesByAuthor:', error);
+            console.error('Erreur dans getArticlesByAuthor:', error);
             throw error;
         }
     }
@@ -349,18 +330,16 @@ class JournalModel {
     // Récupérer tous les articles validés (pour les journaux)
     async getValidatedArticles(): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getValidatedArticles ===');
             const collection = await this.getCollection();
-            
+
             const articles = await collection
                 .find({ status: 'valide' })
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles validés trouvés:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getValidatedArticles:', error);
+            console.error('Erreur dans getValidatedArticles:', error);
             throw error;
         }
     }
@@ -368,21 +347,17 @@ class JournalModel {
     // Récupérer les articles d'une édition spécifique
     async getArticlesByEdition(editionId: string): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getArticlesByEdition ===');
-            console.log('MONGODB: Édition ID recherché:', editionId);
-            
             const collection = await this.getCollection();
             const filter = { editionId: editionId };
-            
+
             const articles = await collection
                 .find(filter)
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles trouvés pour l\'édition:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getArticlesByEdition:', error);
+            console.error('Erreur dans getArticlesByEdition:', error);
             throw error;
         }
     }
@@ -390,21 +365,17 @@ class JournalModel {
     // Récupérer les articles validés d'une édition spécifique
     async getValidatedArticlesByEdition(editionId: string): Promise<JournalArticle[]> {
         try {
-            console.log('=== MONGODB: getValidatedArticlesByEdition ===');
-            console.log('MONGODB: Édition ID recherché:', editionId);
-            
             const collection = await this.getCollection();
             const filter = { editionId: editionId, status: 'valide' as ArticleStatus };
-            
+
             const articles = await collection
                 .find(filter)
                 .sort({ date: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Articles validés trouvés pour l\'édition:', articles.length);
+
             return articles;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getValidatedArticlesByEdition:', error);
+            console.error('Erreur dans getValidatedArticlesByEdition:', error);
             throw error;
         }
     }
@@ -412,27 +383,23 @@ class JournalModel {
     // Associer un article à une édition
     async assignArticleToEdition(articleId: string, editionId: string): Promise<JournalArticle | null> {
         try {
-            console.log('=== MONGODB: assignArticleToEdition ===');
-            console.log('MONGODB: Article ID:', articleId, 'Édition ID:', editionId);
-            
             const collection = await this.getCollection();
             const objectId = new ObjectId(articleId);
-            
+
             const result = await collection.findOneAndUpdate(
                 { _id: objectId },
-                { 
-                    $set: { 
+                {
+                    $set: {
                         editionId: editionId,
                         updatedAt: new Date()
-                    } 
+                    }
                 },
                 { returnDocument: 'after' }
             );
-            
-            console.log('MONGODB: Article associé à l\'édition avec succès');
+
             return result;
         } catch (error) {
-            console.error('MONGODB: Erreur dans assignArticleToEdition:', error);
+            console.error('Erreur dans assignArticleToEdition:', error);
             throw error;
         }
     }
@@ -440,25 +407,21 @@ class JournalModel {
     // Retirer l'association d'un article avec une édition
     async removeArticleFromEdition(articleId: string): Promise<JournalArticle | null> {
         try {
-            console.log('=== MONGODB: removeArticleFromEdition ===');
-            console.log('MONGODB: Article ID:', articleId);
-            
             const collection = await this.getCollection();
             const objectId = new ObjectId(articleId);
-            
+
             const result = await collection.findOneAndUpdate(
                 { _id: objectId },
-                { 
+                {
                     $unset: { editionId: "" },
                     $set: { updatedAt: new Date() }
                 },
                 { returnDocument: 'after' }
             );
-            
-            console.log('MONGODB: Association article-édition supprimée avec succès');
+
             return result;
         } catch (error) {
-            console.error('MONGODB: Erreur dans removeArticleFromEdition:', error);
+            console.error('Erreur dans removeArticleFromEdition:', error);
             throw error;
         }
     }
@@ -477,7 +440,6 @@ class EditionCollectionModel {
             }
             return this.collection;
         } catch (error) {
-            console.log('Tentative de reconnexion MongoDB...');
             await reconnectMongoDB();
             this.collection = getMongoDB().collection<Edition>('editions');
             return this.collection;
@@ -495,9 +457,6 @@ class EditionCollectionModel {
 
     // Créer une nouvelle édition
     async createEdition(editionData: CreateEditionData): Promise<Edition> {
-        console.log('=== MONGODB: createEdition ===');
-        console.log('MONGODB: Données reçues:', editionData);
-        
         const collection = await this.getCollection();
         const now = new Date();
         const edition: Edition = {
@@ -507,29 +466,24 @@ class EditionCollectionModel {
             updatedAt: now
         };
 
-        console.log('MONGODB: Édition à insérer:', edition);
-
         const result = await collection.insertOne(edition);
-        console.log('MONGODB: Édition insérée avec succès, ID:', result.insertedId);
-        
+
         return { ...edition, _id: result.insertedId };
     }
 
     // Récupérer toutes les éditions
     async getAllEditions(): Promise<Edition[]> {
         try {
-            console.log('=== MONGODB: getAllEditions ===');
             const collection = await this.getCollection();
-            
+
             const editions = await collection
                 .find({})
                 .sort({ createdAt: -1 })
                 .toArray();
-                
-            console.log('MONGODB: Éditions trouvées:', editions.length);
+
             return editions;
         } catch (error) {
-            console.error('MONGODB: Erreur dans getAllEditions:', error);
+            console.error('Erreur dans getAllEditions:', error);
             throw error;
         }
     }

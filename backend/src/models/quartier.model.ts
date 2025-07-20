@@ -63,6 +63,53 @@ export class QuartierModel {
         }
     }
 
+    // Vérifier si une géométrie intersecte avec des quartiers existants
+    static async checkGeometryIntersection(geom: any, excludeId?: number): Promise<{ hasIntersection: boolean, intersectingQuartiers: any[] }> {
+        try {
+            const geomString = JSON.stringify(geom);
+            let query = `
+                SELECT
+                    id,
+                    nom_quartier,
+                    ville,
+                    ST_Area(ST_Intersection(geom, ST_SetSRID(ST_Multi(ST_GeomFromGeoJSON($1)), 4326))) as intersection_area,
+                    ST_Area(geom) as quartier_area,
+                    ST_Area(ST_SetSRID(ST_Multi(ST_GeomFromGeoJSON($1)), 4326)) as new_quartier_area
+                FROM "Quartier"
+                WHERE ST_Intersects(geom, ST_SetSRID(ST_Multi(ST_GeomFromGeoJSON($1)), 4326))
+                AND ST_Area(ST_Intersection(geom, ST_SetSRID(ST_Multi(ST_GeomFromGeoJSON($1)), 4326))) > 0
+            `;
+
+            const values = [geomString];
+
+            // Exclure un quartier spécifique (utile pour les mises à jour)
+            if (excludeId) {
+                query += ` AND id != $2`;
+                values.push(excludeId);
+            }
+
+            const result = await pool.query(query, values);
+
+            const intersectingQuartiers = result.rows.map(row => ({
+                id: row.id,
+                nom_quartier: row.nom_quartier,
+                ville: row.ville,
+                intersectionArea: parseFloat(row.intersection_area),
+                quartierArea: parseFloat(row.quartier_area),
+                newQuartierArea: parseFloat(row.new_quartier_area),
+                intersectionPercentage: (parseFloat(row.intersection_area) / parseFloat(row.quartier_area)) * 100
+            }));
+
+            return {
+                hasIntersection: intersectingQuartiers.length > 0,
+                intersectingQuartiers
+            };
+        } catch (error) {
+            console.error('Error checking geometry intersection:', error);
+            throw error;
+        }
+    }
+
     // Créer un nouveau quartier (avec géométrie GeoJSON)
     static async create(quartierData: Quartier): Promise<number> {
         try {
