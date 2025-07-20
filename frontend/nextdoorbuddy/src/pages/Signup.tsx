@@ -21,7 +21,10 @@ import {
     EyeOff,
     AlertCircle,
     Loader2,
-    ArrowRight
+    ArrowRight,
+    Check,
+    FileText,
+    ExternalLink
 } from 'lucide-react'
 
 const Signup = () => {
@@ -45,6 +48,7 @@ const Signup = () => {
     const [isLoadingQuartiers, setIsLoadingQuartiers] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+    const [acceptTerms, setAcceptTerms] = useState(false)
 
     const { register } = useAuth()
     const navigate = useNavigate()
@@ -102,6 +106,11 @@ const Signup = () => {
 
         if (!quartierId) {
             setError('Veuillez sélectionner un quartier')
+            return false
+        }
+
+        if (!acceptTerms) {
+            setError('Vous devez accepter les conditions générales d\'utilisation pour vous inscrire')
             return false
         }
 
@@ -429,6 +438,57 @@ const Signup = () => {
                                             <p className="text-xs text-gray-500 mt-1">
                                                 Commencez à saisir votre adresse pour voir les suggestions
                                             </p>
+                                        </div>
+                                    </motion.div>
+
+                                    {/* Terms and Conditions Acceptance */}
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ duration: 0.5, delay: 0.45 }}
+                                        className="pt-6"
+                                    >
+                                        <div className="flex items-start space-x-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                            <div className="flex-shrink-0 mt-0.5">
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={acceptTerms}
+                                                        onChange={(e) => setAcceptTerms(e.target.checked)}
+                                                        className="sr-only peer"
+                                                        aria-describedby="terms-description"
+                                                    />
+                                                    <div className="w-5 h-5 bg-white border-2 border-gray-300 rounded peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-focus:ring-2 peer-focus:ring-blue-500 peer-focus:ring-offset-2 transition-all duration-200 flex items-center justify-center">
+                                                        {acceptTerms && (
+                                                            <Check className="w-3 h-3 text-white" />
+                                                        )}
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <label
+                                                    htmlFor="terms-checkbox"
+                                                    className="text-sm text-gray-700 cursor-pointer leading-relaxed"
+                                                    id="terms-description"
+                                                >
+                                                    <span className="font-medium">J'ai lu et j'accepte les </span>
+                                                    <a
+                                                        href="/conditions-generales"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-blue-600 hover:text-blue-700 font-semibold underline decoration-2 underline-offset-2 hover:decoration-blue-700 transition-colors duration-200 inline-flex items-center space-x-1"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <FileText className="w-4 h-4" />
+                                                        <span>conditions générales d'utilisation</span>
+                                                        <ExternalLink className="w-3 h-3" />
+                                                    </a>
+                                                    <span className="font-medium"> *</span>
+                                                </label>
+                                                <p className="text-xs text-gray-500 mt-1">
+                                                    Requis pour créer votre compte
+                                                </p>
+                                            </div>
                                         </div>
                                     </motion.div>
 

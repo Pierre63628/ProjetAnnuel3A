@@ -35,6 +35,7 @@ import I18nTest from "./pages/I18nTest"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ChatProvider } from "./contexts/ChatContext"
 import EventDetails from "./pages/EventsDetail.tsx";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 // Composant pour les routes protégées
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -243,6 +244,7 @@ function AppRoutes() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/verify-email" element={<EmailVerification />} />
       <Route path="/verification-sent" element={<VerificationSent />} />
+      <Route path="/conditions-generales" element={<TermsAndConditions />} />
       <Route path="/test-carousel" element={<TestCarousel />} />
       <Route path="/i18n-test" element={<I18nTest />} />
     </Routes>
