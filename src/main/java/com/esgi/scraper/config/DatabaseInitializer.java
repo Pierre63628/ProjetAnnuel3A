@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 @Log4j2
 public class DatabaseInitializer {
-    private static final String HOST = "localhost";
+    private static final String HOST = "37.59.118.112";
     private static final int PORT = 5432;
     private static final String DB_NAME = DatabaseConfig.DB_NAME;
     private static final String SCHEMA_NAME = "public";

@@ -3,6 +3,7 @@ package com.esgi.scraper.service;
 import com.esgi.scraper.config.DatabaseConfig;
 import com.esgi.scraper.utils.AddressUtils;
 import com.esgi.scraper.utils.DateValidator;
+import com.esgi.scraper.utils.ResourceManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.json.JSONArray;
@@ -32,10 +33,12 @@ public class EventStorageService {
     public List<Map<String, String>> validEvents = new ArrayList<>();
     public List<Map<String, String>> invalidEvents = new ArrayList<>();
     private final ObjectMapper objectMapper;
+    private final ResourceManager resourceManager;
 
     public EventStorageService() {
         this.objectMapper = new ObjectMapper();
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        this.resourceManager = new ResourceManager();
         createStorageDirectory();
     }
 
@@ -56,19 +59,24 @@ public class EventStorageService {
 
     private void createStorageDirectory() {
         try {
-            Files.createDirectories(Path.of("/" + STORAGE_DIR));
+            Files.createDirectories(Path.of(STORAGE_DIR));
         } catch (IOException e) {
             System.err.println("Error creating storage directory: " + e.getMessage());
         }
     }
 
     public void saveEventsToJson(String source) {
-        String fileName = String.format("/%s/%s_events.json", STORAGE_DIR, source);
-        try {
-            objectMapper.writeValue(new File(fileName), validEvents);
-            System.out.println("Events saved to file: " + fileName);
-        } catch (IOException e) {
-            System.err.println("Error saving events to file: " + e.getMessage());
+        // Use ResourceManager to save to external storage
+        boolean success = resourceManager.saveEventsToExternalStorage(source, validEvents);
+        if (!success) {
+            // Fallback to old method if ResourceManager fails
+            String fileName = String.format("%s/%s_events.json", STORAGE_DIR, source);
+            try {
+                objectMapper.writeValue(new File(fileName), validEvents);
+                System.out.println("Events saved to file (fallback): " + fileName);
+            } catch (IOException e) {
+                System.err.println("Error saving events to file: " + e.getMessage());
+            }
         }
     }
 
@@ -173,7 +181,7 @@ public class EventStorageService {
     public static Optional<Integer> getQuartierIdFromCoordinates(double longitude, double latitude) {
         try {
             String urlString = String.format(Locale.US,
-                    "http://localhost:5173/api/quartiers/coordinates?longitude=%f&latitude=%f",
+                    "https://doorbudy.cloud/api/quartiers/coordinates?longitude=%f&latitude=%f",
                     longitude, latitude
             );
 
@@ -214,6 +222,13 @@ public class EventStorageService {
 
 
     public List<Map<String, String>> loadLatestEvents(String source) {
+        // Use ResourceManager to load events (tries classpath first, then external storage)
+        List<Map<String, String>> events = resourceManager.loadEventsFromJson(source);
+        if (!events.isEmpty()) {
+            return events;
+        }
+
+        // Fallback to old method for backward compatibility
         try {
             Path storageDir = Paths.get(STORAGE_DIR);
             if (!Files.exists(storageDir)) {

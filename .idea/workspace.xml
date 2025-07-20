@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19657930-f5fd-4e64-a9b6-2f1bcda94716" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/utils/ResourceManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/config/DatabaseInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventDataLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/interfaces/EventViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +217,12 @@
       <workItem from="1749719258101" duration="18000" />
       <workItem from="1749740056373" duration="14602000" />
       <workItem from="1751276861013" duration="17000" />
-      <workItem from="1751276892642" duration="8031000" />
+      <workItem from="1751276892642" duration="8147000" />
+      <workItem from="1751376334419" duration="1028000" />
+      <workItem from="1752834129001" duration="11000" />
+      <workItem from="1752834158262" duration="2680000" />
+      <workItem from="1752879357586" duration="890000" />
+      <workItem from="1753015142192" duration="5890000" />
     </task>
     <servers />
   </component>
@@ -222,38 +233,28 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/TestQuartierApi.java</url>
           <line>25</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
-          <line>177</line>
+          <line>185</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
-          <line>125</line>
+          <line>133</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
-          <line>119</line>
+          <line>127</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/EventStorageService.java</url>
-          <line>115</line>
+          <line>123</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -265,6 +266,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/repository/EventRepository.java</url>
           <line>168</line>
           <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/esgi/scraper/service/ScraperService.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="36" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -138,7 +138,7 @@ public class EventViewController implements Initializable, ThemeMenuHandler {
             return;
         }
 
-        String url = "http://localhost:5173/events/" + eventId;
+        String url = "https://doorbudy.cloud/events/" + eventId;
 
         try {
             if (java.awt.Desktop.isDesktopSupported()) {

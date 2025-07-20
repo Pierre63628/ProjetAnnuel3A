@@ -2,6 +2,7 @@ package com.esgi.scraper.interfaces;
 
 import com.esgi.scraper.models.Event;
 import com.esgi.scraper.repository.EventRepository;
+import com.esgi.scraper.utils.ResourceManager;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.scene.control.Label;
@@ -23,6 +24,7 @@ public class EventDataLoader {
     private final Label eventCountLabel;
     private final TextArea eventDetailsArea;
     private final EventRepository eventRepository;
+    private final ResourceManager resourceManager;
 
     private List<Event> allEvents = new ArrayList<>();
     private String currentSearchText = null;
@@ -34,6 +36,7 @@ public class EventDataLoader {
         this.eventCountLabel = eventCountLabel;
         this.eventDetailsArea = eventDetailsArea;
         this.eventRepository = new EventRepository();
+        this.resourceManager = new ResourceManager();
     }
 
     public void loadAllEvents() {
@@ -61,11 +64,8 @@ public class EventDataLoader {
 
     private void loadEventsFromJson(String source) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            List<Event> events = mapper.readValue(
-                new File("/events_storage/" + source + "_events.json"),
-                new TypeReference<>() {}
-            );
+            // Use ResourceManager to load events (tries classpath first, then external storage)
+            List<Event> events = resourceManager.loadEventObjectsFromJson(source);
 
             if (!events.isEmpty()) {
                 allEvents.addAll(events);
@@ -75,7 +75,7 @@ public class EventDataLoader {
             } else {
                 statusLabel.setText("Aucun événement trouvé");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Erreur lors du chargement du fichier JSON: " + e.getMessage());
             eventDetailsArea.setText("Erreur lors du chargement des événements: " + e.getMessage());
             statusLabel.setText("Erreur de chargement");

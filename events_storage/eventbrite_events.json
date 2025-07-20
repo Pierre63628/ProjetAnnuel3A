@@ -1,0 +1,703 @@
+[ {
+  "date" : "2025-08-10T19:00:00",
+  "detailed_date" : "dim. 10 août 2025 19:00 - 22:30 CEST",
+  "detailed_address" : "Cabaret Sauvage\n59 Boulevard Macdonald 75019 Paris\nItinéraire",
+  "event_id" : "1421345836659",
+  "name" : "Redman Live in Paris",
+  "location" : "Cabaret Sauvage",
+  "category" : "music",
+  "url" : "https://www.eventbrite.com/e/billets-redman-live-in-paris-1421345836659?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-24T18:30:00",
+  "detailed_date" : "jeu. 24 juil. 2025 18:30 - 21:30 CEST",
+  "detailed_address" : "Institut Saint Cassien ISFEC\n63 Avenue des Roches 13007 Marseille\nItinéraire",
+  "event_id" : "1316355216889",
+  "name" : "Apéro des Epaulettes - Atelier \"Partages et perspectives\"",
+  "location" : "jeudi prochain à 18:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-apero-des-epaulettes-atelier-partages-et-perspectives-1316355216889?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-24T17:00:00",
+  "detailed_date" : "2025-07-24T17:00:00Z",
+  "detailed_address" : "Château de Carqueiranne\n100 Chemin du Château 83320 Carqueiranne\nGet directions",
+  "event_id" : "1353264443379",
+  "name" : "Jazz et Vignes 24 Juillet 2025",
+  "location" : "jeudi prochain à 19:00",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/jazz-et-vignes-24-juillet-2025-tickets-1353264443379?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-03T10:00:00",
+  "detailed_date" : "dim. 3 août 2025 10:00 - 15:00 CEST",
+  "detailed_address" : "Office de Tourisme du Grand Port d'Aix-les-Bains\nPlace Président Edouard Herriot 73100 Aix-les-Bains\nItinéraire",
+  "event_id" : "1405140606379",
+  "name" : "BAVARD RUN + ACROYOGA",
+  "location" : "Office de Tourisme du Grand Port d'Aix-les-Bains",
+  "category" : "sports-and-fitness",
+  "url" : "https://www.eventbrite.fr/e/billets-bavard-run-acroyoga-1405140606379?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-22T10:30:00",
+  "detailed_date" : "mar. 22 juil. 2025 10:30 - 12:00 CEST",
+  "detailed_address" : "Nice\n19 Boulevard Joseph Garnier 06000 Nice\nItinéraire",
+  "event_id" : "1465312311569",
+  "name" : "Tech For Every Day Use",
+  "location" : "mardi prochain à 10:30",
+  "category" : "science-and-tech",
+  "url" : "https://www.eventbrite.co.uk/e/billets-tech-for-every-day-use-1465312311569?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-22T18:30:00",
+  "detailed_date" : "mar. 22 juil. 2025 18:30 - 21:30 CEST",
+  "detailed_address" : "BNP Paribas Real Estate Transaction - Nice\n455 Promenade des Anglais 06200 Nice\nItinéraire",
+  "event_id" : "1465430765869",
+  "name" : "Atelier Convergences inter-organisations à NICE (06000)",
+  "location" : "mardi prochain à 18:30",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-convergences-inter-organisations-a-nice-06000-1465430765869?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-07T17:00:00",
+  "detailed_date" : "2025-08-07T17:00:00Z",
+  "detailed_address" : "Château de Carqueiranne\n100 Chemin du Château 83320 Carqueiranne\nGet directions",
+  "event_id" : "1353265095329",
+  "name" : "Jazz et Vignes 7 Août 2025",
+  "location" : "Château de Carqueiranne",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/jazz-et-vignes-7-aout-2025-tickets-1353265095329?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-03T21:45:00",
+  "detailed_date" : "2025-10-03T21:45:00Z",
+  "detailed_address" : "Salle Wagram\n39-41 Avenue de Wagram 75017 Paris\nGet directions",
+  "event_id" : "1295009541399",
+  "name" : "PARIS FASHION WEEK",
+  "location" : "Salle Wagram",
+  "category" : "fashion",
+  "url" : "https://www.eventbrite.com/e/paris-fashion-week-tickets-1295009541399?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-21T18:00:00",
+  "detailed_date" : "mar. 21 oct. 2025 18:00 - 20:00 CEST",
+  "detailed_address" : "Tennessee - Paris\n12 Rue André Mazet 75006 Paris\nItinéraire",
+  "event_id" : "953524496437",
+  "name" : "Paris Business, Tech & Entrepreneur Networking Soiree",
+  "location" : "Tue, Oct 21, 6:00 PM",
+  "category" : "business",
+  "url" : "https://www.eventbrite.com/e/billets-paris-business-tech-entrepreneur-networking-soiree-953524496437?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-12T17:30:00",
+  "detailed_date" : "2025-08-12T17:30:00Z",
+  "detailed_address" : "Scots Kirk Paris\n17 Rue Bayard 75008 Paris\nGet directions",
+  "event_id" : "1444087527669",
+  "name" : "Scottish Fish in Paris",
+  "location" : "Scots Kirk Paris",
+  "category" : "music",
+  "url" : "https://www.eventbrite.com/e/scottish-fish-in-paris-tickets-1444087527669?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-11T01:00:00",
+  "detailed_date" : "sam. 11 oct. 2025 01:00 - 18:00 CEST",
+  "detailed_address" : "38 Bd de Bonne Nouvelle\n38 Boulevard de Bonne Nouvelle 75010 Paris\nItinéraire",
+  "event_id" : "1446904774129",
+  "name" : "MONAT Europe Together Event UK & Ireland MPs",
+  "location" : "sam. 11 oct., 01:00",
+  "category" : "government",
+  "url" : "https://www.eventbrite.co.uk/e/billets-monat-europe-together-event-uk-ireland-mps-1446904774129?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-23T14:00:00",
+  "detailed_date" : "mer. 23 juil. 2025 14:00 - 17:00 CEST",
+  "detailed_address" : "Open Landes\n10 rue de l'île Mabon 44200 NANTES\nItinéraire",
+  "event_id" : "1446110999929",
+  "name" : "Atelier Convergences inter-organisations à NANTES (44200)",
+  "location" : "mercredi prochain à 14:00",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-convergences-inter-organisations-a-nantes-44200-1446110999929?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-21T17:00:00",
+  "detailed_date" : "jeu. 21 août 2025 17:00 - dim. 24 août 2025 17:00 CEST",
+  "detailed_address" : "Basilique Notre-Dame d'Avioth\n5 Rue de l'Abbé Delhotel 55600 Avioth\nItinéraire",
+  "event_id" : "1109087052229",
+  "name" : "Stage résidentiel Yoga et Chant à Avioth",
+  "location" : "jeu. 21 août, 17:00",
+  "category" : "health",
+  "url" : "https://www.eventbrite.ca/e/billets-stage-residentiel-yoga-et-chant-a-avioth-1109087052229?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-23T18:30:00",
+  "detailed_date" : "mer. 23 juil. 2025 18:30 - 22:00 CEST",
+  "detailed_address" : "Les Berthom Paris\n35 Bd Voltaire 75011 Paris\nItinéraire",
+  "event_id" : "1357087708869",
+  "name" : "2tonnes France - Formation à l'animation à PARIS",
+  "location" : "mercredi prochain à 18:30",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-france-formation-a-lanimation-a-paris-1357087708869?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-29T19:00:00",
+  "detailed_date" : "mar. 29 juil. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Wagon Restaurant Bar\n32 Place de la Gare 59800 Lille\nItinéraire",
+  "event_id" : "1438865498439",
+  "name" : "Rigoladrink N°117 - juillet 2025",
+  "location" : "Wagon Restaurant Bar",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/inscription-rigoladrink-n117-juillet-2025-1438865498439?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-13T19:30:00",
+  "detailed_date" : "mer. 13 août 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "Bar Midi O Halles - Troyes\n11 Place Saint-Rémy 10000 Troyes\nItinéraire",
+  "event_id" : "1468668981459",
+  "name" : "Atelier \"Dolce Vita\"",
+  "location" : "mer. 13 août, 19:30",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/inscription-atelier-dolce-vita-1468668981459?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-04T11:00:00",
+  "detailed_date" : "lun. 4 août 2025 11:00 - 18:00 CEST",
+  "detailed_address" : "La Planque en Perche\nLa Buchère 61130 Bellou-le-Trichard\nItinéraire",
+  "event_id" : "1330790252469",
+  "name" : "SALON À l'OUEST 2025 @salonalouest",
+  "location" : "La Planque en Perche",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.com/e/billets-salon-a-louest-2025-salonalouest-1330790252469?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-06T19:30:00",
+  "detailed_date" : "mer. 6 août 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "Bar Midi O Halles - Troyes\n11 Place Saint-Rémy 10000 Troyes\nItinéraire",
+  "event_id" : "1460357742319",
+  "name" : "Atelier \"Un air de Frida\"",
+  "location" : "mer. 6 août, 19:30",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/inscription-atelier-un-air-de-frida-1460357742319?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-26T16:00:00",
+  "detailed_date" : "mar. 26 août 2025 16:00 - 20:00 CEST",
+  "detailed_address" : "17 Rue du Général Leclerc\n17 Rue du Général Leclerc 65400 Argelès-Gazost\nItinéraire",
+  "event_id" : "1352790004319",
+  "name" : "Météo des montagnes – Orages et prévention",
+  "location" : "17 Rue du Général Leclerc",
+  "category" : "science-and-tech",
+  "url" : "https://www.eventbrite.fr/e/billets-meteo-des-montagnes-orages-et-prevention-1352790004319?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-23T18:30:00",
+  "detailed_date" : "mer. 23 juil. 2025 18:30 - 21:30 CEST",
+  "detailed_address" : "Les Petites Cantines\n13 avenue Germain Perréard 74960 ANNECY\nItinéraire",
+  "event_id" : "1426445901089",
+  "name" : "2tonnes - Atelier à ANNECY (74960)",
+  "location" : "Les Petites Cantines",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-2tonnes-atelier-a-annecy-74960-1426445901089?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-02T13:50:00",
+  "detailed_date" : "2025-08-02T13:50:00Z",
+  "detailed_address" : "La Cité Fertile\n14 Avenue Edouard Vaillant 93500 Pantin\nItinéraire",
+  "event_id" : "1466043799469",
+  "name" : "Atelier : Symboles traditionnels mexicains [BELLATAM]",
+  "location" : "La Cité Fertile",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-symboles-traditionnels-mexicains-bellatam-1466043799469?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-11T08:30:00",
+  "detailed_date" : "jeu. 11 sept. 2025 08:30 - 17:30 CEST",
+  "detailed_address" : "IFAG - Ecole de management et de ressources humaines - Paris\n1 Rue Sainte-Marie 92400 Courbevoie\nItinéraire",
+  "event_id" : "1415123696069",
+  "name" : "La Non-Conférence du Recrutement de Paris 2025",
+  "location" : "IFAG - Ecole de management et de ressources humaines - Paris",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/inscription-la-non-conference-du-recrutement-de-paris-2025-1415123696069?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-25T15:00:00",
+  "detailed_date" : "ven. 25 juil. 2025 15:00 - 19:00 CEST",
+  "detailed_address" : "IPLN Paris - Spécialiste Photo et Vidéo\n3 Rue Lucien Sampaix 75010 Paris\nItinéraire",
+  "event_id" : "1449834928299",
+  "name" : "IPLN Paris - Rencontre avec Kenny Sika",
+  "location" : "vendredi prochain à 15:00",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-ipln-paris-rencontre-avec-kenny-sika-1449834928299?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-20T19:00:00",
+  "detailed_date" : "dim. 20 juil. 2025 19:00 - 20:30 CEST",
+  "detailed_address" : "Rue Française\nRue Française Paris\nItinéraire",
+  "event_id" : "1344978981339",
+  "name" : "Schubert Winterreise pour Accordéon & Voix",
+  "location" : "aujourd’hui à 19:00",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.co.uk/e/billets-schubert-winterreise-pour-accordeon-voix-1344978981339?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-16T17:00:00",
+  "detailed_date" : "2025-08-16T17:00:00Z",
+  "detailed_address" : "Chateau de Londigny | Boutique Stay & Spa Retreat\n5 Rue Du Chateau 16700 Londigny\nGet directions",
+  "event_id" : "1312786472679",
+  "name" : "Open Air Classics at Chateau de Londigny",
+  "location" : "Chateau de Londigny | Boutique Stay & Spa Retreat",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/open-air-classics-at-chateau-de-londigny-tickets-1312786472679?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-09T09:30:00",
+  "detailed_date" : "mar. 9 sept. 2025 09:30 - 17:30 CEST",
+  "detailed_address" : "lieu secret (comme pour tous les DIGITAL LUXE MEETINGS)\nPARIS 3e PARIS PARIS\nItinéraire",
+  "event_id" : "1307775735429",
+  "name" : "DIGITAL RH MEETING 2025 - 15e édition > The future of RH & DRH",
+  "location" : "lieu secret (comme pour tous les DIGITAL LUXE MEETINGS)",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-digital-rh-meeting-2025-15e-edition-the-future-of-rh-drh-1307775735429?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-01T17:00:00",
+  "detailed_date" : "2025-08-01T17:00:00Z",
+  "detailed_address" : "La Mécanique Ondulatoire\n8 Passage Thiéré 75011 Paris\nGet directions",
+  "event_id" : "1410714518099",
+  "name" : "TANZ AKADEMIE + THE QUIET SCREAMERS @LA MÉCANIQUE ONDULATOIRE",
+  "location" : "La Mécanique Ondulatoire",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.com/e/tanz-akademie-the-quiet-screamers-la-mecanique-ondulatoire-tickets-1410714518099?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-26T14:30:00",
+  "detailed_date" : "sam. 26 juil. 2025 14:30 - 17:30 CEST",
+  "detailed_address" : "Wanted Café Paris\n70 Rue du Faubourg Saint-Martin 75010 Paris\nItinéraire",
+  "event_id" : "1427192604499",
+  "name" : "Arrêtez d'être votre pire ennemi : Transformez vos pensées",
+  "location" : "Wanted Café Paris",
+  "category" : "health",
+  "url" : "https://www.eventbrite.fr/e/billets-arretez-detre-votre-pire-ennemi-transformez-vos-pensees-1427192604499?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-21T10:00:00",
+  "detailed_date" : "dim. 21 sept. 2025 10:00 - 17:00 CEST",
+  "detailed_address" : "Espace Tartalin\n435 Rue de l'Église 79230 Aiffres\nItinéraire",
+  "event_id" : "1271749630379",
+  "name" : "PIQUE-NIQUE Annuel | Journée d’information de la Fondation Beljanski",
+  "location" : "Espace Tartalin",
+  "category" : "health",
+  "url" : "https://www.eventbrite.com/e/billets-pique-nique-annuel-journee-dinformation-de-la-fondation-beljanski-1271749630379?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-25T18:30:00",
+  "detailed_date" : "ven. 25 juil. 2025 18:30 - 23:30 CEST",
+  "detailed_address" : "Château du Payre - Vignoble\n69 Route du Château d'Eau 33410 Cardan\nItinéraire",
+  "event_id" : "1405517904889",
+  "name" : "Soirée - Château Du Payre & Eric Boschman",
+  "location" : "Château du Payre - Vignoble",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.com/e/billets-soiree-chateau-du-payre-eric-boschman-1405517904889?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-28T22:30:00",
+  "detailed_date" : "2025-07-28T22:30:00Z",
+  "detailed_address" : "Nouvelle Acropole Lyon\n7 Place Antoine Vollon 69002 Lyon\nGet directions",
+  "event_id" : "1449025537389",
+  "name" : "Florence, ville de Renaissance : Le monde a besoin d’un nouveau printemps !",
+  "location" : "Nouvelle Acropole Lyon",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/florence-ville-de-renaissance-le-monde-a-besoin-dun-nouveau-printemps-tickets-1449025537389?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-09T08:30:00",
+  "detailed_date" : "mar. 9 sept. 2025 08:30 - 11:30 CEST",
+  "detailed_address" : "Pépinière d’entreprise CRÉACITÉ\n847 route de Frans 69400 VILLEFRANCHE-SUR-SAÔNE\nItinéraire",
+  "event_id" : "1432634120219",
+  "name" : "Speed Business Meeting Calad' Impulsion 9 septembre 2025",
+  "location" : "mar. 9 sept., 08:30",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-speed-business-meeting-calad-impulsion-9-septembre-2025-1432634120219?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-13T19:00:00",
+  "detailed_date" : "sam. 13 sept. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Perpignan\nPerpignan 66000 Perpignan\nItinéraire",
+  "event_id" : "1345292298479",
+  "name" : "Soirée Disney Channel & 2010's PERPIGNAN",
+  "location" : "Perpignan",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-perpignan-1345292298479?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-30T14:00:00",
+  "detailed_date" : "mar. 30 sept. 2025 14:00 - 17:00 CEST",
+  "detailed_address" : "Bâtiment Wikivillage\n8 Rue de Srebrenica 75020 Paris\nItinéraire",
+  "event_id" : "1426635839199",
+  "name" : "Coopérer n’est pas inné, mais ça s’apprend !",
+  "location" : "Bâtiment Wikivillage",
+  "category" : "charity-and-causes",
+  "url" : "https://www.eventbrite.fr/e/billets-cooperer-nest-pas-inne-mais-ca-sapprend-1426635839199?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-06T15:20:00",
+  "detailed_date" : "sam. 6 sept. 2025 15:20 - 17:30 CEST",
+  "detailed_address" : "Place du Panthéon\nPlace du Panthéon 75005 Paris\nItinéraire",
+  "event_id" : "1412847648349",
+  "name" : "La Rive Gauche et les Pionniers (en français)",
+  "location" : "Place du Panthéon",
+  "category" : "travel-and-outdoor",
+  "url" : "https://www.eventbrite.fr/e/billets-la-rive-gauche-et-les-pionniers-en-francais-1412847648349?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-20T20:00:00",
+  "detailed_date" : "sam. 20 sept. 2025 20:00 - dim. 21 sept. 2025 00:00 CEST",
+  "detailed_address" : "La Java\n105 Rue du Faubourg du Temple 75010 Paris\nItinéraire",
+  "event_id" : "1352569524859",
+  "name" : "THE SILENT PARTY (Paris)",
+  "location" : "La Java",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-the-silent-party-paris-1352569524859?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-31T16:45:00",
+  "detailed_date" : "2025-07-31T16:45:00Z",
+  "detailed_address" : "La Hacienda Coffee Shop - Nice\n2 Boulevard Gambetta 06000 Nice\nGet directions",
+  "event_id" : "1454549018269",
+  "name" : "Creative Apero & Social Art Night at La Hacienda Coffee Shop (Nice, FR)",
+  "location" : "La Hacienda Coffee Shop - Nice",
+  "category" : "community",
+  "url" : "https://www.eventbrite.com/e/creative-apero-social-art-night-at-la-hacienda-coffee-shop-nice-fr-tickets-1454549018269?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-26T15:00:00",
+  "detailed_date" : "sam. 26 juil. 2025 15:00 - 17:00 CEST",
+  "detailed_address" : "LIBRAIRIE A SOI.E\n16, RUE PIZAY 69001 LYON\nItinéraire",
+  "event_id" : "1438157179839",
+  "name" : "Cercle de Lecture de la Librairie à soi.e avec Isabelle",
+  "location" : "LIBRAIRIE A SOI.E",
+  "category" : "other",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-de-lecture-de-la-librairie-a-soie-avec-isabelle-1438157179839?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-04T17:00:00",
+  "detailed_date" : "2025-10-04T17:00:00Z",
+  "detailed_address" : "Badaboum\n2 bis Rue des Taillandiers 75011 Paris\nGet directions",
+  "event_id" : "1364125559269",
+  "name" : "Tonic Walter - It All Comes Together Tour 2025, Paris",
+  "location" : "Badaboum",
+  "category" : "music",
+  "url" : "https://www.eventbrite.de/e/tonic-walter-it-all-comes-together-tour-2025-paris-tickets-1364125559269?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-10T18:30:00",
+  "detailed_date" : "mer. 10 sept. 2025 18:30 - 21:30 CEST",
+  "detailed_address" : "Avenue de Soubise\nAvenue de Soubise 59130 Lambersart\nItinéraire",
+  "event_id" : "1450227482439",
+  "name" : "BCCI Lille (Late) Summer Party 2025",
+  "location" : "Avenue de Soubise",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-bcci-lille-late-summer-party-2025-1450227482439?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-01T20:00:00",
+  "detailed_date" : "mer. 1 oct. 2025 20:00 - 23:00 CEST",
+  "detailed_address" : "Le Ferrailleur\n21 Quai des Antilles 44200 Nantes\nItinéraire",
+  "event_id" : "1298123384989",
+  "name" : "L1NKN P4RK (The Linkin Park Experience) @ Le Ferrailleur, Nantes 01.10.2025",
+  "location" : "Le Ferrailleur",
+  "category" : "music",
+  "url" : "https://www.eventbrite.co.uk/e/billets-l1nkn-p4rk-the-linkin-park-experience-le-ferrailleur-nantes-01102025-1298123384989?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-27T15:30:00",
+  "detailed_date" : "dim. 27 juil. 2025 15:30 - 18:00 CEST",
+  "detailed_address" : "EspaceYUZU - Studio de YOGA - Paris 15\n240 Rue de la Croix Nivert 75015 Paris\nItinéraire",
+  "event_id" : "1470752673839",
+  "name" : "Atelier de breathwork : respiration holotropique",
+  "location" : "EspaceYUZU - Studio de YOGA - Paris 15",
+  "category" : "health",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-de-breathwork-respiration-holotropique-1470752673839?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-01T21:50:00",
+  "detailed_date" : "2025-08-01T21:50:00Z",
+  "detailed_address" : "La Cité Fertile\n14 Avenue Edouard Vaillant 93500 Pantin\nItinéraire",
+  "event_id" : "1465950520469",
+  "name" : "Cours de yoga et pilates [BELLATAM`]",
+  "location" : "La Cité Fertile",
+  "category" : "health",
+  "url" : "https://www.eventbrite.fr/e/billets-cours-de-yoga-et-pilates-bellatam-1465950520469?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-30T19:00:00",
+  "detailed_date" : "sam. 30 août 2025 19:00 - dim. 7 sept. 2025 22:00 CEST",
+  "detailed_address" : "Rue Française\n3 Rue Française 75001 Paris\nItinéraire",
+  "event_id" : "1330742810569",
+  "name" : "La Française Week",
+  "location" : "Rue Française",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/inscription-la-francaise-week-1330742810569?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-04T19:00:00",
+  "detailed_date" : "sam. 4 oct. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Lyon\nLYON 69000 Lyon\nItinéraire",
+  "event_id" : "1345356711139",
+  "name" : "Soirée Disney Channel & 2010's LYON",
+  "location" : "Lyon",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-lyon-1345356711139?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-21T10:00:00",
+  "detailed_date" : "lun. 21 juil. 2025 10:00 - ven. 25 juil. 2025 12:00 CEST",
+  "detailed_address" : "Blitz Society\n4 Rue du Sabot 75006 Paris\nItinéraire",
+  "event_id" : "1474474806839",
+  "name" : "STAGE D'ECHECS ETE 2025",
+  "location" : "demain à 10:00",
+  "category" : "hobbies",
+  "url" : "https://www.eventbrite.fr/e/billets-stage-dechecs-ete-2025-1474474806839?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-18T09:00:00",
+  "detailed_date" : "jeu. 18 sept. 2025 09:00 - 12:00 CEST",
+  "detailed_address" : "Future4care\n8 Rue Jean Antoine de Baïf 75013 Paris\nItinéraire",
+  "event_id" : "1427529261449",
+  "name" : "Fresque de l'IA en santé by Future4care 18 septembre 2025",
+  "location" : "Future4care",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-fresque-de-lia-en-sante-by-future4care-18-septembre-2025-1427529261449?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-12-05T16:00:00",
+  "detailed_date" : "ven. 5 déc. 2025 16:00 - dim. 7 déc. 2025 19:00 CET",
+  "detailed_address" : "Parc des Expositions de Bordeaux\nCours Jules Ladoumegue 33300 Bordeaux\nItinéraire",
+  "event_id" : "929734299317",
+  "name" : "art3f Bordeaux 2025",
+  "location" : "Parc des Expositions de Bordeaux",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-art3f-bordeaux-2025-929734299317?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-02T14:50:00",
+  "detailed_date" : "2025-08-02T14:50:00Z",
+  "detailed_address" : "La Cité Fertile\n14 Avenue Edouard Vaillant 93500 Pantin\nItinéraire",
+  "event_id" : "1466062023979",
+  "name" : "Atelier graffiti décolonial & féministe [BELLATAM]",
+  "location" : "La Cité Fertile",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-graffiti-decolonial-feministe-bellatam-1466062023979?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-11T19:00:00",
+  "detailed_date" : "sam. 11 oct. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Lille\nlille 59000 Lille\nItinéraire",
+  "event_id" : "1345382688839",
+  "name" : "Soirée Disney Channel & 2010's LILLE 3",
+  "location" : "Lille",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-lille-3-1345382688839?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-23T17:00:00",
+  "detailed_date" : "mar. 23 sept. 2025 17:00 - 19:30 CEST",
+  "detailed_address" : "90 Espl. du Général de Gaulle\n90 Esplanade du Général de Gaulle 92400 Courbevoie\nItinéraire",
+  "event_id" : "1392785060609",
+  "name" : "Atelier Mission Biodiversité – Ile de France - La Défense",
+  "location" : "mar. 23 sept., 17:00",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-mission-biodiversite-ile-de-france-la-defense-1392785060609?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-30T19:30:00",
+  "detailed_date" : "mar. 30 sept. 2025 19:30 - 23:30 CEST",
+  "detailed_address" : "New Morning\n7/9 Rue des Petites Écuries 75010 Paris\nItinéraire",
+  "event_id" : "1298118931669",
+  "name" : "L1NKN P4RK (The Linkin Park Experience) @ New Morning, Paris 30.09.2025",
+  "location" : "New Morning",
+  "category" : "music",
+  "url" : "https://www.eventbrite.co.uk/e/billets-l1nkn-p4rk-the-linkin-park-experience-new-morning-paris-30092025-1298118931669?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-25T14:30:00",
+  "detailed_date" : "ven. 25 juil. 2025 14:30 - 17:30 CEST",
+  "detailed_address" : "Bureau Mozart\n8 rue du Sentier 75002 PARIS\nItinéraire",
+  "event_id" : "1498433628319",
+  "name" : "Atelier Convergences inter-organisations à PARIS (75002)",
+  "location" : "vendredi prochain à 14:30",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-convergences-inter-organisations-a-paris-75002-1498433628319?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-27T19:00:00",
+  "detailed_date" : "sam. 27 sept. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Dijon\nDIJON 21000 Dijon\nItinéraire",
+  "event_id" : "1345307122819",
+  "name" : "Soirée Disney Channel & 2010's DIJON",
+  "location" : "Dijon",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-disney-channel-2010s-dijon-1345307122819?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-04T10:00:00",
+  "detailed_date" : "sam. 4 oct. 2025 10:00 - 19:00 CEST",
+  "detailed_address" : "Domaine du Malval\nCol de Malval 69670 Vaugneray\nItinéraire",
+  "event_id" : "940624141127",
+  "name" : "Salon intimiste Mariée au quotidien. Prestataire.",
+  "location" : "Domaine du Malval",
+  "category" : "business",
+  "url" : "https://www.eventbrite.com/e/billets-salon-intimiste-mariee-au-quotidien-prestataire-940624141127?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-20T19:00:00",
+  "detailed_date" : "sam. 20 sept. 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Paris\nParis 75 Paris\nItinéraire",
+  "event_id" : "1345458876719",
+  "name" : "Soirée 100% VIOLETTA/TINI PARIS",
+  "location" : "Paris",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-100-violettatini-paris-1345458876719?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-02T15:20:00",
+  "detailed_date" : "2025-08-02T15:20:00Z",
+  "detailed_address" : "La Cité Fertile\n14 Avenue Edouard Vaillant 93500 Pantin\nItinéraire",
+  "event_id" : "1466049456389",
+  "name" : "Atelier artistique : Se relier à ses ancêtres [BELLATAM]",
+  "location" : "La Cité Fertile",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-artistique-se-relier-a-ses-ancetres-bellatam-1466049456389?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-02T10:00:00",
+  "detailed_date" : "sam. 2 août 2025 10:00 - 13:00 CEST",
+  "detailed_address" : "Allez Hops! cave à bière\n15 Rue Defly 06000 Nice\nItinéraire",
+  "event_id" : "1252953580889",
+  "name" : "Initiation au brassage et à la dégustation",
+  "location" : "Allez Hops! cave à bière",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.fr/e/billets-initiation-au-brassage-et-a-la-degustation-1252953580889?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-03T10:00:00",
+  "detailed_date" : "dim. 3 août 2025 10:00 - 16:00 CEST",
+  "detailed_address" : "34 Rue Victor Hugo\n34 Rue Victor Hugo 62200 Boulogne-sur-Mer\nItinéraire",
+  "event_id" : "1484879046199",
+  "name" : "Les secrets de Grand-Mère avec Zelapanthere",
+  "location" : "34 Rue Victor Hugo",
+  "category" : "home-and-lifestyle",
+  "url" : "https://www.eventbrite.com/e/billets-les-secrets-de-grand-mere-avec-zelapanthere-1484879046199?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-09T19:00:00",
+  "detailed_date" : "mar. 9 sept. 2025 19:00 - 20:30 CEST",
+  "detailed_address" : "Jardin des Tuileries\nrue de rivoli 75001 Paris\nItinéraire",
+  "event_id" : "1401734689189",
+  "name" : "INSEAD ARTS - Visite du jardin des Tuileries",
+  "location" : "Jardin des Tuileries",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-insead-arts-visite-du-jardin-des-tuileries-1401734689189?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-29T10:00:00",
+  "detailed_date" : "mar. 29 juil. 2025 10:00 - 12:30 CEST",
+  "detailed_address" : "A confirmer\nA confirmer 27490 Cailly-sur-Eure\nItinéraire",
+  "event_id" : "1416638827869",
+  "name" : "Cercle Départemental dans l'Eure",
+  "location" : "A confirmer",
+  "category" : "business",
+  "url" : "https://www.eventbrite.fr/e/billets-cercle-departemental-dans-leure-1416638827869?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-21T19:00:00",
+  "detailed_date" : "lun. 21 juil. 2025 19:00 - 19:50 CEST",
+  "detailed_address" : "Parc de la tête d'Or - Devant la serre botanique\nAll. des Serres 69006 Lyon\nItinéraire",
+  "event_id" : "1413878451509",
+  "name" : "P.A.T COACHING - TRAINING CAMP #6",
+  "location" : "demain à 19:00",
+  "category" : "sports-and-fitness",
+  "url" : "https://www.eventbrite.fr/e/billets-pat-coaching-training-camp-6-1413878451509?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-29T17:30:00",
+  "detailed_date" : "2025-07-29T17:30:00Z",
+  "detailed_address" : "Cathédrale Saint-Étienne de Toulouse\nPlace Saint-Étienne 31000 Toulouse\nGet directions",
+  "event_id" : "1454560001119",
+  "name" : "Musicâme en Été – Concert à Toulouse – Cathédrale Saint-Etienne",
+  "location" : "Cathédrale Saint-Étienne de Toulouse",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/musicame-en-ete-concert-a-toulouse-cathedrale-saint-etienne-tickets-1454560001119?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-20T16:00:00",
+  "detailed_date" : "2025-08-20T16:00:00Z",
+  "detailed_address" : "Guru Paris\n36 Boulevard de la Bastille 75012 Paris\nItinéraire",
+  "event_id" : "1397168611929",
+  "name" : "DEVTEAMDRINK - Paris #18",
+  "location" : "mer. 20 août, 18:30",
+  "category" : "food-and-drink",
+  "url" : "https://www.eventbrite.ca/e/billets-devteamdrink-paris-18-1397168611929?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-28T17:30:00",
+  "detailed_date" : "jeu. 28 août 2025 17:30 - 20:30 CEST",
+  "detailed_address" : "Newtons Office\n1165 Rue Jean René Guillibert Gauthier de la Lauzière 13290 AIX-EN-PROVENCE - Les Milles\nItinéraire",
+  "event_id" : "1441281996249",
+  "name" : "Atelier Convergences inter-organisations à AIX-EN-PROVENCE - Les Milles (13290)",
+  "location" : "Newtons Office",
+  "category" : "N/A",
+  "url" : "https://www.eventbrite.fr/e/billets-atelier-convergences-inter-organisations-a-aix-en-provence-les-milles-13290-1441281996249?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-07-23T19:30:00",
+  "detailed_date" : "mer. 23 juil. 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "20 Rue de Buffon\n20 Rue de Buffon 76000 Rouen\nItinéraire",
+  "event_id" : "1381799331999",
+  "name" : "Conférence participative - La joie de l’effort",
+  "location" : "mercredi prochain à 19:30",
+  "category" : "health",
+  "url" : "https://www.eventbrite.fr/e/billets-conference-participative-la-joie-de-leffort-1381799331999?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-30T18:00:00",
+  "detailed_date" : "sam. 30 août 2025 18:00 - 19:30 CEST",
+  "detailed_address" : "Potters House Paris\n23 Rue des Messageries 75010 Paris\nItinéraire",
+  "event_id" : "1412019601639",
+  "name" : "Last Summer Jam free concert",
+  "location" : "Potters House Paris",
+  "category" : "music",
+  "url" : "https://www.eventbrite.fr/e/billets-last-summer-jam-free-concert-1412019601639?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-26T20:00:00",
+  "detailed_date" : "mar. 26 août 2025 20:00 - 22:00 CEST",
+  "detailed_address" : "Theater La Chocolaterie\n680 Rue Théophraste Renaudot 34430 Saint-Jean-de-Védas\nItinéraire",
+  "event_id" : "1429413396949",
+  "name" : "Alpine Universe à Montpellier",
+  "location" : "Theater La Chocolaterie",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.com/e/billets-alpine-universe-a-montpellier-1429413396949?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-13T19:30:00",
+  "detailed_date" : "mer. 13 août 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "20 Rue de Buffon\n20 Rue de Buffon 76000 Rouen\nItinéraire",
+  "event_id" : "1382682754339",
+  "name" : "Conférence - Un praticien de la voie du cœur, St Luc de Crimée",
+  "location" : "20 Rue de Buffon",
+  "category" : "spirituality",
+  "url" : "https://www.eventbrite.fr/e/billets-conference-un-praticien-de-la-voie-du-cur-st-luc-de-crimee-1382682754339?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-09T18:30:00",
+  "detailed_date" : "jeu. 9 oct. 2025 18:30 - 22:00 CEST",
+  "detailed_address" : "Crédit Agricole des Savoie - Entreprises\n4 Avenue du Pré Félin 74940 Annecy\nItinéraire",
+  "event_id" : "1437744706119",
+  "name" : "Nuit de la Résilience Annecy - Comment rebondir dans le chaos ?",
+  "location" : "Crédit Agricole des Savoie - Entreprises",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-nuit-de-la-resilience-annecy-comment-rebondir-dans-le-chaos-1437744706119?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-10-09T09:00:00",
+  "detailed_date" : "jeu. 9 oct. 2025 09:00 - ven. 10 oct. 2025 16:30 CEST",
+  "detailed_address" : "11 Rue Lavoisier\n11 Rue Lavoisier 75008 Paris\nItinéraire",
+  "event_id" : "1205696152649",
+  "name" : "Diagnostic Partagé (DP) : le BOOTCAMP sur 2 jours à Paris",
+  "location" : "11 Rue Lavoisier",
+  "category" : "other",
+  "url" : "https://www.eventbrite.fr/e/billets-diagnostic-partage-dp-le-bootcamp-sur-2-jours-a-paris-1205696152649?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-25T10:00:00",
+  "detailed_date" : "jeu. 25 sept. 2025 10:00 - 15:00 CEST",
+  "detailed_address" : "Péniche Aristote\nFaçade de l'Esplanade 59000 Lille\nItinéraire",
+  "event_id" : "1365803889199",
+  "name" : "Brunch&Learn - DPO Forum Lille",
+  "location" : "Péniche Aristote",
+  "category" : "business",
+  "url" : "https://www.eventbrite.co.uk/e/billets-brunchlearn-dpo-forum-lille-1365803889199?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-18T19:30:00",
+  "detailed_date" : "jeu. 18 sept. 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "Le Champo\n51 Rue des Écoles 75005 Paris\nItinéraire",
+  "event_id" : "1381598691879",
+  "name" : "LE GRAND SAUT - Le documentaire - Paris j'arrive !",
+  "location" : "Le Champo",
+  "category" : "film-and-media",
+  "url" : "https://www.eventbrite.com/e/billets-le-grand-saut-le-documentaire-paris-jarrive-1381598691879?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-09-22T07:00:00",
+  "detailed_date" : "2025-09-22T07:00:00Z",
+  "detailed_address" : "Future4care\n8 Rue Jean Antoine de Baïf 75013 Paris\nGet directions",
+  "event_id" : "1472991841249",
+  "name" : "AI4PHARMA : THE VALUE CHAIN REVOLUTION",
+  "location" : "Future4care",
+  "category" : "science-and-tech",
+  "url" : "https://www.eventbrite.fr/e/ai4pharma-the-value-chain-revolution-tickets-1472991841249?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-07T10:00:00",
+  "detailed_date" : "jeu. 7 août 2025 10:00 - 12:00 CEST",
+  "detailed_address" : "118 Pl. de Pipay\n118 Place de Pipay 38570 Theys\nItinéraire",
+  "event_id" : "1442708011499",
+  "name" : "ADN MUSIC FESTIVAL 2025 [11.12.13 JUILLET]",
+  "location" : "118 Pl. de Pipay",
+  "category" : "music",
+  "url" : "https://www.eventbrite.com.au/e/billets-adn-music-festival-2025-111213-juillet-1442708011499?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-14T19:00:00",
+  "detailed_date" : "jeu. 14 août 2025 19:00 - 23:30 CEST",
+  "detailed_address" : "Caffé Créole\n62 Boulevard Beaumarchais 75011 Paris\nItinéraire",
+  "event_id" : "1484397004399",
+  "name" : "Soirée Afrowork le jeudi 14 août 2025 de 19h à 1h30 au Caffé Créole",
+  "location" : "Caffé Créole",
+  "category" : "community",
+  "url" : "https://www.eventbrite.fr/e/billets-soiree-afrowork-le-jeudi-14-aout-2025-de-19h-a-1h30-au-caffe-creole-1484397004399?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-20T19:30:00",
+  "detailed_date" : "mer. 20 août 2025 19:30 - 21:30 CEST",
+  "detailed_address" : "Bar Midi O Halles - Troyes\n11 Place Saint-Rémy 10000 Troyes\nItinéraire",
+  "event_id" : "1468702311149",
+  "name" : "Atelier \"Esprit Banksy \"",
+  "location" : "mer. 20 août, 19:30",
+  "category" : "arts",
+  "url" : "https://www.eventbrite.fr/e/inscription-atelier-esprit-banksy-1468702311149?aff=ebdssbdestsearch"
+}, {
+  "date" : "2025-08-01T10:00:00",
+  "detailed_date" : "ven. 1 août 2025 10:00 - 12:00 CEST",
+  "detailed_address" : "Le Grand Mix\n5 Place Notre Dame 59200 Tourcoing\nItinéraire",
+  "event_id" : "1425807411349",
+  "name" : "Ocean Wisdom in Tourcoing",
+  "location" : "Le Grand Mix",
+  "category" : "travel-and-outdoor",
+  "url" : "https://www.eventbrite.fr/e/billets-ocean-wisdom-in-tourcoing-1425807411349?aff=ebdssbdestsearch"
+} ]
