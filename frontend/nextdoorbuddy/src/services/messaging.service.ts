@@ -9,7 +9,7 @@ import {
     ApiResponse 
 } from '../types/messaging.types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://doorbudy.cloud/';
 
 class MessagingService {
     private getAuthHeaders() {
@@ -84,6 +84,16 @@ class MessagingService {
         await this.handleResponse<void>(response);
     }
 
+    // Create or get direct message room for offline users
+    async createOfflineDirectMessage(targetUserId: number): Promise<ChatRoom> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/offline-direct-message`, {
+            method: 'POST',
+            headers: this.getAuthHeaders(),
+            body: JSON.stringify({ target_user_id: targetUserId })
+        });
+        return this.handleResponse<ChatRoom>(response);
+    }
+
     // Messages
     async getMessages(roomId: number, query: GetMessagesQuery = {}): Promise<Message[]> {
         const params = new URLSearchParams();
@@ -130,6 +140,37 @@ class MessagingService {
             headers: this.getAuthHeaders()
         });
         return this.handleResponse<UserPresence[]>(response);
+    }
+
+    // Get all neighborhood users (both online and offline)
+    async getNeighborhoodUsers(): Promise<UserPresence[]> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/users/neighborhood`, {
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse<UserPresence[]>(response);
+    }
+
+    // Offline Messages
+    async getUndeliveredMessages(): Promise<Message[]> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/messages/undelivered`, {
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse<Message[]>(response);
+    }
+
+    async getUndeliveredMessageCount(): Promise<{ count: number }> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/messages/undelivered/count`, {
+            headers: this.getAuthHeaders()
+        });
+        return this.handleResponse<{ count: number }>(response);
+    }
+
+    async markMessageAsRead(messageId: number): Promise<void> {
+        const response = await fetch(`${API_BASE_URL}/api/messaging/messages/${messageId}/mark-read`, {
+            method: 'POST',
+            headers: this.getAuthHeaders()
+        });
+        await this.handleResponse<void>(response);
     }
 }
 

@@ -1,140 +1,163 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import LanguageSelector from './LanguageSelector';
+import logoSvg from '../assets/logo.svg';
 import {
     Home,
     Calendar,
     ArrowRightLeft,
+    Briefcase,
     Heart,
     MessageCircle,
     User,
     LogOut,
     Sparkles,
     BookOpen
+    Menu,
+    X
 } from 'lucide-react';
 
 const Header = () => {
-    const { user, logout } = useAuth();
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const handleLogout = () => {
-        logout();
-        navigate('/login');
-    };
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
     const navigationItems = [
         { to: '/', label: t('navigation.home'), icon: Home },
         { to: '/events', label: t('navigation.events'), icon: Calendar },
         { to: '/trocs', label: t('navigation.trocs'), icon: ArrowRightLeft },
+        { to: '/services', label: 'Services', icon: Briefcase },
         { to: '/events/my-events', label: t('navigation.myEvents'), icon: Heart },
         { to: '/chat', label: t('navigation.chat'), icon: MessageCircle },
         { to: '/journal', label: t('navigation.journal'), icon: BookOpen },
         { to: '/profile', label: t('navigation.profile'), icon: User },
     ];
 
-    const adminNavigationItems = [
-        { to: '/admin/dashboard', label: t('navigation.adminDashboard'), icon: Sparkles },
-    ];
+  const adminNavigationItems = [
+    { to: '/admin/dashboard', label: t('navigation.adminDashboard'), icon: Sparkles },
+  ];
 
-    return (
-        <motion.header
-            className="bg-gradient-to-r from-white via-blue-50/30 to-indigo-50/30 backdrop-blur-sm border-b border-blue-100/50 shadow-lg hover:shadow-xl transition-all duration-300"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-        >
-            <div className="container mx-auto px-6 py-4 max-w-10xl">
-                <div className="flex items-center justify-between">
-                    {/* Logo and Brand */}
-                    <motion.div
-                        className="flex items-center space-x-8"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                    >
-                        <Link
-                            to="/"
-                            className="flex items-center space-x-3 group"
-                        >
-                            <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-br">
-                                <img src="/vite.svg" alt="NextDoor" className="w-28 h-15" />
-                            </div>
+  return (
+    <header className="bg-white/80 backdrop-blur-sm border-b border-blue-100 shadow-sm">
+      <div className="container mx-auto px-4 sm:px-6 py-3 max-w-7xl">
+        <div className="flex items-center justify-between">
+          {/* Logo and Brand */}
+          <div className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center group">
+              <img src={logoSvg} alt="Logo" className="w-10 h-10" />
+              <span className="ml-2 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Les copains du Quartier
+              </span>
+            </Link>
+          </div>
 
-                            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent group-hover:from-blue-700 group-hover:to-indigo-700 transition-all duration-300">
-                                Les copains du Quartier
-                            </span>
-                        </Link>
+          {/* Desktop Navigation */}
+          {user && (
+            <nav className="hidden lg:flex items-center space-x-2">
+              {navigationItems.map(({ to, label, icon: Icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition"
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="hidden xl:inline">{label}</span>
+                </Link>
+              ))}
 
-                        {/* Navigation */}
-                        {user && (
-                            <nav className="hidden lg:flex items-center space-x-4">
-                                {navigationItems.map((item) => {
-                                    const IconComponent = item.icon;
-                                    return (
-                                        <motion.div
-                                            key={item.to}
-                                            whileHover={{ y: -2 }}
-                                            transition={{ type: "spring", stiffness: 300 }}
-                                        >
-                                            <Link
-                                                to={item.to}
-                                                className="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 transition-all duration-300 font-medium group"
-                                            >
-                                                <IconComponent className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                                                <span>{item.label}</span>
-                                            </Link>
-                                        </motion.div>
-                                    );
-                                })}
+              {user.role === 'admin' && adminNavigationItems.map(({ to, label, icon: Icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-sm text-gray-600 hover:text-purple-600 hover:bg-purple-50 transition"
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="hidden xl:inline">{label}</span>
+                </Link>
+              ))}
+            </nav>
+          )}
 
-                                {/* Admin Navigation */}
-                                {user.role === 'admin' && (
-                                    <div className="flex items-center space-x-1 ml-2 pl-2 border-l border-gray-200">
-                                        {adminNavigationItems.map((item) => {
-                                            const IconComponent = item.icon;
-                                            return (
-                                                <motion.div
-                                                    key={item.to}
-                                                    whileHover={{ y: -2 }}
-                                                    transition={{ type: "spring", stiffness: 300 }}
-                                                >
-                                                    <Link
-                                                        to={item.to}
-                                                        className="flex items-center space-x-2 px-3 py-2 rounded-lg text-gray-600 hover:text-purple-600 hover:bg-purple-50/80 transition-all duration-300 text-sm font-medium group"
-                                                    >
-                                                        <IconComponent className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-                                                        <span className="hidden xl:inline">{item.label}</span>
-                                                    </Link>
-                                                </motion.div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </nav>
-                        )}
-                    </motion.div>
+          {/* Right section */}
+          {user && (
+            <div className="flex items-center space-x-3">
+              {/* Mobile menu toggle */}
+              <button
+                onClick={toggleMobileMenu}
+                className="lg:hidden p-2 rounded-md hover:bg-blue-100"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
 
-                    {/* User Section */}
-                    {user && (
-                        <motion.div
-                            className="flex items-center space-x-4"
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                            <div className="hidden md:flex items-center space-x-3 px-4 py-2 bg-white/60 backdrop-blur-sm rounded-xl border border-blue-100/50 shadow-sm">
-                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
-                                    <User className="w-4 h-4 text-white" />
-                                </div>
-                                <span className="text-gray-700 font-medium">
-                                    {t('home.greeting')}, <span className="text-blue-600 font-semibold">{user.prenom}</span>
-                                </span>
-                            </div>
+              {/* User greeting */}
+              <div className="hidden md:flex items-center px-3 py-1 bg-white/60 rounded-md border border-blue-100 text-sm">
+                <User className="w-4 h-4 text-blue-600 mr-2" />
+                <span>
+                  {t('home.greeting')},{' '}
+                  <span className="font-semibold text-blue-600">{user.prenom}</span>
+                </span>
+              </div>
 
-                            <LanguageSelector />
+              <LanguageSelector />
 
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('navigation.logout')}</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile menu */}
+        {user && mobileMenuOpen && (
+          <div className="lg:hidden mt-3 border-t border-blue-100 pt-4">
+            <nav className="space-y-2">
+              {navigationItems.map(({ to, label, icon: Icon }) => (
+                <Link
+                  key={to}
+                  to={to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center space-x-3 px-4 py-2 rounded-md text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition"
+                >
+                  <Icon className="w-5 h-5" />
+                  <span>{label}</span>
+                </Link>
+              ))}
+              {user.role === 'admin' &&
+                adminNavigationItems.map(({ to, label, icon: Icon }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center space-x-3 px-4 py-2 rounded-md text-sm text-gray-600 hover:text-purple-600 hover:bg-purple-50 transition"
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{label}</span>
+                  </Link>
+                ))}
+            </nav>
+          </div>
+        )}
+      </div>
+    </header>
+  );
                             <motion.button
                                 onClick={handleLogout}
                                 className="flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-medium shadow-lg hover:shadow-xl hover:from-red-600 hover:to-red-700 transition-all duration-300 group"
@@ -148,7 +171,7 @@ const Header = () => {
                     )}
                 </div>
             </div>
-        </motion.header>
+        </header>
     );
 };
 

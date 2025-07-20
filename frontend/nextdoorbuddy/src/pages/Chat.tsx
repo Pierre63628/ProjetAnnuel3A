@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { useChat } from '../contexts/ChatContext';
+import { MobileChatProvider, useMobileChat } from '../contexts/MobileChatContext';
 import ChatRoomList from '../components/chat/ChatRoomList';
 import ChatWindow from '../components/chat/ChatWindow';
 import OnlineUsers from '../components/chat/OnlineUsers';
+import NeighborhoodUsers from '../components/chat/NeighborhoodUsers';
 import CreateRoomModal from '../components/chat/CreateRoomModal';
+import MobileNavigation from '../components/chat/MobileNavigation';
+import SwipeGestureHandler from '../components/chat/SwipeGestureHandler';
+import UndeliveredMessagesNotification from '../components/chat/UndeliveredMessagesNotification';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import {
@@ -18,7 +23,8 @@ import {
     AlertCircle
 } from 'lucide-react';
 
-const Chat: React.FC = () => {
+// Create a separate component for the chat content to use mobile context
+const ChatContent: React.FC = () => {
     const {
         isConnected,
         isConnecting,
@@ -30,8 +36,14 @@ const Chat: React.FC = () => {
         connectToChat
     } = useChat();
 
+    const {
+        currentView,
+        isMobile
+    } = useMobileChat();
+
     const [showOnlineUsers, setShowOnlineUsers] = useState(false);
     const [showCreateRoom, setShowCreateRoom] = useState(false);
+    const [userViewMode, setUserViewMode] = useState<'online' | 'neighborhood'>('online');
 
     if (error) {
         return (
@@ -81,16 +93,69 @@ const Chat: React.FC = () => {
         );
     }
 
+    // Render mobile view based on current view state
+    const renderMobileView = () => {
+        switch (currentView) {
+            case 'rooms':
+                return (
+                    <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                        <ChatRoomList
+                            rooms={chatRooms}
+                            currentRoom={currentRoom}
+                            onShowCreateRoom={() => setShowCreateRoom(true)}
+                        />
+                    </Card>
+                );
+            case 'chat':
+                return (
+                    <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col overflow-hidden">
+                        <ChatWindow />
+                    </Card>
+                );
+            case 'users':
+                return (
+                    <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                        {userViewMode === 'online' ? (
+                            <OnlineUsers
+                                users={onlineUsers}
+                                currentRoom={currentRoom}
+                                onToggleView={() => setUserViewMode('neighborhood')}
+                                showToggle={isMobile}
+                            />
+                        ) : (
+                            <NeighborhoodUsers
+                                currentRoom={currentRoom}
+                                onToggleView={() => setUserViewMode('online')}
+                                showToggle={isMobile}
+                            />
+                        )}
+                    </Card>
+                );
+            default:
+                return null;
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
             <Header />
-            <div className="container mx-auto px-4 py-6 max-w-7xl h-[calc(100vh-60px)] flex flex-col">
-                <motion.div
-                    className="mb-6"
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                >
+
+            {/* Mobile Navigation */}
+            {isMobile && <MobileNavigation />}
+
+            <div className={`container mx-auto px-4 max-w-7xl flex flex-col ${
+                isMobile
+                    ? 'h-[calc(100vh-120px)] py-0' // Account for mobile nav + bottom tabs
+                    : 'h-[calc(100vh-60px)] py-6'
+            }`}>
+                {/* Desktop Header - Hidden on mobile */}
+                {!isMobile && (
+                    <motion.div
+                        className="mb-6"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center">
                             <MessageCircle className="w-8 h-8 text-blue-600 mr-3" />
@@ -105,7 +170,9 @@ const Chat: React.FC = () => {
                                     ) : (
                                         <>
                                             <WifiOff className="w-4 h-4 text-red-500 mr-2" />
-                                            <span className="text-red-600 text-sm font-medium">Déconnecté</span>
+                                            <span className="text-red-600 text-sm font-medium">
+                                                {isConnecting ? 'Connexion...' : 'Déconnecté'}
+                                            </span>
                                         </>
                                     )}
                                     <span className="text-gray-400 mx-2">•</span>
@@ -116,15 +183,30 @@ const Chat: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setShowOnlineUsers(!showOnlineUsers)}
-                                className="hidden md:flex"
-                            >
-                                <Users className="w-4 h-4 mr-2" />
-                                En ligne ({onlineUsers.length})
-                            </Button>
+                            <div className="hidden md:flex items-center gap-2">
+                                <Button
+                                    variant={userViewMode === 'online' ? 'solid' : 'outline'}
+                                    size="sm"
+                                    onClick={() => {
+                                        setUserViewMode('online');
+                                        setShowOnlineUsers(true);
+                                    }}
+                                >
+                                    <Wifi className="w-4 h-4 mr-2" />
+                                    En ligne ({onlineUsers.length})
+                                </Button>
+                                <Button
+                                    variant={userViewMode === 'neighborhood' ? 'solid' : 'outline'}
+                                    size="sm"
+                                    onClick={() => {
+                                        setUserViewMode('neighborhood');
+                                        setShowOnlineUsers(true);
+                                    }}
+                                >
+                                    <Users className="w-4 h-4 mr-2" />
+                                    Voisins
+                                </Button>
+                            </div>
                             <Button
                                 variant="outline"
                                 size="sm"
@@ -138,63 +220,106 @@ const Chat: React.FC = () => {
                             </Button>
                         </div>
                     </div>
-                </motion.div>
+                    </motion.div>
+                )}
                 <div className="flex-1 min-h-0">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full min-h-0">
-                        <motion.div
-                            className="lg:col-span-1 h-full min-h-0"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.1 }}
+                    {isMobile ? (
+                        /* Mobile Single-Column Layout with Swipe Gestures */
+                        <SwipeGestureHandler className="h-full">
+                            <motion.div
+                                className="h-full"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                                key={currentView} // Re-animate on view change
+                            >
+                                {renderMobileView()}
+                            </motion.div>
+                        </SwipeGestureHandler>
+                    ) : (
+                        /* Desktop Multi-Column Layout */
+                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-full min-h-0">
+                            <motion.div
+                                className="lg:col-span-1 h-full min-h-0"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: 0.1 }}
+                            >
+                                <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                                    <ChatRoomList
+                                        rooms={chatRooms}
+                                        currentRoom={currentRoom}
+                                        onShowCreateRoom={() => setShowCreateRoom(true)}
+                                    />
+                                </Card>
+                            </motion.div>
+                            <motion.div
+                                className="lg:col-span-2 h-full min-h-0"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.2 }}
+                            >
+                                <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col overflow-hidden">
+                                    <ChatWindow />
+                                </Card>
+                            </motion.div>
+                            <motion.div
+                                className={`lg:col-span-1 h-full min-h-0 ${showOnlineUsers || currentRoom ? 'block' : 'hidden lg:block'}`}
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5, delay: 0.3 }}
+                            >
+                                <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
+                                    {userViewMode === 'online' ? (
+                                        <OnlineUsers
+                                            users={onlineUsers}
+                                            currentRoom={currentRoom}
+                                            onToggleView={() => setUserViewMode('neighborhood')}
+                                            showToggle={false}
+                                        />
+                                    ) : (
+                                        <NeighborhoodUsers
+                                            currentRoom={currentRoom}
+                                            onToggleView={() => setUserViewMode('online')}
+                                            showToggle={false}
+                                        />
+                                    )}
+                                </Card>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+                {/* Desktop floating button - hidden on mobile since we have bottom tabs */}
+                {!isMobile && (
+                    <div className="lg:hidden fixed bottom-4 right-4">
+                        <Button
+                            onClick={() => setShowOnlineUsers(!showOnlineUsers)}
+                            className="rounded-full w-14 h-14 shadow-lg"
+                            size="lg"
                         >
-                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
-                                <ChatRoomList
-                                    rooms={chatRooms}
-                                    currentRoom={currentRoom}
-                                    onShowCreateRoom={() => setShowCreateRoom(true)}
-                                />
-                            </Card>
-                        </motion.div>
-                        <motion.div
-                            className="lg:col-span-2 h-full min-h-0"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                        >
-                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col overflow-hidden">
-                                <ChatWindow />
-                            </Card>
-                        </motion.div>
-                        <motion.div
-                            className={`lg:col-span-1 h-full min-h-0 ${showOnlineUsers || currentRoom ? 'block' : 'hidden lg:block'}`}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5, delay: 0.3 }}
-                        >
-                            <Card className="h-full min-h-0 shadow-lg border-0 bg-white/90 backdrop-blur-sm flex flex-col">
-                                <OnlineUsers
-                                    users={onlineUsers}
-                                    currentRoom={currentRoom}
-                                />
-                            </Card>
-                        </motion.div>
+                            <Users className="w-6 h-6" />
+                        </Button>
                     </div>
-                </div>
-                <div className="lg:hidden fixed bottom-4 right-4">
-                    <Button
-                        onClick={() => setShowOnlineUsers(!showOnlineUsers)}
-                        className="rounded-full w-14 h-14 shadow-lg"
-                        size="lg"
-                    >
-                        <Users className="w-6 h-6" />
-                    </Button>
-                </div>
+                )}
+
                 <CreateRoomModal
                     isOpen={showCreateRoom}
                     onClose={() => setShowCreateRoom(false)}
                 />
+
+                {/* Undelivered Messages Notification */}
+                <UndeliveredMessagesNotification />
             </div>
         </div>
+    );
+};
+
+// Main Chat component wrapped with MobileChatProvider
+const Chat: React.FC = () => {
+    return (
+        <MobileChatProvider>
+            <ChatContent />
+        </MobileChatProvider>
     );
 };
 

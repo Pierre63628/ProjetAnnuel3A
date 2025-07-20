@@ -18,7 +18,7 @@ export class WebSocketService {
     constructor(server: HTTPServer) {
         this.io = new SocketIOServer(server, {
             cors: {
-                origin: process.env.FRONTEND_URL || "http://localhost:5173",
+                origin: process.env.FRONTEND_URL || "http://37.59.118.112:80",
                 methods: ["GET", "POST"],
                 credentials: true
             }
@@ -104,6 +104,30 @@ export class WebSocketService {
             const userRooms = await ChatRoomModel.getChatRoomsForUser(userId);
             for (const room of userRooms) {
                 socket.join(`room_${room.id}`);
+            }
+
+            // Check for undelivered messages and notify user
+            try {
+                const MessageModel = (await import('../models/message.model.js')).MessageModel;
+                const undeliveredMessages = await MessageModel.getUndeliveredMessages(userId);
+
+                if (undeliveredMessages.length > 0) {
+                    console.log(`📬 User ${userId} has ${undeliveredMessages.length} undelivered messages`);
+
+                    // Send notification about undelivered messages
+                    socket.emit('undelivered_messages_notification', {
+                        count: undeliveredMessages.length,
+                        messages: undeliveredMessages
+                    });
+
+                    // Mark messages as delivered now that user is online
+                    const messageIds = undeliveredMessages.map(msg => msg.id);
+                    await MessageModel.markMessagesAsDelivered(userId, messageIds);
+
+                    console.log(`✅ Marked ${messageIds.length} messages as delivered for user ${userId}`);
+                }
+            } catch (error) {
+                console.error('Error checking undelivered messages:', error);
             }
 
             // Handle joining a specific room

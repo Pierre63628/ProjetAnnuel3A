@@ -258,7 +258,7 @@ export class MessagingController {
         try {
             const quartierId = req.user!.quartier_id!;
             const onlineUsers = await UserPresenceModel.getOnlineUsersInQuartier(quartierId);
-            
+
             res.json({
                 success: true,
                 data: onlineUsers
@@ -268,6 +268,28 @@ export class MessagingController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to get online users'
+            });
+        }
+    }
+
+    // Get all users in the same neighborhood (quartier) for offline messaging
+    static async getNeighborhoodUsers(req: AuthenticatedRequest, res: Response) {
+        try {
+            const quartierId = req.user!.quartier_id!;
+            const currentUserId = req.user!.id!;
+
+            // Get all users in the same neighborhood with their presence status
+            const neighborhoodUsers = await UserPresenceModel.getAllUsersInQuartier(quartierId, currentUserId);
+
+            res.json({
+                success: true,
+                data: neighborhoodUsers
+            });
+        } catch (error) {
+            console.error('Error getting neighborhood users:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to get neighborhood users'
             });
         }
     }
@@ -388,6 +410,134 @@ export class MessagingController {
             res.status(500).json({
                 success: false,
                 message: 'Failed to create direct message'
+            });
+        }
+    }
+
+    // Create or get direct message room for offline messaging (same as above but more explicit)
+    static async createOfflineDirectMessage(req: AuthenticatedRequest, res: Response) {
+        try {
+            const userId = req.user!.id!;
+            const targetUserId = parseInt(req.body.target_user_id);
+            const quartierId = req.user!.quartier_id!;
+
+            if (!targetUserId || targetUserId === userId) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Valid target user ID is required'
+                });
+            }
+
+            // Check if target user exists and is in the same neighborhood
+            const targetUserQuery = 'SELECT nom, prenom FROM "Utilisateur" WHERE id = $1 AND quartier_id = $2';
+            const targetUserResult = await pool.query(targetUserQuery, [targetUserId, quartierId]);
+
+            if (targetUserResult.rows.length === 0) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Target user not found in your neighborhood'
+                });
+            }
+
+            // Check if direct message room already exists
+            const existingRoom = await ChatRoomModel.findDirectMessageRoom(userId, targetUserId);
+
+            if (existingRoom) {
+                return res.json({
+                    success: true,
+                    data: existingRoom,
+                    message: 'Existing conversation found'
+                });
+            }
+
+            const targetUser = targetUserResult.rows[0];
+            const currentUser = req.user!;
+
+            // Create new direct message room for offline messaging
+            const roomName = `${currentUser.prenom} & ${targetUser.prenom}`;
+            const room = await ChatRoomModel.createChatRoom({
+                name: roomName,
+                description: `Conversation privée entre ${currentUser.prenom} et ${targetUser.prenom}`,
+                room_type: 'direct',
+                member_ids: [targetUserId]
+            }, userId, quartierId);
+
+            res.status(201).json({
+                success: true,
+                data: room,
+                message: 'Direct message conversation created for offline user'
+            });
+        } catch (error) {
+            console.error('Error creating offline direct message:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to create offline direct message'
+            });
+        }
+    }
+
+    // Get undelivered messages for the current user
+    static async getUndeliveredMessages(req: AuthenticatedRequest, res: Response) {
+        try {
+            const userId = req.user!.id!;
+            const undeliveredMessages = await MessageModel.getUndeliveredMessages(userId);
+
+            // Mark messages as delivered now that they've been retrieved
+            if (undeliveredMessages.length > 0) {
+                const messageIds = undeliveredMessages.map(msg => msg.id);
+                await MessageModel.markMessagesAsDelivered(userId, messageIds);
+            }
+
+            res.json({
+                success: true,
+                data: undeliveredMessages,
+                count: undeliveredMessages.length
+            });
+        } catch (error) {
+            console.error('Error getting undelivered messages:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to get undelivered messages'
+            });
+        }
+    }
+
+    // Get undelivered message count for the current user
+    static async getUndeliveredMessageCount(req: AuthenticatedRequest, res: Response) {
+        try {
+            const userId = req.user!.id!;
+            const count = await MessageModel.getUndeliveredMessageCount(userId);
+
+            res.json({
+                success: true,
+                data: { count }
+            });
+        } catch (error) {
+            console.error('Error getting undelivered message count:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to get undelivered message count'
+            });
+        }
+    }
+
+    // Mark a specific message as read
+    static async markMessageAsRead(req: AuthenticatedRequest, res: Response) {
+        try {
+            const messageId = parseInt(req.params.messageId);
+            const userId = req.user!.id!;
+
+            await MessageModel.markMessageAsRead(messageId, userId);
+
+            res.json({
+                success: true,
+                message: 'Message marked as read'
+            });
+        } catch (error) {
+            console.error('Error marking message as read:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to mark message as read'
             });
         }
     }

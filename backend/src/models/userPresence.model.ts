@@ -54,7 +54,7 @@ export class UserPresenceModel {
     // Get online users in a quartier
     static async getOnlineUsersInQuartier(quartierId: number): Promise<UserPresence[]> {
         const query = `
-            SELECT 
+            SELECT
                 up.*,
                 json_build_object(
                     'id', u.id,
@@ -63,13 +63,45 @@ export class UserPresenceModel {
                 ) as user
             FROM "UserPresence" up
             INNER JOIN "Utilisateur" u ON up.user_id = u.id
-            WHERE u.quartier_id = $1 
+            WHERE u.quartier_id = $1
             AND up.status IN ('online', 'away', 'busy')
             AND up.last_seen > NOW() - INTERVAL '5 minutes'
             ORDER BY up.last_seen DESC
         `;
-        
+
         const result = await pool.query(query, [quartierId]);
+        return result.rows;
+    }
+
+    // Get all users in a quartier (both online and offline) for offline messaging
+    static async getAllUsersInQuartier(quartierId: number, excludeUserId?: number): Promise<UserPresence[]> {
+        const query = `
+            SELECT
+                COALESCE(up.id, 0) as id,
+                u.id as user_id,
+                COALESCE(up.status, 'offline') as status,
+                COALESCE(up.last_seen, u.created_at) as last_seen,
+                up.socket_id,
+                COALESCE(up.updated_at, u.created_at) as updated_at,
+                json_build_object(
+                    'id', u.id,
+                    'nom', u.nom,
+                    'prenom', u.prenom
+                ) as user
+            FROM "Utilisateur" u
+            LEFT JOIN "UserPresence" up ON u.id = up.user_id
+            WHERE u.quartier_id = $1
+            ${excludeUserId ? 'AND u.id != $2' : ''}
+            ORDER BY
+                CASE
+                    WHEN up.status IN ('online', 'away', 'busy') AND up.last_seen > NOW() - INTERVAL '5 minutes' THEN 1
+                    ELSE 2
+                END,
+                COALESCE(up.last_seen, u.created_at) DESC
+        `;
+
+        const params = excludeUserId ? [quartierId, excludeUserId] : [quartierId];
+        const result = await pool.query(query, params);
         return result.rows;
     }
 

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 import { createEvenement, getEvenementById, updateEvenement } from '../services/evenement.service';
+import { getImageUrl } from '../utils/imageUtils';
 
 const EventForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -26,6 +27,11 @@ const EventForm = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [initialLoading, setInitialLoading] = useState(isEditMode);
+
+    // Image upload states
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     useEffect(() => {
         const fetchEvenement = async () => {
@@ -75,6 +81,19 @@ const EventForm = () => {
             ...formData,
             [name]: value
         });
+
+        // Real-time validation for date field
+        if (name === 'date_evenement' && value) {
+            const dateError = validateEventDate(value);
+            if (dateError) {
+                setError(dateError);
+            } else {
+                // Clear error if date is valid and it was a date error
+                if (error === "La date de l'événement ne peut pas être antérieure à maintenant") {
+                    setError('');
+                }
+            }
+        }
     };
 
     const handleAddressSelect = (address: {
@@ -93,6 +112,93 @@ const EventForm = () => {
         });
     };
 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // Check file type
+        if (!file.type.startsWith('image/')) {
+            setError('Seules les images sont autorisées (JPEG, PNG, GIF, WebP, etc.)');
+            return;
+        }
+
+        // Check file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+            setError('Le fichier est trop volumineux (max 5MB)');
+            return;
+        }
+
+        setImageFile(file);
+        setError(''); // Clear any previous errors
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            setImagePreview(e.target?.result as string);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const removeImage = () => {
+        setImageFile(null);
+        setImagePreview(null);
+        setFormData({
+            ...formData,
+            photo_url: ''
+        });
+
+        // Reset file input
+        const fileInput = document.getElementById('image_file') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+    };
+
+    const uploadImage = async (): Promise<string | null> => {
+        if (!imageFile) return null;
+
+        try {
+            setUploadingImage(true);
+            const formData = new FormData();
+            formData.append('image', imageFile);
+
+            const response = await fetch('/api/upload/image', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data.imageUrl || null;
+            } else {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || `Erreur ${response.status} lors de l'upload`);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'upload de l\'image:', error);
+            throw error;
+        } finally {
+            setUploadingImage(false);
+        }
+    };
+
+    const validateEventDate = (dateString: string): string | null => {
+        if (!dateString) return null;
+
+        const eventDate = new Date(dateString);
+        const now = new Date();
+        // Allow a 5-minute buffer to account for form filling time
+        const bufferTime = 5 * 60 * 1000; // 5 minutes in milliseconds
+        const minimumDate = new Date(now.getTime() - bufferTime);
+
+        if (eventDate < minimumDate) {
+            return "La date de l'événement ne peut pas être antérieure à maintenant";
+        }
+
+        return null;
+    };
+
     const validateForm = () => {
         if (!formData.nom.trim()) {
             setError(t('events.errors.nameRequired'));
@@ -101,6 +207,13 @@ const EventForm = () => {
 
         if (!formData.date_evenement) {
             setError(t('events.errors.dateRequired'));
+            return false;
+        }
+
+        // Validate that the event date is not in the past
+        const dateError = validateEventDate(formData.date_evenement);
+        if (dateError) {
+            setError(dateError);
             return false;
         }
 
@@ -133,8 +246,28 @@ const EventForm = () => {
             setError('');
             setSuccess('');
 
+            // Upload image if a new one is selected
+            let imageUrl = formData.photo_url; // Keep existing image URL if no new image
+            if (imageFile) {
+                try {
+                    const uploadedImageUrl = await uploadImage();
+                    if (uploadedImageUrl) {
+                        imageUrl = uploadedImageUrl;
+                    }
+                } catch (uploadError) {
+                    setError('Erreur lors de l\'upload de l\'image');
+                    return;
+                }
+            }
+
+            // Prepare form data with image URL
+            const eventData = {
+                ...formData,
+                photo_url: imageUrl
+            };
+
             if (isEditMode && id) {
-                const result = await updateEvenement(parseInt(id), formData);
+                const result = await updateEvenement(parseInt(id), eventData);
 
                 if (result) {
                     setSuccess('Événement mis à jour avec succès');
@@ -145,7 +278,7 @@ const EventForm = () => {
                     setError('Erreur lors de la mise à jour de l\'événement');
                 }
             } else {
-                const result = await createEvenement(formData);
+                const result = await createEvenement(eventData);
 
                 if (result) {
                     setSuccess('Événement créé avec succès');
@@ -267,6 +400,54 @@ const EventForm = () => {
                             className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
                             placeholder="Ex: fête, atelier, réunion..."
                         />
+                    </div>
+
+                    {/* Image Upload Section */}
+                    <div className="mb-4">
+                        <label className="mb-2 block font-medium text-gray-700">
+                            Photo de l'événement
+                        </label>
+
+                        {/* Current image display */}
+                        {(formData.photo_url || imagePreview) && (
+                            <div className="mb-4">
+                                <div className="relative inline-block">
+                                    <img
+                                        src={imagePreview || getImageUrl(formData.photo_url) || ''}
+                                        alt="Aperçu de l'événement"
+                                        className="h-32 w-48 object-cover rounded-lg border"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={removeImage}
+                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                <p className="text-sm text-gray-500 mt-2">
+                                    {imagePreview ? 'Nouvelle image sélectionnée' : 'Image actuelle'}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* File input */}
+                        <input
+                            type="file"
+                            id="image_file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                        />
+                        <p className="mt-1 text-sm text-gray-500">
+                            Formats acceptés: JPEG, PNG, GIF, WebP (max 5MB)
+                        </p>
+
+                        {uploadingImage && (
+                            <p className="mt-2 text-sm text-blue-600">
+                                Upload de l'image en cours...
+                            </p>
+                        )}
                     </div>
 
                     <div className="mb-4">

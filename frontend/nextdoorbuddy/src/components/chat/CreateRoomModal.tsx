@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 import { useChat } from '../../contexts/ChatContext';
+import { useMobileChat } from '../../contexts/MobileChatContext';
 import messagingService from '../../services/messaging.service';
-import { 
-    X, 
-    Hash, 
-    Users, 
+import {
+    X,
+    Hash,
+    Users,
     MessageCircle,
     Plus
 } from 'lucide-react';
@@ -19,6 +20,7 @@ interface CreateRoomModalProps {
 
 const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) => {
     const { selectRoom, refreshChatRooms } = useChat();
+    const { isMobile } = useMobileChat();
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -75,27 +77,37 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+                    className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+                        isMobile ? 'p-2' : 'p-4'
+                    }`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={handleClose}
                 >
                     <motion.div
-                        className="w-full max-w-md"
+                        className={isMobile ? 'w-full h-full' : 'w-full max-w-md'}
                         initial={{ opacity: 0, scale: 0.9, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <Card className="shadow-xl">
-                            <CardContent className="p-6">
+                        <Card className={`shadow-xl ${
+                            isMobile ? 'h-full rounded-none' : 'rounded-lg'
+                        }`}>
+                            <CardContent className={isMobile ? 'p-4 h-full flex flex-col' : 'p-6'}>
                                 {/* Header */}
-                                <div className="flex items-center justify-between mb-6">
+                                <div className={`flex items-center justify-between ${
+                                    isMobile ? 'mb-4' : 'mb-6'
+                                }`}>
                                     <div className="flex items-center">
-                                        <MessageCircle className="w-6 h-6 text-blue-600 mr-3" />
-                                        <h2 className="text-xl font-semibold text-gray-900">
-                                            Créer un nouveau salon
+                                        <MessageCircle className={`text-blue-600 mr-3 ${
+                                            isMobile ? 'w-5 h-5' : 'w-6 h-6'
+                                        }`} />
+                                        <h2 className={`font-semibold text-gray-900 ${
+                                            isMobile ? 'text-lg' : 'text-xl'
+                                        }`}>
+                                            {isMobile ? 'Nouveau salon' : 'Créer un nouveau salon'}
                                         </h2>
                                     </div>
                                     <Button
@@ -103,7 +115,7 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
                                         size="sm"
                                         onClick={handleClose}
                                         disabled={isLoading}
-                                        className="p-1"
+                                        className={isMobile ? 'p-3 min-h-[44px] min-w-[44px]' : 'p-1'}
                                     >
                                         <X className="w-5 h-5" />
                                     </Button>
@@ -117,7 +129,9 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
                                 )}
 
                                 {/* Form */}
-                                <form onSubmit={handleSubmit} className="space-y-4">
+                                <form onSubmit={handleSubmit} className={`space-y-4 ${
+                                    isMobile ? 'flex-1 flex flex-col' : ''
+                                }`}>
                                     {/* Room Type */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -164,7 +178,12 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
                                             value={formData.name}
                                             onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                                             placeholder="Entrez le nom du salon"
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className={`w-full px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                                                isMobile ? 'py-3 text-base min-h-[44px]' : 'py-2 text-sm'
+                                            }`}
+                                            style={{
+                                                fontSize: isMobile ? '16px' : '14px' // Prevent zoom on iOS
+                                            }}
                                             disabled={isLoading}
                                             maxLength={255}
                                             required
@@ -189,20 +208,26 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({ isOpen, onClose }) =>
                                     </div>
 
                                     {/* Actions */}
-                                    <div className="flex gap-3 pt-4">
+                                    <div className={`flex gap-3 ${
+                                        isMobile ? 'pt-6 mt-auto' : 'pt-4'
+                                    }`}>
                                         <Button
                                             type="button"
                                             variant="outline"
                                             onClick={handleClose}
                                             disabled={isLoading}
-                                            className="flex-1"
+                                            className={`flex-1 ${
+                                                isMobile ? 'min-h-[44px] text-base' : ''
+                                            }`}
                                         >
                                             Annuler
                                         </Button>
                                         <Button
                                             type="submit"
                                             disabled={isLoading || !formData.name.trim()}
-                                            className="flex-1"
+                                            className={`flex-1 ${
+                                                isMobile ? 'min-h-[44px] text-base' : ''
+                                            }`}
                                         >
                                             {isLoading ? (
                                                 <div className="flex items-center">

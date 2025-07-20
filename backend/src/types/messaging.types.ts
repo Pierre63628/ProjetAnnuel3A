@@ -117,6 +117,7 @@ export interface ServerToClientEvents {
     message_reaction_removed: (data: { messageId: number; userId: number; reaction: string }) => void;
     room_created: (room: ChatRoom) => void;
     room_updated: (room: ChatRoom) => void;
+    undelivered_messages_notification: (data: { count: number; messages: Message[] }) => void;
     error: (error: { message: string; code?: string }) => void;
 }
 
