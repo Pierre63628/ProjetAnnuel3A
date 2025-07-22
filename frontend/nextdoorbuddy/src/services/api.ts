@@ -103,8 +103,5 @@ export default {
         method: 'PATCH',
         body: JSON.stringify(data),
     }),
-    delete: (endpoint: string, data?: any) => apiRequest(endpoint, {
-        method: 'DELETE',
-        ...(data ? { body: JSON.stringify(data) } : {})
-    }),
+    delete: (endpoint: string) => apiRequest(endpoint, { method: 'DELETE' }),
 };

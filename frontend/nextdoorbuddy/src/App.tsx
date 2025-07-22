@@ -10,17 +10,27 @@ import ServiceForm from "./pages/ServiceForm"
 import ServiceDetail from "./pages/ServiceDetail"
 import MyServices from "./pages/MyServices"
 import Signup from "./pages/Signup"
+import EmailVerification from "./pages/EmailVerification"
+import VerificationSent from "./pages/VerificationSent"
 import Profile from "./pages/Profile"
 import AdminUsers from "./pages/AdminUsers"
 import AdminQuartiers from "./pages/AdminQuartiers"
 import AdminTrocs from "./pages/AdminTrocs"
 import AdminServices from "./pages/AdminServices"
 import AdminDashboard from "./pages/AdminDashboard"
+
 import Events from "./pages/Events"
 import EventForm from "./pages/EventForm"
 import TestCarousel from "./pages/TestCarousel"
 import MyEvents from "./pages/MyEvents"
 import Chat from "./pages/Chat"
+import Journal from "./pages/Journal"
+import NewJournal from "./pages/NewJournal"
+import CreateJournal from "./pages/CreateJournal"
+import ArticleForm from "./pages/ArticleForm"
+import ArticleDetail from "./pages/ArticleDetail"
+import EditionDetail from "./pages/EditionDetail"
+
 import I18nTest from "./pages/I18nTest"
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
 import { ChatProvider } from "./contexts/ChatContext"
@@ -28,7 +38,7 @@ import EventDetails from "./pages/EventsDetail.tsx";
 
 // Composant pour les routes protégées
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -41,6 +51,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     );
   }
 
+  // If user exists but email is not verified, redirect to verification
+  if (user && !user.email_verified) {
+    return <Navigate to="/verify-email" state={{
+      email: user.email,
+      userId: user.id,
+      fromProtectedRoute: true
+    }} replace />;
+  }
+
+  // If no user at all, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
@@ -141,6 +161,44 @@ function AppRoutes() {
           <Chat />
         </ProtectedRoute>
       } />
+      <Route path="/journal" element={
+        <ProtectedRoute>
+          <Journal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/new" element={
+        <ProtectedRoute>
+          <NewJournal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/create-journal" element={
+        <ProtectedRoute>
+          <CreateJournal />
+        </ProtectedRoute>
+      } />
+
+      <Route path="/journal/create" element={
+        <ProtectedRoute>
+          <ArticleForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/edit/:id" element={
+        <ProtectedRoute>
+          <ArticleForm />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/:id" element={
+        <ProtectedRoute>
+          <ArticleDetail />
+        </ProtectedRoute>
+      } />
+      <Route path="/journal/edition/:uuid" element={
+        <ProtectedRoute>
+          <EditionDetail />
+        </ProtectedRoute>
+      } />
       <Route path="/events/:id" element={
         <ProtectedRoute>
           <EventDetails />
@@ -183,6 +241,8 @@ function AppRoutes() {
       } />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/verify-email" element={<EmailVerification />} />
+      <Route path="/verification-sent" element={<VerificationSent />} />
       <Route path="/test-carousel" element={<TestCarousel />} />
       <Route path="/i18n-test" element={<I18nTest />} />
     </Routes>

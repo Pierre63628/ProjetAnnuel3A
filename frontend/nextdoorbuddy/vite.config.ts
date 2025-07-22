@@ -30,7 +30,6 @@ export default defineConfig({
       '/uploads': {
         target: 'http://nextdoorbuddy-backend:3000',
         changeOrigin: true,
-        rewrite: (path) => path,
       },
     },
   },

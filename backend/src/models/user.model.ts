@@ -11,7 +11,10 @@ export interface User {
     date_naissance?: Date;
     telephone?: string;
     quartier_id?: number;
+    profile_picture?: string;
     role?: string;
+    email_verified?: boolean;
+    email_verified_at?: Date;
     created_at?: Date;
     updated_at?: Date;
 }
@@ -20,10 +23,10 @@ export class UserModel {
     // Trouver un utilisateur par email
     static async findByEmail(email: string): Promise<User | null> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Utilisateur" WHERE email = $1',
-                [email]
-            );
+                    const result = await pool.query(
+            'SELECT * FROM "Utilisateur" WHERE email = $1',
+            [email]
+        );
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by email:', error);
@@ -34,10 +37,10 @@ export class UserModel {
     // Trouver un utilisateur par ID
     static async findById(id: number): Promise<User | null> {
         try {
-            const result = await pool.query(
-                'SELECT * FROM "Utilisateur" WHERE id = $1',
-                [id]
-            );
+                    const result = await pool.query(
+            'SELECT * FROM "Utilisateur" WHERE id = $1',
+            [id]
+        );
             return result.rows.length ? result.rows[0] : null;
         } catch (error) {
             console.error('Error finding user by id:', error);
@@ -53,8 +56,8 @@ export class UserModel {
 
             const result = await pool.query(
                 `INSERT INTO "Utilisateur"
-                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+                (nom, prenom, email, password, adresse, date_naissance, telephone, quartier_id, profile_picture, email_verified)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
                 [
                     userData.nom,
                     userData.prenom,
@@ -63,7 +66,9 @@ export class UserModel {
                     userData.adresse || null,
                     userData.date_naissance || null,
                     userData.telephone || null,
-                    userData.quartier_id || null
+                    userData.quartier_id || null,
+                    userData.profile_picture || null,
+                    userData.email_verified || false
                 ]
             );
 
@@ -148,9 +153,19 @@ export class UserModel {
                 values.push(userData.quartier_id);
             }
 
+            if (userData.profile_picture !== undefined) {
+                fields.push(`profile_picture = $${paramIndex++}`);
+                values.push(userData.profile_picture);
+            }
+
             if (userData.role !== undefined) {
                 fields.push(`role = $${paramIndex++}`);
                 values.push(userData.role);
+            }
+
+            if (userData.email_verified !== undefined) {
+                fields.push(`email_verified = $${paramIndex++}`);
+                values.push(userData.email_verified);
             }
 
             // Si aucun champ à mettre à jour, retourner true
@@ -195,6 +210,43 @@ export class UserModel {
             return result.rows;
         } catch (error) {
             console.error('Error finding all users:', error);
+            throw error;
+        }
+    }
+
+    // Récupérer tous les utilisateurs avec leurs informations de quartier
+    static async findAllWithQuartier(): Promise<any[]> {
+        try {
+            const result = await pool.query(`
+                SELECT
+                    u.id,
+                    u.nom,
+                    u.prenom,
+                    u.email,
+                    u.adresse,
+                    u.telephone,
+                    u.date_naissance,
+                    u.profile_picture,
+                    u.role,
+                    u.email_verified,
+                    u.email_verified_at,
+                    u.created_at,
+                    u.updated_at,
+                    u.quartier_id,
+                    q.nom_quartier,
+                    q.ville,
+                    q.code_postal
+                FROM "Utilisateur" u
+                LEFT JOIN "Quartier" q ON u.quartier_id = q.id
+                ORDER BY
+                    CASE WHEN q.nom_quartier IS NULL THEN 1 ELSE 0 END,
+                    q.nom_quartier ASC,
+                    u.nom ASC,
+                    u.prenom ASC
+            `);
+            return result.rows;
+        } catch (error) {
+            console.error('Error finding all users with quartier:', error);
             throw error;
         }
     }

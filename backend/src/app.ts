@@ -1,6 +1,11 @@
 import express, { RequestHandler } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
@@ -11,6 +16,8 @@ import trocRoutes from './routes/troc.routes.js';
 import serviceRoutes from './routes/service.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import messagingRoutes from './routes/messaging.routes.js';
+import journalRoutes from './routes/journal.routes.js';
+import articleGenerationRoutes from './routes/article-generation.routes.js';
 
 
 import { errorHandler } from './controllers/errors.controller.js';
@@ -27,7 +34,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir les fichiers statiques (images uploadées)
-app.use('/uploads', express.static('uploads'));
+const uploadsPath = '/app/uploads';
+console.log('Serving uploads from:', uploadsPath);
+app.use('/uploads', express.static(uploadsPath));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -39,6 +48,8 @@ app.use('/api/troc', trocRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/messaging', messagingRoutes);
+app.use('/api/journal', journalRoutes);
+app.use('/api/articles', articleGenerationRoutes);
 
 app.use((req, res, next) => {
     res.status(404).json({

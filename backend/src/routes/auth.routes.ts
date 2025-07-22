@@ -23,4 +23,9 @@ router.get('/me', authenticateJWT, authController.getMe);
 // Route de stats
 router.get('/stats',authController.getStats)
 
+// Email verification routes
+router.post('/verify-email', authController.verifyEmail);
+router.post('/resend-verification', authController.resendVerificationEmail);
+router.get('/verification-status/:userId', authController.getVerificationStatus);
+
 export default router;

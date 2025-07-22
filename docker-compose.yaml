@@ -3,7 +3,7 @@ services:
     build: ./backend
     container_name: nextdoorbuddy-backend
     ports:
-      - "3000:3000"              
+      - "3000:3000"
     volumes:
       - ./backend/src:/app/src
       - ./backend/dist:/app/dist
@@ -16,14 +16,34 @@ services:
       - DB_USER=user
       - DB_PASSWORD=rootpass
       - DB_NAME=nextdoorbuddy
+      - MONGODB_URI=mongodb://mongodb:27017/journal
+      - MONGODB_DB=journal
+      # Email Configuration
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_SECURE=false
+      - SMTP_USER=doorbudy@gmail.com
+      - SMTP_PASS=jymi ameu shij siys 
+      - FROM_EMAIL=noreply@doorbudy.cloud
+      - FROM_NAME=DoorBudy
+      # Verification Settings
+      - VERIFICATION_CODE_EXPIRY=15
+      - MAX_VERIFICATION_ATTEMPTS=3
+      - MAX_RESEND_ATTEMPTS=3
     depends_on:
       - db
+      - mongodb
     networks:
       - nextdoorbuddy-network
 
   frontend:
     build: ./frontend/nextdoorbuddy
     container_name: nextdoorbuddy-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/nextdoorbuddy/src:/app/src
+      - ./uploads:/app/public/uploads
     environment:
       - NODE_ENV=production
     depends_on:
@@ -35,13 +55,32 @@ services:
     image: postgis/postgis:15-3.3
     container_name: nextdoorbuddy-db
     restart: always
+    ports:
+      - "0.0.0.0:5432:5432"  # Expose to all interfaces
     environment:
       POSTGRES_PASSWORD: rootpass
       POSTGRES_USER: user
       POSTGRES_DB: nextdoorbuddy
+    ports:
+      - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./docker/init:/docker-entrypoint-initdb.d
+    networks:
+      - nextdoorbuddy-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: nextdoorbuddy-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: journal
+    ports:
+      - "27017:27017"
+    command: mongod --noauth
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongodb-init:/docker-entrypoint-initdb.d
     networks:
       - nextdoorbuddy-network
 
@@ -63,6 +102,7 @@ services:
 
 volumes:
   db_data:
+  mongodb_data:
   uploads_data:
 
 networks:

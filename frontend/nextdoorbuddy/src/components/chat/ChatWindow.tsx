@@ -13,8 +13,6 @@ import {
     MessageCircle,
     Users,
     Hash,
-    Settings,
-    Phone,
     ArrowLeft
 } from 'lucide-react';
 
@@ -170,14 +168,7 @@ const ChatWindow: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">
-                            <Phone className="w-4 h-4" />
-                        </Button>
-                        <Button variant="outline" size="sm">
-                            <Settings className="w-4 h-4" />
-                        </Button>
-                    </div>
+
                 </div>
                 </div>
             )}

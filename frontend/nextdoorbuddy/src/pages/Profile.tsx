@@ -1,9 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Header from '../components/Header';
+import ProfilePictureUpload from '../components/ProfilePictureUpload';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
 import { getQuartiers, getUserQuartiers, addQuartierToUser, setQuartierAsPrincipal, Quartier, UserQuartier } from '../services/quartier.service';
 import AddressAutocomplete from '../components/AddressAutocomplete';
+import {
+    User,
+    Mail,
+    Phone,
+    MapPin,
+    Calendar,
+    Lock,
+    Save,
+    Trash2,
+    AlertCircle,
+    CheckCircle,
+    Info,
+    Shield
+} from 'lucide-react';
 
 const Profile = () => {
     const { user, accessToken, refreshAccessToken, logout, updateUserInfo } = useAuth();
@@ -19,6 +37,7 @@ const Profile = () => {
         telephone: '',
         date_naissance: '',
         quartier_id: '',
+        profile_picture: '',
         password: '',
         confirmPassword: ''
     });
@@ -43,6 +62,7 @@ const Profile = () => {
                 telephone: user.telephone || '',
                 date_naissance: user.date_naissance ? new Date(user.date_naissance).toISOString().split('T')[0] : '',
                 quartier_id: user.quartier_id ? user.quartier_id.toString() : '',
+                profile_picture: user.profile_picture || '',
                 password: '',
                 confirmPassword: ''
             });
@@ -106,6 +126,13 @@ const Profile = () => {
         setFormData({
             ...formData,
             [name]: value
+        });
+    };
+
+    const handleProfilePictureChange = (imageUrl: string | null) => {
+        setFormData({
+            ...formData,
+            profile_picture: imageUrl || ''
         });
     };
 
@@ -179,7 +206,8 @@ const Profile = () => {
                 latitude: formData.latitude || undefined,
                 longitude: formData.longitude || undefined,
                 telephone: formData.telephone || undefined,
-                quartier_id: formData.quartier_id ? parseInt(formData.quartier_id) : undefined
+                quartier_id: formData.quartier_id ? parseInt(formData.quartier_id) : undefined,
+                profile_picture: formData.profile_picture || undefined
             };
 
             // Ajouter la date de naissance si fournie
@@ -294,111 +322,198 @@ const Profile = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-white">
             <Header />
-            <div className="container mx-auto p-6">
-                <h1 className="mb-6 text-2xl font-bold">Mon Profil</h1>
 
+            {/* Main Content */}
+            <main className="container mx-auto px-4 py-8 max-w-4xl">
+                {/* Page Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center mb-8"
+                >
+                    <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                        Mon Profil
+                    </h1>
+                    <p className="text-gray-600 text-lg">
+                        Gérez vos informations personnelles et vos préférences
+                    </p>
+                </motion.div>
+
+                {/* Alert Messages */}
                 {error && (
-                    <div className="mb-4 rounded-md bg-red-100 p-4 text-red-700">
-                        {error}
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center space-x-3"
+                    >
+                        <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        <span className="text-red-700">{error}</span>
+                    </motion.div>
                 )}
 
                 {success && (
-                    <div className="mb-4 rounded-md bg-green-100 p-4 text-green-700">
-                        {success}
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center space-x-3"
+                    >
+                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <span className="text-green-700">{success}</span>
+                    </motion.div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                        <div>
-                            <label htmlFor="nom" className="block text-sm font-medium text-gray-700">
-                                Nom
-                            </label>
-                            <input
-                                type="text"
-                                id="nom"
-                                name="nom"
-                                value={formData.nom}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                            />
-                        </div>
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Profile Picture Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                    >
+                        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                            <CardContent className="p-8">
+                                <div className="text-center">
+                                    <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center justify-center">
+                                        <User className="w-5 h-5 mr-2" />
+                                        Photo de profil
+                                    </h2>
+                                    <ProfilePictureUpload
+                                        currentPicture={formData.profile_picture}
+                                        onPictureChange={handleProfilePictureChange}
+                                        userName={`${formData.prenom || ''} ${formData.nom || ''}`.trim()}
+                                        size="xl"
+                                        disabled={isLoading}
+                                    />
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
 
-                        <div>
-                            <label htmlFor="prenom" className="block text-sm font-medium text-gray-700">
-                                Prénom
-                            </label>
-                            <input
-                                type="text"
-                                id="prenom"
-                                name="prenom"
-                                value={formData.prenom}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                            />
-                        </div>
+                    {/* Personal Information Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                            <CardContent className="p-8">
+                                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                                    <User className="w-5 h-5 mr-2" />
+                                    Informations personnelles
+                                </h2>
 
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                disabled
-                            />
-                            <p className="mt-1 text-xs text-gray-500">L'email ne peut pas être modifié</p>
-                        </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label htmlFor="nom" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Nom *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="nom"
+                                            name="nom"
+                                            value={formData.nom}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                            placeholder="Votre nom de famille"
+                                        />
+                                    </div>
 
-                        <div>
-                            <label htmlFor="adresse" className="block text-sm font-medium text-gray-700">
-                                Adresse
-                            </label>
-                            <AddressAutocomplete
-                                initialValue={formData.adresse}
-                                required={true}
-                                onAddressSelect={(selectedAddress) => {
-                                    setFormData({
-                                        ...formData,
-                                        adresse: selectedAddress.adresse,
-                                        latitude: selectedAddress.latitude,
-                                        longitude: selectedAddress.longitude
-                                    });
+                                    <div>
+                                        <label htmlFor="prenom" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Prénom *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="prenom"
+                                            name="prenom"
+                                            value={formData.prenom}
+                                            onChange={handleChange}
+                                            required
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                            placeholder="Votre prénom"
+                                        />
+                                    </div>
 
-                                    // Si un quartier a été trouvé par l'API, l'utiliser
-                                    if (selectedAddress.quartierFound && selectedAddress.quartier_id) {
-                                        setFormData(prev => ({
-                                            ...prev,
-                                            quartier_id: String(selectedAddress.quartier_id)
-                                        }));
-                                    }
-                                    // Sinon, essayer de trouver un quartier par code postal
-                                    else if (selectedAddress.postcode && quartiers.length > 0) {
-                                        const matchingQuartier = quartiers.find(
-                                            q => q.code_postal === selectedAddress.postcode
-                                        );
-                                        if (matchingQuartier) {
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                quartier_id: String(matchingQuartier.id)
-                                            }));
-                                        } else {
-                                            // Réinitialiser le quartier si aucun n'est trouvé
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                quartier_id: ''
-                                            }));
-                                        }
+                                    <div className="md:col-span-2">
+                                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                                            <Mail className="w-4 h-4 inline mr-1" />
+                                            Adresse email
+                                        </label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={formData.email}
+                                            disabled
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed transition-all duration-200"
+                                        />
+                                        <div className="mt-2 flex items-center text-sm text-gray-500">
+                                            <Info className="w-4 h-4 mr-1" />
+                                            L'adresse email ne peut pas être modifiée
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+
+                    {/* Contact & Location Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                            <CardContent className="p-8">
+                                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                                    <MapPin className="w-5 h-5 mr-2" />
+                                    Contact et localisation
+                                </h2>
+
+                                <div className="space-y-6">
+                                    <div>
+                                        <label htmlFor="adresse" className="block text-sm font-medium text-gray-700 mb-2">
+                                            <MapPin className="w-4 h-4 inline mr-1" />
+                                            Adresse *
+                                        </label>
+
+                                        <AddressAutocomplete
+                                            initialValue={formData.adresse}
+                                            required={true}
+                                            onAddressSelect={(selectedAddress) => {
+                                                setFormData({
+                                                    ...formData,
+                                                    adresse: selectedAddress.adresse,
+                                                    latitude: selectedAddress.latitude,
+                                                    longitude: selectedAddress.longitude
+                                                });
+
+                                                // Si un quartier a été trouvé par l'API, l'utiliser
+                                                if (selectedAddress.quartierFound && selectedAddress.quartier_id) {
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        quartier_id: String(selectedAddress.quartier_id)
+                                                    }));
+                                                }
+                                                // Sinon, essayer de trouver un quartier par code postal
+                                                else if (selectedAddress.postcode && quartiers.length > 0) {
+                                                    const matchingQuartier = quartiers.find(
+                                                        q => q.code_postal === selectedAddress.postcode
+                                                    );
+                                                    if (matchingQuartier) {
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            quartier_id: String(matchingQuartier.id)
+                                                        }));
+                                                    } else {
+                                                        // Réinitialiser le quartier si aucun n'est trouvé
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            quartier_id: ''
+                                                        }));
+                                                    }
                                     } else {
                                         // Réinitialiser le quartier si aucun n'est trouvé
                                         setFormData(prev => ({
@@ -406,169 +521,183 @@ const Profile = () => {
                                             quartier_id: ''
                                         }));
                                     }
-                                }}
-                            />
-                            <p className="mt-1 text-xs text-gray-500">
-                                Commencez à saisir votre adresse pour voir les suggestions
-                            </p>
-                        </div>
+                                                }}
+                                            />
+                                            <p className="mt-2 text-sm text-gray-500">
+                                                Commencez à saisir votre adresse pour voir les suggestions
+                                            </p>
+                                    </div>
 
-                        <div>
-                            <label htmlFor="telephone" className="block text-sm font-medium text-gray-700">
-                                Téléphone
-                            </label>
-                            <input
-                                type="text"
-                                id="telephone"
-                                name="telephone"
-                                value={formData.telephone}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                            />
-                        </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="telephone" className="block text-sm font-medium text-gray-700 mb-2">
+                                                <Phone className="w-4 h-4 inline mr-1" />
+                                                Téléphone
+                                            </label>
+                                            <input
+                                                type="tel"
+                                                id="telephone"
+                                                name="telephone"
+                                                value={formData.telephone}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                                placeholder="0123456789"
+                                            />
+                                        </div>
 
-                        <div>
-                            <label htmlFor="date_naissance" className="block text-sm font-medium text-gray-700">
-                                Date de naissance
-                            </label>
-                            <input
-                                type="date"
-                                id="date_naissance"
-                                name="date_naissance"
-                                value={formData.date_naissance}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                            />
-                        </div>
+                                        <div>
+                                            <label htmlFor="date_naissance" className="block text-sm font-medium text-gray-700 mb-2">
+                                                <Calendar className="w-4 h-4 inline mr-1" />
+                                                Date de naissance
+                                            </label>
+                                            <input
+                                                type="date"
+                                                id="date_naissance"
+                                                name="date_naissance"
+                                                value={formData.date_naissance}
+                                                onChange={handleChange}
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                            />
+                                        </div>
+                                    </div>
 
-                        <div>
-                            <label htmlFor="quartier_id" className="block text-sm font-medium text-gray-700">
-                                Quartier
-                            </label>
-                            <select
-                                id="quartier_id"
-                                name="quartier_id"
-                                value={formData.quartier_id}
-                                onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                            >
-                                <option value="">Sélectionnez un quartier</option>
-                                {quartiers.map((quartier) => (
-                                    <option key={quartier.id} value={quartier.id}>
-                                        {quartier.nom_quartier} ({quartier.ville})
-                                    </option>
-                                ))}
-                            </select>
-                            {!formData.quartier_id && formData.latitude && formData.longitude && (
-                                <p className="mt-1 text-xs text-amber-600">
-                                    ⚠️ Aucun quartier n'a été trouvé pour cette adresse. Veuillez en sélectionner un manuellement.
-                                </p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="border-t border-gray-200 pt-6">
-                        <h2 className="mb-4 text-lg font-semibold">Mes quartiers</h2>
-
-                        {/* Liste des quartiers de l'utilisateur */}
-                        <div className="mb-6">
-                            <h3 className="mb-2 text-md font-medium">Quartiers auxquels vous êtes rattaché</h3>
-
-                            {userQuartiers.length === 0 ? (
-                                <p className="text-gray-500">Vous n'êtes rattaché à aucun quartier pour le moment.</p>
-                            ) : (
-                                <div className="mt-2 overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-50">
-                                            <tr>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Quartier</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Ville</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Statut</th>
-                                                <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-gray-200 bg-white">
-                                            {userQuartiers.map((quartier) => (
-                                                <tr key={quartier.id}>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
-                                                        {quartier.nom_quartier}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                                                        {quartier.ville || '-'}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                                                        {quartier.est_principal ? (
-                                                            <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                                                                Principal
-                                                            </span>
-                                                        ) : (
-                                                            <span className="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800">
-                                                                Secondaire
-                                                            </span>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                    <div>
+                                        <label htmlFor="quartier_id" className="block text-sm font-medium text-gray-700 mb-2">
+                                            <Shield className="w-4 h-4 inline mr-1" />
+                                            Quartier
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                id="quartier_display"
+                                                value={
+                                                    formData.quartier_id && quartiers.length > 0
+                                                        ? (() => {
+                                                            const quartier = quartiers.find(q => q.id === parseInt(formData.quartier_id));
+                                                            return quartier ? `${quartier.nom_quartier} (${quartier.ville})` : 'Quartier non trouvé';
+                                                        })()
+                                                        : 'Aucun quartier assigné'
+                                                }
+                                                disabled
+                                                className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed transition-all duration-200"
+                                            />
+                                            <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                        </div>
+                                        <div className="mt-2 flex items-center text-sm text-gray-500">
+                                            <Info className="w-4 h-4 mr-1" />
+                                            Le quartier est déterminé automatiquement par votre adresse et ne peut pas être modifié
+                                        </div>
+                                    </div>
                                 </div>
-                            )}
-                        </div>
-                    </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
 
-                    <div className="border-t border-gray-200 pt-6">
-                        <h2 className="mb-4 text-lg font-semibold">Changer de mot de passe</h2>
-                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                            <div>
-                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                                    Nouveau mot de passe
-                                </label>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                />
-                            </div>
+                    {/* Security Section */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                    >
+                        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                            <CardContent className="p-8">
+                                <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+                                    <Lock className="w-5 h-5 mr-2" />
+                                    Sécurité
+                                </h2>
 
-                            <div>
-                                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                                    Confirmer le mot de passe
-                                </label>
-                                <input
-                                    type="password"
-                                    id="confirmPassword"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
-                                />
-                            </div>
-                        </div>
-                    </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Nouveau mot de passe
+                                        </label>
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                            placeholder="Laissez vide pour ne pas changer"
+                                        />
+                                    </div>
 
-                    <div className="flex justify-between">
-                        <button
+                                    <div>
+                                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                                            Confirmer le mot de passe
+                                        </label>
+                                        <input
+                                            type="password"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm"
+                                            placeholder="Confirmez le nouveau mot de passe"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                                    <div className="flex items-start">
+                                        <Info className="w-5 h-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
+                                        <div className="text-sm text-blue-700">
+                                            <p className="font-medium mb-1">Exigences du mot de passe :</p>
+                                            <ul className="list-disc list-inside space-y-1 text-xs">
+                                                <li>Au moins 8 caractères</li>
+                                                <li>Une majuscule et une minuscule</li>
+                                                <li>Au moins un chiffre</li>
+                                                <li>Au moins un caractère spécial</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+
+                    {/* Action Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="flex flex-col sm:flex-row gap-4 justify-between"
+                    >
+                        <Button
                             type="submit"
                             disabled={isLoading}
-                            className="rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                            className="flex-1 sm:flex-none px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {isLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
-                        </button>
+                            {isLoading ? (
+                                <>
+                                    <motion.div
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mr-2"
+                                    />
+                                    Enregistrement...
+                                </>
+                            ) : (
+                                <>
+                                    <Save className="w-5 h-5 mr-2" />
+                                    Enregistrer les modifications
+                                </>
+                            )}
+                        </Button>
 
-                        <button
+                        <Button
                             type="button"
                             onClick={handleDeleteAccount}
                             disabled={isLoading}
-                            className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50"
+                            variant="destructive"
+                            className="flex-1 sm:flex-none px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
+                            <Trash2 className="w-5 h-5 mr-2" />
                             Supprimer mon compte
-                        </button>
-                    </div>
+                        </Button>
+                    </motion.div>
                 </form>
-            </div>
+            </main>
         </div>
     );
 };

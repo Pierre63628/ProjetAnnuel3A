@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import { useChat } from '../contexts/ChatContext';
@@ -16,7 +17,6 @@ import { Button } from '../components/ui/button';
 import {
     MessageCircle,
     Users,
-    Settings,
     Plus,
     Wifi,
     WifiOff,
@@ -33,7 +33,8 @@ const ChatContent: React.FC = () => {
         onlineUsers,
         error,
         clearError,
-        connectToChat
+        connectToChat,
+        selectRoom
     } = useChat();
 
     const {
@@ -41,9 +42,29 @@ const ChatContent: React.FC = () => {
         isMobile
     } = useMobileChat();
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const [showOnlineUsers, setShowOnlineUsers] = useState(false);
     const [showCreateRoom, setShowCreateRoom] = useState(false);
     const [userViewMode, setUserViewMode] = useState<'online' | 'neighborhood'>('online');
+
+    // Handle room selection from URL parameter
+    useEffect(() => {
+        const roomIdParam = searchParams.get('room');
+        if (roomIdParam && chatRooms.length > 0) {
+            const roomId = parseInt(roomIdParam);
+            const targetRoom = chatRooms.find(room => room.id === roomId);
+
+            if (targetRoom && (!currentRoom || currentRoom.id !== roomId)) {
+                selectRoom(targetRoom);
+                // Clear the URL parameter after selecting the room
+                setSearchParams(prev => {
+                    const newParams = new URLSearchParams(prev);
+                    newParams.delete('room');
+                    return newParams;
+                });
+            }
+        }
+    }, [searchParams, chatRooms, currentRoom, selectRoom, setSearchParams]);
 
     if (error) {
         return (
@@ -145,7 +166,7 @@ const ChatContent: React.FC = () => {
 
             <div className={`container mx-auto px-4 max-w-7xl flex flex-col ${
                 isMobile
-                    ? 'h-[calc(100vh-120px)] py-0' // Account for mobile nav + bottom tabs
+                    ? 'h-[calc(100vh-80px)] py-0' // Account for mobile nav only (no bottom tabs)
                     : 'h-[calc(100vh-60px)] py-6'
             }`}>
                 {/* Desktop Header - Hidden on mobile */}
@@ -215,9 +236,7 @@ const ChatContent: React.FC = () => {
                                 <Plus className="w-4 h-4 mr-2" />
                                 Nouveau salon
                             </Button>
-                            <Button variant="outline" size="sm">
-                                <Settings className="w-4 h-4" />
-                            </Button>
+
                         </div>
                     </div>
                     </motion.div>
@@ -289,7 +308,7 @@ const ChatContent: React.FC = () => {
                         </div>
                     )}
                 </div>
-                {/* Desktop floating button - hidden on mobile since we have bottom tabs */}
+                {/* Desktop floating button - hidden on mobile since navigation is via hamburger menu */}
                 {!isMobile && (
                     <div className="lg:hidden fixed bottom-4 right-4">
                         <Button

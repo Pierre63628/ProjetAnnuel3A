@@ -4,6 +4,7 @@ import { useChat } from '../../contexts/ChatContext';
 import { useMobileChat } from '../../contexts/MobileChatContext';
 import { Message } from '../../types/messaging.types';
 import { Button } from '../ui/button';
+import UserAvatar from '../UserAvatar';
 import {
     MoreVertical,
     Reply,
@@ -112,11 +113,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
         setShowReactions(false);
     };
 
-    const getInitials = (nom: string, prenom: string) => {
-        return `${prenom?.charAt(0) || ''}${nom?.charAt(0) || ''}`.toUpperCase();
-    };
-
-    const reactionEmojis = ['👍', '❤️', '😂', '😮', '😢', '😡'];
 
     return (
         <div className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group ${
@@ -131,14 +127,10 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                 {!isOwn && (
                     <div className={`flex-shrink-0 ${isMobile ? 'mr-2' : 'mr-3'}`}>
                         {showAvatar ? (
-                            <div className={`rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-medium ${
-                                isMobile ? 'w-7 h-7 text-xs' : 'w-8 h-8 text-xs'
-                            }`}>
-                                {message.sender ?
-                                    getInitials(message.sender.nom, message.sender.prenom) :
-                                    '?'
-                                }
-                            </div>
+                            <UserAvatar
+                                user={message.sender}
+                                size={isMobile ? 'sm' : 'md'}
+                            />
                         ) : (
                             <div className={isMobile ? 'w-7 h-7' : 'w-8 h-8'} />
                         )}
@@ -261,28 +253,6 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({
                                 >
                                     <MoreVertical className="w-4 h-4" />
                                 </Button>
-                            </motion.div>
-                        )}
-
-                        {/* Reaction picker */}
-                        {showReactions && (
-                            <motion.div
-                                className={`absolute top-0 ${isOwn ? 'right-0' : 'left-0'} transform ${
-                                    isOwn ? 'translate-x-full' : '-translate-x-full'
-                                } -translate-y-1/2 flex items-center gap-1 bg-white rounded-lg shadow-lg border p-2`}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                            >
-                                {reactionEmojis.map((emoji) => (
-                                    <button
-                                        key={emoji}
-                                        onClick={() => handleReaction(emoji)}
-                                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors"
-                                    >
-                                        {emoji}
-                                    </button>
-                                ))}
                             </motion.div>
                         )}
                     </motion.div>

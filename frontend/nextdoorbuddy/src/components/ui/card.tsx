@@ -29,3 +29,29 @@ export const CardContent: React.FC<CardContentProps> = ({ children, className = 
       </div>
   );
 };
+
+export interface CardHeaderProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const CardHeader: React.FC<CardHeaderProps> = ({ children, className = '' }) => {
+  return (
+      <div className={`p-6 pb-0 ${className}`}>
+        {children}
+      </div>
+  );
+};
+
+export interface CardTitleProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const CardTitle: React.FC<CardTitleProps> = ({ children, className = '' }) => {
+  return (
+      <h3 className={`text-lg font-semibold leading-none tracking-tight ${className}`}>
+        {children}
+      </h3>
+  );
+};

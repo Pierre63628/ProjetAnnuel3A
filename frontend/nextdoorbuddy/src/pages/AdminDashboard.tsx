@@ -18,7 +18,8 @@ import {
     Settings,
     Eye,
     Edit,
-    Shield
+    Shield,
+    BookOpen
 } from 'lucide-react'
 
 const AdminDashboard = () => {
@@ -93,7 +94,8 @@ const AdminDashboard = () => {
                             Tableau de bord administrateur
                         </h1>
                         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                            Gérez et supervisez votre plateforme NextDoorBuddy
+                            Gérez et supervisez votre plateforme Les copains du Quartier
+
                         </p>
                     </div>
                 </motion.div>
@@ -303,6 +305,26 @@ const AdminDashboard = () => {
                                             </p>
                                         </div>
                                         <Settings className="w-5 h-5 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                                    </Link>
+                                </motion.div>
+
+                                <motion.div whileHover={{ scale: 1.02 }} transition={{ type: "spring", stiffness: 300 }}>
+                                    <Link
+                                        to="/journal"
+                                        className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-indigo-50 hover:border-indigo-300 transition-all duration-300 group"
+                                    >
+                                        <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
+                                            <BookOpen className="w-6 h-6 text-indigo-600" />
+                                        </div>
+                                        <div className="ml-4 flex-1">
+                                            <h4 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                                Gérer les articles
+                                            </h4>
+                                            <p className="text-sm text-gray-500">
+                                                Valider et modérer les articles du journal
+                                            </p>
+                                        </div>
+                                        <Edit className="w-5 h-5 text-gray-400 group-hover:text-indigo-600 transition-colors" />
                                     </Link>
                                 </motion.div>
 

@@ -392,14 +392,14 @@ export class MessagingController {
             const targetUser = targetUserResult.rows[0];
             const currentUser = req.user!;
 
-            // Create new direct message room
-            const roomName = `${currentUser.prenom} & ${targetUser.prenom}`;
-            const room = await ChatRoomModel.createChatRoom({
-                name: roomName,
-                description: `Conversation privée entre ${currentUser.prenom} et ${targetUser.prenom}`,
-                room_type: 'direct',
-                member_ids: [targetUserId]
-            }, userId, quartierId);
+            // Create new direct message room using the atomic method
+            const room = await ChatRoomModel.createDirectMessageRoom(
+                userId,
+                targetUserId,
+                quartierId,
+                currentUser.prenom,
+                targetUser.prenom
+            );
 
             res.status(201).json({
                 success: true,
@@ -453,14 +453,14 @@ export class MessagingController {
             const targetUser = targetUserResult.rows[0];
             const currentUser = req.user!;
 
-            // Create new direct message room for offline messaging
-            const roomName = `${currentUser.prenom} & ${targetUser.prenom}`;
-            const room = await ChatRoomModel.createChatRoom({
-                name: roomName,
-                description: `Conversation privée entre ${currentUser.prenom} et ${targetUser.prenom}`,
-                room_type: 'direct',
-                member_ids: [targetUserId]
-            }, userId, quartierId);
+            // Create new direct message room using the atomic method
+            const room = await ChatRoomModel.createDirectMessageRoom(
+                userId,
+                targetUserId,
+                quartierId,
+                currentUser.prenom,
+                targetUser.prenom
+            );
 
             res.status(201).json({
                 success: true,

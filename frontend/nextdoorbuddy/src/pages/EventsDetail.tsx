@@ -4,13 +4,15 @@ import {
     getEvenementById,
     deleteEvenement,
     checkParticipation,
+    participateToEvenement,
+    cancelParticipation,
     Evenement
 } from '../services/evenement.service';
 import Header from '../components/Header';
 import EventMap from '../components/EventMap';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Calendar, MapPin, User, Tag, ArrowLeft, Clock, Trash2, Edit, ExternalLink, Users } from 'lucide-react';
+import { Calendar, MapPin, User, Tag, ArrowLeft, Clock, Trash2, Edit, ExternalLink, Users, CheckCircle, XCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { canDeleteEvent, canEditEvent } from '../utils/permissions';
@@ -27,6 +29,7 @@ const EventDetails = () => {
     const [isParticipant, setIsParticipant] = useState(false);
     const [participantCount, setParticipantCount] = useState(0);
     const [participationLoading, setParticipationLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useEffect(() => {
         const fetchEvenement = async () => {
@@ -102,6 +105,32 @@ const EventDetails = () => {
         try {
             setParticipationLoading(true);
             setError('');
+            setSuccessMessage('');
+
+            if (isParticipant) {
+                // Cancel participation
+                const result = await cancelParticipation(evenement.id);
+                setIsParticipant(false);
+                if (result.participantCount !== undefined) {
+                    setParticipantCount(result.participantCount);
+                } else {
+                    setParticipantCount(prev => prev - 1);
+                }
+                setSuccessMessage('Votre participation a été annulée avec succès.');
+            } else {
+                // Join event
+                const result = await participateToEvenement(evenement.id);
+                setIsParticipant(true);
+                if (result.participantCount !== undefined) {
+                    setParticipantCount(result.participantCount);
+                } else {
+                    setParticipantCount(prev => prev + 1);
+                }
+                setSuccessMessage('Votre participation a été enregistrée avec succès !');
+            }
+
+            // Clear success message after 3 seconds
+            setTimeout(() => setSuccessMessage(''), 3000);
 
         } catch (err: any) {
             console.error(err);
@@ -424,6 +453,36 @@ const EventDetails = () => {
                                                     </>
                                                 )}
                                             </Button>
+                                        )}
+
+                                        {/* Success message */}
+                                        {successMessage && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="p-4 bg-green-50 border border-green-200 rounded-lg"
+                                            >
+                                                <p className="text-green-700 font-medium text-center flex items-center justify-center">
+                                                    <CheckCircle className="w-5 h-5 mr-2" />
+                                                    {successMessage}
+                                                </p>
+                                            </motion.div>
+                                        )}
+
+                                        {/* Error message */}
+                                        {error && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                className="p-4 bg-red-50 border border-red-200 rounded-lg"
+                                            >
+                                                <p className="text-red-700 font-medium text-center flex items-center justify-center">
+                                                    <XCircle className="w-5 h-5 mr-2" />
+                                                    {error}
+                                                </p>
+                                            </motion.div>
                                         )}
 
                                         {/* Message for past events */}

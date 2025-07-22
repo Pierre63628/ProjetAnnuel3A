@@ -22,6 +22,11 @@ router.post('/images', upload.array('images', 5), handleMulterError, handleMulti
 // Route de test sans authentification
 router.post('/test', upload.single('image'), handleMulterError, handleImageUpload);
 
+// Route de test simple pour vérifier que le serveur répond
+router.get('/test', (req, res) => {
+    res.json({ message: 'Upload service is working' });
+});
+
 // Route pour supprimer une image
 router.delete('/image/:filename', deleteImage);
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import ContactButton from '../components/ContactButton';
+import { useAuth } from '../contexts/AuthContext';
 import serviceService, { Service, ServiceSearchFilters } from '../services/service.service';
 import ErrorBoundary from '../components/ErrorBoundary';
 import { motion } from 'framer-motion';
@@ -19,6 +21,7 @@ import {
 } from 'lucide-react';
 
 function Services() {
+    const { user } = useAuth();
     const [services, setServices] = useState<Service[]>([]);
     const [filteredServices, setFilteredServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
@@ -345,8 +348,8 @@ function Services() {
                                             </div>
                                             <div className="flex items-center mb-2">
                                                 <span className={`px-2 py-1 rounded-full text-xs font-medium mr-2 ${
-                                                    service.type_service === 'offre' 
-                                                        ? 'bg-green-100 text-green-800' 
+                                                    service.type_service === 'offre'
+                                                        ? 'bg-green-100 text-green-800'
                                                         : 'bg-blue-100 text-blue-800'
                                                 }`}>
                                                     {service.type_service === 'offre' ? 'Offre' : 'Demande'}
@@ -368,12 +371,12 @@ function Services() {
                                                     <span>{service.lieu}</span>
                                                 </div>
                                             )}
-                                            
+
                                             {(service.prix || service.budget_max) && (
                                                 <div className="flex items-center">
                                                     <Euro className="w-4 h-4 mr-2" />
                                                     <span>
-                                                        {service.type_service === 'offre' 
+                                                        {service.type_service === 'offre'
                                                             ? formatPrice(service.prix)
                                                             : `Budget max: ${formatPrice(service.budget_max)}`
                                                         }
@@ -407,6 +410,19 @@ function Services() {
                                             </p>
                                         </div>
                                     </Link>
+
+                                    {/* Contact Button - Only show for other users' services */}
+                                    {user && service.utilisateur_id && service.utilisateur_id !== user.id && (
+                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                            <ContactButton
+                                                targetUserId={service.utilisateur_id}
+                                                targetUserName={`${service.prenom} ${service.nom}`}
+                                                className="w-full"
+                                                size="sm"
+                                                variant="outline"
+                                            />
+                                        </div>
+                                    )}
                                 </motion.div>
                             ))}
                         </motion.div>
